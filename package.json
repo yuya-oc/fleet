@@ -4,8 +4,19 @@
   "description": "KanColle browser",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "cd app && yarn",
+    "build": "webpack",
+    "start": "electron app",
+    "test": "xo"
   },
   "author": "Yuya Ochiai",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-core": "^6.20.0",
+    "babel-loader": "^6.2.9",
+    "babel-preset-es2015": "^6.18.0",
+    "electron": "1.4.12",
+    "webpack": "^1.14.0",
+    "xo": "^0.17.1"
+  }
 }
