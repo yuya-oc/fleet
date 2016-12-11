@@ -11,10 +11,6 @@ try {
 }
 
 app.on('ready', () => {
-	mainWindow = new BrowserWindow({
-		webPreferences: {
-			plugins: true
-		}
-	});
-	mainWindow.loadURL('http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/');
+	mainWindow = new BrowserWindow();
+	mainWindow.loadURL(`file://${app.getAppPath()}/index.html`);
 });
