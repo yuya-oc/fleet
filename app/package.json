@@ -5,7 +5,10 @@
   "main": "main_bundle.js",
   "author": "Yuya Ochiai",
   "license": "MIT",
-  "devDependencies": {
-    "xo": "^0.17.1"
+  "dependencies": {
+    "react": "^15.4.1",
+    "react-dom": "^15.4.1",
+    "react-redux": "^4.4.6",
+    "redux": "^3.6.0"
   }
 }
