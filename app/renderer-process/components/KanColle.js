@@ -1,4 +1,14 @@
 import React, {PropTypes} from 'react';
+import electron from 'electron';
+const {remote} = electron;
+
+function setWebViewScale(webview, scale) {
+	const currentDisplay = electron.screen.getDisplayMatching(remote.getCurrentWindow().getBounds());
+	webview.getWebContents().enableDeviceEmulation({
+		deviceScaleFactor: 1,
+		scale: scale / currentDisplay.scaleFactor
+	});
+}
 
 class KanColle extends React.Component {
 	componentDidMount() {
@@ -7,8 +17,12 @@ class KanColle extends React.Component {
 //			console.log(this.webview.getURL());
 		});
 		this.webview.addEventListener('dom-ready', () => {
-//			this.webview.openDevTools();
+			setWebViewScale(this.webview, this.props.scale);
 		});
+	}
+
+	componentWillReceiveProps(nextProps) {
+		setWebViewScale(this.webview, nextProps.scale);
 	}
 
 	render() {
@@ -23,7 +37,12 @@ class KanColle extends React.Component {
 }
 
 KanColle.propTypes = {
-	src: PropTypes.string.isRequired
+	src: PropTypes.string.isRequired,
+	scale: PropTypes.number
+};
+
+KanColle.defaultProps = {
+	scale: 1.0
 };
 
 export default KanColle;
