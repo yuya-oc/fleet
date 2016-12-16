@@ -1,6 +1,7 @@
 module.exports = {
 	entry: {
-		main: './app/main.js'
+		main: './app/main.js',
+		'renderer-process/index': './app/renderer-process/index.js'
 	},
 	output: {
 		path: './app',
@@ -13,10 +14,11 @@ module.exports = {
 				exclude: /(node_modules|bower_components)/,
 				loader: 'babel-loader',
 				query: {
-					presets: ['es2015']
+					presets: ['es2015', 'react']
 				}
 			}
 		]
 	},
-	target: 'electron'
+	target: 'electron',
+	devtool: '#inline-source-map'
 };
