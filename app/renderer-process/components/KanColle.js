@@ -1,37 +1,49 @@
 import React, {PropTypes} from 'react';
 import electron from 'electron';
 const {remote} = electron;
+import path from 'path';
+import url from 'url';
+
+function getCurrentDeviceScaleFactor() {
+	const currentDisplay = electron.screen.getDisplayMatching(remote.getCurrentWindow().getBounds());
+	return currentDisplay.scaleFactor;
+}
 
 function setWebViewScale(webview, scale) {
-	const currentDisplay = electron.screen.getDisplayMatching(remote.getCurrentWindow().getBounds());
 	webview.getWebContents().enableDeviceEmulation({
-		deviceScaleFactor: 1,
-		scale: scale / currentDisplay.scaleFactor
+		deviceScaleFactor: scale,
+		scale: scale / getCurrentDeviceScaleFactor()
 	});
 }
 
 class KanColle extends React.Component {
 	componentDidMount() {
-		this.webview.setAttribute('plugins', true);
+//		this.webview.addEventListener('dom-ready', () => {
+//			this.webview.openDevTools();
+//		});
 		this.webview.addEventListener('did-finish-load', () => {
-//			console.log(this.webview.getURL());
+			if (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
+				setWebViewScale(this.webview, this.props.scale);
+			}
 		});
-		this.webview.addEventListener('dom-ready', () => {
-			setWebViewScale(this.webview, this.props.scale);
-		});
-	}
-
-	componentWillReceiveProps(nextProps) {
-		setWebViewScale(this.webview, nextProps.scale);
+		this.webview.setAttribute('plugins', true);
 	}
 
 	render() {
+		const deviceScaleFactor = getCurrentDeviceScaleFactor();
 		return (
 			<webview
+				style={{
+					display: 'inline-flex',
+					background: 'gray',
+					width: `${800 * this.props.scale / deviceScaleFactor}px`,
+					height: `${480 * this.props.scale / deviceScaleFactor}px`
+				}}
 				ref={webview => { // eslint-disable-line react/jsx-no-bind
 					this.webview = webview;
 				}}
 				src={this.props.src}
+				preload={`file://${path.resolve(remote.app.getAppPath(), 'renderer-process/components/KanCollePreload.js')}`}
 				/>);
 	}
 }
