@@ -1,8 +1,4 @@
 module.exports = {
-	entry: {
-		main: './app/main.js',
-		'renderer-process/index': './app/renderer-process/index.js'
-	},
 	output: {
 		path: './app',
 		filename: '[name]_bundle.js'

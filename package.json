@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "postinstall": "cd app && yarn",
-    "build": "webpack",
+    "build": "run-p build:*",
+    "build:main":  "webpack --config webpack.config.main.js",
+    "build:renderer":  "webpack --config webpack.config.renderer.js",
+    "watch": "run-p watch:*",
+    "watch:main": "webpack --watch --config webpack.config.main.js",
+    "watch:renderer": "webpack-dev-server --config webpack.config.renderer.js --inline --content-base app/",
     "start": "electron app",
     "test": "eslint ."
   },
@@ -21,6 +26,9 @@
     "eslint-config-xo": "^0.17.0",
     "eslint-config-xo-react": "^0.10.0",
     "eslint-plugin-react": "^6.8.0",
-    "webpack": "^1.14.0"
+    "npm-run-all": "^3.1.2",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2",
+    "webpack-merge": "^1.1.1"
   }
 }
