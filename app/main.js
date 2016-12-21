@@ -13,5 +13,5 @@ try {
 app.on('ready', () => {
 	mainWindow = new BrowserWindow();
 	// mainWindow.loadURL(`file://${app.getAppPath()}/index.html`);
-	mainWindow.loadURL(`http://localhost:8080/index.html`);
+	mainWindow.loadURL(`http://localhost:8080/`);
 });
