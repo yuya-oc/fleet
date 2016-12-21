@@ -6,8 +6,8 @@
   "scripts": {
     "postinstall": "cd app && yarn",
     "build": "run-p build:*",
-    "build:main":  "webpack --config webpack.config.main.js",
-    "build:renderer":  "webpack --config webpack.config.renderer.js",
+    "build:main": "webpack --config webpack.config.main.js",
+    "build:renderer": "webpack --config webpack.config.renderer.js",
     "watch": "run-p watch:*",
     "watch:main": "webpack --watch --config webpack.config.main.js",
     "watch:renderer": "webpack-dev-server --config webpack.config.renderer.js --inline --history-api-fallback --content-base app/",
