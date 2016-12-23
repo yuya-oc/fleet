@@ -33,6 +33,7 @@ class KanColle extends React.Component {
 		const deviceScaleFactor = getCurrentDeviceScaleFactor();
 		return (
 			<webview
+				id={this.props.id}
 				style={{
 					display: 'inline-flex',
 					background: 'gray',
@@ -49,6 +50,7 @@ class KanColle extends React.Component {
 }
 
 KanColle.propTypes = {
+	id: PropTypes.string,
 	src: PropTypes.string.isRequired,
 	scale: PropTypes.number
 };

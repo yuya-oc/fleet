@@ -10,7 +10,14 @@ class ScreenshotButton extends React.Component {
 	}
 
 	handleScreenshot() {
-		remote.getCurrentWindow().webContents.capturePage(this.props.screenshotBounds, image => {
+		const rect = document.getElementById(this.props.targetId).getBoundingClientRect(); // eslint-disable-line no-undef
+		const bounds = {
+			x: Math.floor(rect.left),
+			y: Math.floor(rect.top),
+			width: Math.floor(rect.width),
+			height: Math.floor(rect.height)
+		};
+		remote.getCurrentWindow().webContents.capturePage(bounds, image => {
 			fs.writeFile(`${this.props.screenshotDir}/test.png`, image.toPNG(), err => {
 				if (err) {
 					console.err(err);
@@ -30,12 +37,7 @@ class ScreenshotButton extends React.Component {
 
 ScreenshotButton.propTypes = {
 	screenshotDir: React.PropTypes.string.isRequired,
-	screenshotBounds: React.PropTypes.shape({
-		x: React.PropTypes.number.isRequired,
-		y: React.PropTypes.number.isRequired,
-		width: React.PropTypes.number.isRequired,
-		height: React.PropTypes.number.isRequired
-	}).isRequired
+	targetId: React.PropTypes.string.isRequired
 };
 
 export default ScreenshotButton;
