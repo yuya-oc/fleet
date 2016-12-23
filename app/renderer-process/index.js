@@ -8,6 +8,7 @@ import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import fleetApp from './reducers';
 import App from './components/App';
 import Main from './components/Main';
+import Settings from './components/Settings';
 
 let store = createStore(
 	combineReducers({
@@ -25,6 +26,7 @@ render(
 		<Router history={history}>
 			<Route path="/" component={App} webviewId={webviewId}>
 				<IndexRoute component={Main} webviewId={webviewId}/>
+				<Route path="/settings" component={Settings}/>
 			</Route>
 		</Router>
 	</Provider>,

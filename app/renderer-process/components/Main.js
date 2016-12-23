@@ -1,13 +1,18 @@
 import React from 'react';
 import ScreenshotButton from './ScreenshotButton';
+import SettingsButton from './SettingsButton';
 
 class Main extends React.Component {
-	 render() {
+	render() {
 		return (
-			<ScreenshotButton
-				targetId={this.props.route.webviewId}
-				screenshotDir={'.'}
-				/>
+			<div>
+				<ScreenshotButton
+					targetId={this.props.route.webviewId}
+					screenshotDir={'.'}
+					/>
+				{' '}
+				<SettingsButton/>
+			</div>
 		);
 	}
 }
