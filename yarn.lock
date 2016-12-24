@@ -1095,6 +1095,16 @@ electron-download@^3.0.1:
     semver "^5.3.0"
     sumchecker "^1.2.0"
 
+electron-is-dev@^0.1.2:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/electron-is-dev/-/electron-is-dev-0.1.2.tgz#8a1043e32b3a1da1c3f553dce28ce764246167e3"
+
+electron-load-devtool:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/electron-load-devtool/-/electron-load-devtool-0.4.0.tgz#938d13440afa293d65713ec8e4416198e8f34ca7"
+  dependencies:
+    electron-is-dev "^0.1.2"
+
 electron@1.4.12:
   version "1.4.12"
   resolved "https://registry.yarnpkg.com/electron/-/electron-1.4.12.tgz#ae6641aa1db01dd04e41c56639ca7b84b888767a"
