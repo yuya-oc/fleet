@@ -1,10 +1,18 @@
 import React from 'react';
-import {Link} from 'react-router';
+import {Button} from 'react-bootstrap';
+
+import ScreenshotDirectoryFormGroup from '../containers/ScreenshotDirectoryFormGroup';
+import LinkButton from './LinkButton';
 
 const Settings = () => (
 	<div>
 		<h1>Settings</h1>
-		<Link to="/">main page</Link>
+		<form>
+			<ScreenshotDirectoryFormGroup/>
+			<LinkButton to="/">Cancel</LinkButton>
+			{' '}
+			<Button type="submit">Save</Button>
+		</form>
 	</div>
 );
 
