@@ -5,14 +5,14 @@ import {createStore, combineReducers} from 'redux';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 
-import fleetApp from './reducers';
+import reducers from './reducers';
 import App from './components/App';
 import Main from './components/Main';
 import Settings from './components/Settings';
 
 let store = createStore(
 	combineReducers({
-		...fleetApp,
+		...reducers,
 		routing: routerReducer
 	}),
 	window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() // eslint-disable-line no-undef

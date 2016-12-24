@@ -1,5 +1,6 @@
+const initialState = {screenshotDir: '.'};
 
-const config = (state = {screenshotDir: 'screenshots'}, action) => {
+const config = (state = initialState, action) => {
 	if (action.type === 'aaa') {
 		return {};
 	}

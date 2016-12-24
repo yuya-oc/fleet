@@ -20,7 +20,7 @@ class ScreenshotButton extends React.Component {
 		remote.getCurrentWindow().webContents.capturePage(bounds, image => {
 			fs.writeFile(`${this.props.screenshotDir}/test.png`, image.toPNG(), err => {
 				if (err) {
-					console.err(err);
+					console.error(err);
 				}
 			});
 		});

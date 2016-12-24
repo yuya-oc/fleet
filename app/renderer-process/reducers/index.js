@@ -1,10 +1,9 @@
-import {combineReducers} from 'redux';
 import fleets from './fleets';
 import config from './config';
 
-const fleetApp = combineReducers({
+const reducers = {
 	fleets,
 	config
-});
+};
 
-export default fleetApp;
+export default reducers;
