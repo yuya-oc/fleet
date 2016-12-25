@@ -1,3 +1,5 @@
+const webpack = require('webpack');
+
 module.exports = {
 	output: {
 		path: './app',
@@ -13,9 +15,12 @@ module.exports = {
 					presets: ['es2015', 'react'],
 					plugins: ['transform-object-rest-spread']
 				}
+			}, {
+				test: /\.json$/,
+				loader: 'json'
 			}
 		]
 	},
 	target: 'electron',
-	devtool: '#inline-source-map'
+	devtool: process.env.NODE_ENV === 'production' ? null : '#inline-source-map'
 };

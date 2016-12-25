@@ -1,5 +1,5 @@
 import {app, BrowserWindow, dialog} from 'electron';
-import loadDevtool from 'electron-load-devtool';
+import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 
 let mainWindow;
@@ -15,8 +15,12 @@ try {
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({show: false});
 	if (isDev) {
-		loadDevtool(loadDevtool.REACT_DEVELOPER_TOOLS);
-		loadDevtool(loadDevtool.REDUX_DEVTOOLS);
+		installExtension(REACT_DEVELOPER_TOOLS).then(name => {
+			console.log(`Added Extension: ${name}`);
+		});
+		installExtension(REDUX_DEVTOOLS).then(name => {
+			console.log(`Added Extension: ${name}`);
+		});
 		mainWindow.loadURL(`http://localhost:8080/`);
 	} else {
 		mainWindow.loadURL(`file://${app.getAppPath()}/index.html`);
