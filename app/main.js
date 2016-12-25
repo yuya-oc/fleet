@@ -26,6 +26,13 @@ app.on('ready', () => {
 		mainWindow.show();
 	});
 
+	mainWindow.webContents.on('did-fail-load', () => {
+		if (isDev) {
+			dialog.showErrorBox('Failed to load development contents', 'You need to execute `yarn run watch` in another console.');
+			app.quit();
+		}
+	});
+
 	mainWindow.on('closed', () => {
 		mainWindow = null;
 	});
