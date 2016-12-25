@@ -8,6 +8,7 @@
     "build": "run-p build:*",
     "build:main": "webpack --config webpack.config.main.js",
     "build:renderer": "webpack --config webpack.config.renderer.js",
+    "pack:win": "build --win --ia32",
     "watch": "run-p watch:*",
     "watch:main": "webpack --watch --config webpack.config.main.js",
     "watch:renderer": "webpack-dev-server --config webpack.config.renderer.js --inline --history-api-fallback --content-base app/",
@@ -23,6 +24,8 @@
     "babel-preset-es2015": "^6.18.0",
     "babel-preset-react": "^6.16.0",
     "electron": "1.4.12",
+    "electron-builder": "^10.11.0",
+    "electron-is-dev": "^0.1.2",
     "electron-load-devtool": "^0.4.0",
     "eslint": "^3.12.0",
     "eslint-config-xo": "^0.17.0",
@@ -32,5 +35,10 @@
     "webpack": "^1.14.0",
     "webpack-dev-server": "^1.16.2",
     "webpack-merge": "^1.1.1"
+  },
+  "build": {
+    "win": {
+      "target": ["zip"]
+    }
   }
 }

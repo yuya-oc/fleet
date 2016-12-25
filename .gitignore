@@ -5,3 +5,4 @@ Thumbs.db
 node_modules
 
 *_bundle.js
+dist

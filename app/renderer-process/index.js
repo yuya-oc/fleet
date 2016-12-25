@@ -2,7 +2,7 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
+import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 
 import fs from 'fs';
@@ -33,7 +33,7 @@ let store = createStore(
 	composeEnhancers(applyMiddleware(configManager))
 );
 
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(hashHistory, store);
 
 const webviewId = 'kancolle';
 
