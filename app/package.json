@@ -1,5 +1,6 @@
 {
   "name": "fleet",
+  "productName": "Fleet",
   "version": "0.0.1",
   "description": "Freet",
   "main": "main_bundle.js",
