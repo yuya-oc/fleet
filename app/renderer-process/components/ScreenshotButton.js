@@ -2,6 +2,11 @@ import React from 'react';
 import {Button} from 'react-bootstrap';
 import {remote} from 'electron';
 import fs from 'fs';
+import dateFormat from 'dateformat';
+
+function getFileName(date) {
+	return `fleet_${dateFormat(date, 'yyyy-mm-dd_HH-MM-ss-l')}.png`;
+}
 
 class ScreenshotButton extends React.Component {
 	constructor() {
@@ -17,8 +22,9 @@ class ScreenshotButton extends React.Component {
 			width: Math.floor(rect.width),
 			height: Math.floor(rect.height)
 		};
+		const date = new Date();
 		remote.getCurrentWindow().webContents.capturePage(bounds, image => {
-			fs.writeFile(`${this.props.screenshotDir}/test.png`, image.toPNG(), err => {
+			fs.writeFile(`${this.props.screenshotDir}/${getFileName(date)}`, image.toPNG(), err => {
 				if (err) {
 					console.error(err);
 				}
