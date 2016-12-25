@@ -12,9 +12,13 @@ try {
 }
 
 app.on('ready', () => {
-	mainWindow = new BrowserWindow();
+	mainWindow = new BrowserWindow({show: false});
 	loadDevtool(loadDevtool.REACT_DEVELOPER_TOOLS);
 	loadDevtool(loadDevtool.REDUX_DEVTOOLS);
 	// mainWindow.loadURL(`file://${app.getAppPath()}/index.html`);
 	mainWindow.loadURL(`http://localhost:8080/`);
+
+	mainWindow.once('ready-to-show', () => {
+		mainWindow.show();
+	});
 });
