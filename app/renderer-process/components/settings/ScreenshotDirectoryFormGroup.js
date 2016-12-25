@@ -15,7 +15,7 @@ function ScreenshotDirectoryFormGroup(props) {
 			Screenshot Directory
 		</ControlLabel>
 		<InputGroup>
-			<input className="form-control" type="text" value={props.screenshotDir} onChange={handleInputChange(props.onDirectorySelect)}/>
+			<input className="form-control" disabled type="text" value={props.screenshotDir} onChange={handleInputChange(props.onDirectorySelect)}/>
 			<InputGroup.Button>
 				<DirectorySelectButton onDirectorySelect={props.onDirectorySelect}>Select</DirectorySelectButton>
 			</InputGroup.Button>

@@ -1,14 +1,18 @@
-import {SET_SCREENSHOT_DIR} from '../actions';
+import {SET_CONFIG, SET_SCREENSHOT_DIR} from '../actions';
 
 const initialState = {screenshotDir: '.'};
 
 const config = (state = initialState, action) => {
-	if (action.type === SET_SCREENSHOT_DIR) {
-		return Object.assign({}, state, {
-			screenshotDir: action.directory
-		});
+	switch (action.type) {
+		case SET_CONFIG:
+			return Object.assign({}, state, action.config);
+		case SET_SCREENSHOT_DIR:
+			return Object.assign({}, state, {
+				screenshotDir: action.directory
+			});
+		default:
+			return state;
 	}
-	return state;
 };
 
 export default config;
