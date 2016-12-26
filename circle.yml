@@ -1,0 +1,22 @@
+dependencies:
+  cache_directories:
+    - "app/node_modules"
+  pre:
+    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+    - sudo dpkg --add-architecture i386
+    - sudo add-apt-repository ppa:ubuntu-wine/ppa -y
+
+    - sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+    - echo "deb http://download.mono-project.com/repo/debian wheezy main" | sudo tee /etc/apt/sources.list.d/mono-xamarin.list
+
+    - sudo apt-get update
+    - sudo apt-get install --no-install-recommends -y yarn wine1.8 mono-devel ca-certificates-mono
+    - unset DISPLAY && wineboot --init
+  override:
+    - yarn
+  post:
+    - yarn run build
+    - yarn run pack:win
+    - mv dist/*.zip ${CIRCLE_ARTIFACTS}/
