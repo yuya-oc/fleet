@@ -8,7 +8,9 @@
     "build": "run-p build:*",
     "build:main": "cross-env NODE_ENV=production webpack --config webpack.config.main.js --optimize-minimize",
     "build:renderer": "cross-env NODE_ENV=production webpack --config webpack.config.renderer.js --optimize-minimize",
-    "pack:win": "build --win --ia32",
+    "pack": "run-p pack:*",
+    "pack:win": "build --win --ia32 --em.main=main_bundle.js",
+    "pack:mac": "build --mac --em.main=main_bundle.js",
     "watch": "run-p watch:*",
     "watch:main": "node scripts/watch_restart_electron.js app app/main.js app/index.html",
     "watch:renderer": "webpack-dev-server --config webpack.config.renderer.js --inline --history-api-fallback --content-base app/",
@@ -54,6 +56,11 @@
   },
   "build": {
     "win": {
+      "target": [
+        "zip"
+      ]
+    },
+    "mac": {
       "target": [
         "zip"
       ]

@@ -18,5 +18,5 @@ dependencies:
     - yarn
   post:
     - yarn run build
-    - yarn run pack:win
+    - yarn run pack
     - mv dist/*.zip ${CIRCLE_ARTIFACTS}/
