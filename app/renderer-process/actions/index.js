@@ -31,3 +31,12 @@ export const setConfig = config => {
 		config
 	};
 };
+
+export const SET_AUDIO_MUTED = 'SET_MUTED';
+
+export const setAudioMuted = muted => {
+	return {
+		type: SET_AUDIO_MUTED,
+		muted
+	};
+};
