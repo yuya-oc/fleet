@@ -19,4 +19,4 @@ dependencies:
   post:
     - yarn run build
     - yarn run pack
-    - mv dist/*.zip ${CIRCLE_ARTIFACTS}/
+    - find dist -name "*.zip" -exec mv -v {} ${CIRCLE_ARTIFACTS}/ \;
