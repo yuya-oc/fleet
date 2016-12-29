@@ -25,7 +25,7 @@ const Settings = (props, context) => (
 			<ScreenshotDirectoryFormGroup/>
 			<Button onClick={handleCancel(props.onCancel, context)} to="/">Cancel</Button>
 			{' '}
-			<Button type="submit">Save</Button>
+			<Button bsStyle="primary" type="submit">Save</Button>
 		</form>
 	</div>
 );
