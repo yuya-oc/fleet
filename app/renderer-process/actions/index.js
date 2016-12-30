@@ -40,3 +40,12 @@ export const setAudioMuted = muted => {
 		muted
 	};
 };
+
+export const SET_WEBVIEW_SCALE = 'SET_WEBVIEW_SCALE';
+
+export const setWebviewScale = scale => {
+	return {
+		type: SET_WEBVIEW_SCALE,
+		scale
+	};
+};

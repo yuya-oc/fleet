@@ -1,5 +1,5 @@
 import React from 'react';
-import KanColle from './KanColle';
+import KanColle from '../containers/KanColle';
 
 const App = props => (
 	<div>
