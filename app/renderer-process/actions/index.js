@@ -49,3 +49,10 @@ export const setWebviewScale = scale => {
 		scale
 	};
 };
+
+export const TAKE_SCREENSHOT = 'TAKE_SCREENSHOT';
+
+export const takeScreenshot = bounds => ({
+	type: TAKE_SCREENSHOT,
+	bounds
+});

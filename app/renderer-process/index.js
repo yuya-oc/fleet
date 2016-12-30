@@ -12,6 +12,7 @@ import App from './components/App';
 import Main from './components/Main';
 import Settings from './containers/Settings';
 import configManager, {configFile} from './middleware/configManager';
+import ipcManager from './middleware/ipcManager';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-undef
 
@@ -30,7 +31,7 @@ let store = createStore(
 		routing: routerReducer
 	}),
 	{config},
-	composeEnhancers(applyMiddleware(configManager))
+	composeEnhancers(applyMiddleware(configManager, ipcManager))
 );
 
 const history = syncHistoryWithStore(hashHistory, store);

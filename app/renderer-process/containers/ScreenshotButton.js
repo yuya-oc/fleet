@@ -1,12 +1,15 @@
 import {connect} from 'react-redux';
+import {takeScreenshot} from '../actions';
 import ScreenshotButton from '../components/ScreenshotButton';
 
-function mapStateToPops(state) {
+function mapDispathToProps(dispatch) {
 	return {
-		screenshotDir: state.config.screenshotDir
+		onClick: bounds => {
+			dispatch(takeScreenshot(bounds));
+		}
 	};
 }
 
-const ScreenshotButtonContainer = connect(mapStateToPops)(ScreenshotButton);
+const ScreenshotButtonContainer = connect(null, mapDispathToProps)(ScreenshotButton);
 
 export default ScreenshotButtonContainer;
