@@ -23,6 +23,7 @@
     "dateformat": "^2.0.0",
     "electron-devtools-installer": "^2.0.1",
     "electron-is-dev": "^0.1.2",
+    "http-proxy": "^1.16.2",
     "react": "^15.4.1",
     "react-bootstrap": "^0.30.7",
     "react-dom": "^15.4.1",

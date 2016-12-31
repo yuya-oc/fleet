@@ -1,12 +1,17 @@
 import {app, BrowserWindow, dialog, ipcMain} from 'electron';
 import fs from 'fs';
+import http from 'http';
+import url from 'url';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import dateFormat from 'dateformat';
+import httpProxy from 'http-proxy';
 
 import {REDUX_IPC_ACTION} from './renderer-process/middleware/ipcManager';
 import {TAKE_SCREENSHOT} from './renderer-process/actions';
+
+const localProxyPort = 20010;
 
 let mainWindow;
 
@@ -17,6 +22,31 @@ try {
 	dialog.showErrorBox('Flash Plugin not found', `You need to install Flash Plugin (PPAPI)\n\n${err}`);
 	app.quit();
 }
+
+app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
+const proxy = httpProxy.createProxyServer();
+const proxyServer = http.createServer((req, res) => {
+	const parsed = url.parse(req.url);
+	const target = `${parsed.protocol}//${parsed.host}`;
+	proxy.web(req, res, {target});
+}).listen(localProxyPort);
+proxy.on('proxyRes', function (proxyRes, req) {
+	if (url.parse(req.url).path.startsWith('/kcsapi/')) {
+		let chunks = [];
+		proxyRes.on('data', chunk => {
+			chunks.push(chunk);
+		});
+
+		proxyRes.on('end', () => {
+			var buffer = Buffer.concat(chunks);
+			console.log(req.url);
+			console.log(buffer.toString());
+		});
+	}
+});
+app.on('quit', () => {
+	proxyServer.close();
+});
 
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({show: false});
