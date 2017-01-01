@@ -1,13 +1,10 @@
-import {app, BrowserWindow, dialog, ipcMain} from 'electron';
+import {app, BrowserWindow, dialog} from 'electron';
 import fs from 'fs';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
-import dateFormat from 'dateformat';
 import mkdirp from 'mkdirp';
 
-import {REDUX_IPC_ACTION} from './renderer-process/middleware/ipcManager';
-import {TAKE_SCREENSHOT} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
 
@@ -39,14 +36,14 @@ proxyServer.on('kcsapiRes', (req, pathname, body) => {
 	}
 });
 
-const store = createReduxStore(); // eslint-disable-line no-unused-vars
-
 app.on('quit', () => {
 	proxyServer.close();
 });
 
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({show: false});
+	const store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
+
 	if (isDev) {
 		installExtension(REACT_DEVELOPER_TOOLS).then(name => {
 			console.log(`Added Extension: ${name}`);
@@ -77,37 +74,4 @@ app.on('ready', () => {
 
 app.on('window-all-closed', () => {
 	app.quit();
-});
-
-function getFileName(date) {
-	return `fleet_${dateFormat(date, 'yyyy-mm-dd_HH-MM-ss-l')}.png`;
-}
-
-ipcMain.on(REDUX_IPC_ACTION, (event, action) => {
-	switch (action.type) {
-		case TAKE_SCREENSHOT: {
-			const bounds = Object.assign({}, action.bounds, {
-				width: Math.floor(action.bounds.width) + 1,
-				height: Math.floor(action.bounds.height) + 1
-			});
-			const date = new Date();
-			event.sender.capturePage(bounds, image => {
-				const screenshot = image.crop({
-					x: 0,
-					y: 0,
-					width: Math.round(800 * action.webviewScale),
-					height: Math.round(480 * action.webviewScale)
-				});
-				const filename = `${action.screenshotDir}/${getFileName(date)}`;
-				fs.writeFile(filename, screenshot.toPNG(), err => {
-					if (err) {
-						console.error(err);
-					}
-				});
-			});
-			break;
-		}
-		default:
-			break;
-	}
 });

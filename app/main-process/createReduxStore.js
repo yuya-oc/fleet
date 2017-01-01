@@ -3,9 +3,10 @@ import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {electronEnhancer} from 'redux-electron-store';
 
 import reducers from '../reducers';
+import electronMiddleware from './middleware/electronMiddleware';
 import configManager, {configFile} from './middleware/configManager';
 
-function createReduxStore() {
+function createReduxStore(mainWindow) {
 	let store;
 
 	const config = (() => {
@@ -18,7 +19,7 @@ function createReduxStore() {
 	})();
 
 	const enhancer = compose(
-		applyMiddleware(configManager),
+		applyMiddleware(configManager, electronMiddleware(mainWindow)),
 		electronEnhancer({
 			dispatchProxy: a => store.dispatch(a)
 		})
