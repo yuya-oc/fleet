@@ -10,7 +10,8 @@ function createProxyServer() {
 		proxy.web(req, res, {target});
 	});
 	proxy.on('proxyRes', function (proxyRes, req) {
-		if (url.parse(req.url).path.startsWith('/kcsapi/')) {
+		const parsed = url.parse(req.url);
+		if (parsed.path.startsWith('/kcsapi/')) {
 			const chunks = [];
 			proxyRes.on('data', chunk => {
 				chunks.push(chunk);
@@ -19,7 +20,7 @@ function createProxyServer() {
 			proxyRes.on('end', () => {
 				const buffer = Buffer.concat(chunks);
 				const body = JSON.parse(buffer.toString().replace(/^svdata=/, ''));
-				proxyServer.emit('kcsapiRes', req, body);
+				proxyServer.emit('kcsapiRes', req, parsed.pathname, body);
 			});
 		}
 	});

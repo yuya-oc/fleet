@@ -4,6 +4,7 @@ import fs from 'fs';
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import dateFormat from 'dateformat';
+import mkdirp from 'mkdirp';
 
 import {REDUX_IPC_ACTION} from './renderer-process/middleware/ipcManager';
 import {TAKE_SCREENSHOT} from './renderer-process/actions';
@@ -23,9 +24,18 @@ try {
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
 const proxyServer = createProxyServer().listen(localProxyPort);
-proxyServer.on('kcsapiRes', (req, body) => {
-	console.log(req.url);
-	console.log(JSON.stringify(body));
+proxyServer.on('kcsapiRes', (req, pathname, body) => {
+	console.log(pathname);
+	try {
+		const match = pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
+		const dir = `${app.getPath('userData')}/${match[1]}`;
+		const file = match[2];
+		console.log(dir, file);
+		mkdirp.sync(dir);
+		fs.writeFileSync(`${dir}/${file}`, JSON.stringify(body, null, '  '));
+	} catch (e) {
+		console.error(e);
+	}
 });
 app.on('quit', () => {
 	proxyServer.close();
