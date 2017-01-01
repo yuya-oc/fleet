@@ -1,5 +1,5 @@
 import {ipcRenderer} from 'electron';
-import {TAKE_SCREENSHOT} from '../actions';
+import {TAKE_SCREENSHOT} from '../../actions';
 
 export const REDUX_IPC_ACTION = 'REDUX_IPC_ACTION';
 

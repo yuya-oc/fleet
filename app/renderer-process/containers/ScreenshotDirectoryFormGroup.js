@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 
-import {setScreenshotDir} from '../actions';
+import {setScreenshotDir} from '../../actions';
 import ScreenshotDirectoryFormGroup from '../components/settings/ScreenshotDirectoryFormGroup';
 
 function mapStateToPops(state) {

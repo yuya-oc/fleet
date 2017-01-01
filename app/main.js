@@ -7,8 +7,9 @@ import dateFormat from 'dateformat';
 import mkdirp from 'mkdirp';
 
 import {REDUX_IPC_ACTION} from './renderer-process/middleware/ipcManager';
-import {TAKE_SCREENSHOT} from './renderer-process/actions';
+import {TAKE_SCREENSHOT} from './actions';
 import createProxyServer from './main-process/createProxyServer';
+import createReduxStore from './main-process/createReduxStore';
 
 const localProxyPort = 20010;
 
@@ -37,6 +38,9 @@ proxyServer.on('kcsapiRes', (req, pathname, body) => {
 		console.error(e);
 	}
 });
+
+const store = createReduxStore(); // eslint-disable-line no-unused-vars
+
 app.on('quit', () => {
 	proxyServer.close();
 });

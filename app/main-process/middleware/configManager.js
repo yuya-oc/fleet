@@ -1,9 +1,9 @@
-import {SAVE_CONFIG, LOAD_CONFIG, setConfig} from '../actions';
+import {SAVE_CONFIG, LOAD_CONFIG, setConfig} from '../../actions';
 import fs from 'fs';
 import path from 'path';
-import {remote} from 'electron';
+import {app} from 'electron';
 
-export const configFile = path.resolve(remote.app.getPath('userData'), 'config.json');
+export const configFile = path.resolve(app.getPath('userData'), 'config.json');
 
 const configManager = store => next => action => {
 	switch (action.type) {

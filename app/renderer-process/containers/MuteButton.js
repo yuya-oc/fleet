@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {Button} from 'react-bootstrap';
-import {setAudioMuted} from '../actions';
+import {setAudioMuted} from '../../actions';
 
 const handleClick = (handler, props) => () => {
 	const muted = !props.muted;

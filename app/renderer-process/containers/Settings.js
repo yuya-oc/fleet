@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 
-import {saveConfig, loadConfig} from '../actions';
+import {saveConfig, loadConfig} from '../../actions';
 import Settings from '../components/Settings';
 
 function mapDispatchToProps(dispath) {

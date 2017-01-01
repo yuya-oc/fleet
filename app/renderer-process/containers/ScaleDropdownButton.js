@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
-import {setWebviewScale} from '../actions';
+import {setWebviewScale} from '../../actions';
 
 const handleSelect = (onSelect, scales) => eventKey => {
 	if (onSelect) {
