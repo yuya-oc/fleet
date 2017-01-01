@@ -1,9 +1,9 @@
-import fleets from './fleets';
+import gameData from './gameData';
 import config from './config';
 import appState from './appState';
 
 const reducers = {
-	fleets,
+	gameData,
 	config,
 	appState
 };

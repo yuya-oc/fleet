@@ -5,12 +5,14 @@ import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-
 import isDev from 'electron-is-dev';
 import mkdirp from 'mkdirp';
 
+import {setKcsapiMasterData, setKcsapiPortData} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
 
 const localProxyPort = 20010;
 
 let mainWindow;
+let store;
 
 try {
 	app.commandLine.appendSwitch('ppapi-flash-path', app.getPath('pepperFlashSystemPlugin'));
@@ -31,6 +33,16 @@ proxyServer.on('kcsapiRes', (req, pathname, body) => {
 		console.log(dir, file);
 		mkdirp.sync(dir);
 		fs.writeFileSync(`${dir}/${file}`, JSON.stringify(body, null, '  '));
+		switch (pathname) {
+			case '/kcsapi/api_start2':
+				store.dispatch(setKcsapiMasterData(body));
+				break;
+			case '/kcsapi/api_port/port':
+				store.dispatch(setKcsapiPortData(body));
+				break;
+			default:
+				break;
+		}
 	} catch (e) {
 		console.error(e);
 	}
@@ -42,7 +54,7 @@ app.on('quit', () => {
 
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({show: false});
-	const store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
+	store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
 
 	if (isDev) {
 		installExtension(REACT_DEVELOPER_TOOLS).then(name => {

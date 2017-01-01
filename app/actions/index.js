@@ -56,3 +56,16 @@ export const takeScreenshot = bounds => ({
 	type: TAKE_SCREENSHOT,
 	bounds
 });
+
+export const SET_KCSAPI_MASTER_DATA = 'SET_KCSAPI_MASTER_DATA';
+export const SET_KCSAPI_PORT_DATA = 'SET_KCSAPI_PORT_DATA';
+
+export const setKcsapiMasterData = data => ({
+	type: SET_KCSAPI_MASTER_DATA,
+	data
+});
+
+export const setKcsapiPortData = data => ({
+	type: SET_KCSAPI_PORT_DATA,
+	data
+});
