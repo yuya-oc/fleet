@@ -23,7 +23,7 @@ try {
 }
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
-const proxyServer = createProxyServer().listen(localProxyPort);
+const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('kcsapiRes', (req, pathname, body) => {
 	console.log(pathname);
 	try {
