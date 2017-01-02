@@ -70,7 +70,9 @@ app.on('ready', () => {
 
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
-		mainWindow.openDevTools();
+		if (isDev) {
+			mainWindow.openDevTools();
+		}
 	});
 
 	mainWindow.webContents.on('did-fail-load', () => {
