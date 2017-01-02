@@ -31,6 +31,10 @@ function createReduxStore(mainWindow) {
 		appState: {
 			muted: false,
 			webviewScale: 1.0
+		},
+		userData: {
+			ships: null,
+			fleets: []
 		}
 	};
 

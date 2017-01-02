@@ -1,10 +1,18 @@
 import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_PORT_DATA} from '../actions';
 
+const initialState = {
+	master: null,
+	user: {
+		ships: [],
+		fleets: []
+	}
+};
+
 function getShipName(master, shipId) {
 	return master.ships.find(ship => ship.id === shipId).name;
 }
 
-const gameData = (state = {}, action) => {
+const gameData = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_KCSAPI_MASTER_DATA:
 			return Object.assign({}, state, {
@@ -30,9 +38,12 @@ const gameData = (state = {}, action) => {
 			newState.user.fleets = data.api_deck_port.map(deck => ({
 				id: deck.api_id,
 				name: deck.api_name,
-				ships: deck.api_ship.map(shipId => (
-					newState.user.ships.find(ship => ship.id === shipId)
-				))
+				ships: deck.api_ship.reduce((ships, shipId) => {
+					if (shipId >= 0) {
+						ships.push(newState.user.ships.find(ship => ship.id === shipId));
+					}
+					return ships;
+				}, [])
 			}));
 			return newState;
 		}
