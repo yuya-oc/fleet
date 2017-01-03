@@ -1,26 +1,19 @@
 import React from 'react';
-import ScreenshotButton from '../containers/ScreenshotButton';
-import SettingsButton from './SettingsButton';
-import MuteButton from '../containers/MuteButton';
-import ScaleDropdownButton from '../containers/ScaleDropdownButton';
-import FleetList from '../containers/FleetList';
-
-const scales = [1.0, 1.25, 1.5, 1.75, 2.0];
+import LinkTab from './LinkTab';
 
 const Main = props => (
 	<div>
-		<div>
-			<ScreenshotButton
-				targetId={props.route.webviewId}
-				/>
-			{' '}
-			<MuteButton targetId={props.route.webviewId}>Mute</MuteButton>
-			{' '}
-			<ScaleDropdownButton scales={scales} id="scaleDropdownButton"/>
-			{' '}
-			<SettingsButton/>
+		<div className="tab-group">
+			<LinkTab to="/">
+				概要
+			</LinkTab>
+			<LinkTab to="/settings">
+				設定
+			</LinkTab>
 		</div>
-		<FleetList/>
+		<div>
+			{props.children}
+		</div>
 	</div>
 );
 

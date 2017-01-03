@@ -5,8 +5,5 @@
   "description": "Freet",
   "main": "main.js",
   "author": "Yuya Ochiai",
-  "license": "MIT",
-  "dependencies": {
-    "bootstrap": "^3.3.7"
-  }
+  "license": "MIT"
 }

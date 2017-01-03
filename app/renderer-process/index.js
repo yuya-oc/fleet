@@ -8,8 +8,10 @@ import {electronEnhancer} from 'redux-electron-store';
 
 import reducers from '../reducers';
 import App from './components/App';
-import Main from './components/Main';
+import Overview from './components/Overview';
 import Settings from './containers/Settings';
+
+import photon from '!style!css!photon/dist/css/photon.css';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-undef
 
@@ -34,7 +36,7 @@ render(
 	<Provider store={store}>
 		<Router history={history}>
 			<Route path="/" component={App} webviewId={webviewId}>
-				<IndexRoute component={Main} webviewId={webviewId}/>
+				<IndexRoute component={Overview} webviewId={webviewId}/>
 				<Route path="/settings" component={Settings}/>
 			</Route>
 		</Router>
