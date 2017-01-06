@@ -8,12 +8,12 @@ const mapStateToProps = state => ({
 	scale: state.appState.webviewScale
 });
 
-const mapDispatchToProps = (dispatch, ownProps) => ({
+const mapDispatchToProps = dispatch => ({
 	onClickScreenshot: bounds => {
 		dispatch(takeScreenshot(bounds));
 	},
-	onClickMute: nextMuted => {
-		dispatch(setAudioMuted(nextMuted));
+	onClickMute: (targetId, nextMuted) => {
+		dispatch(setAudioMuted(targetId, nextMuted));
 	}
 });
 

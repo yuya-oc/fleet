@@ -34,9 +34,10 @@ export const setConfig = config => {
 
 export const SET_AUDIO_MUTED = 'SET_MUTED';
 
-export const setAudioMuted = muted => {
+export const setAudioMuted = (targetId, muted) => {
 	return {
 		type: SET_AUDIO_MUTED,
+		targetId,
 		muted
 	};
 };

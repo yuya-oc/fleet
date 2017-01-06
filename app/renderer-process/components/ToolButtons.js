@@ -3,7 +3,7 @@ import React from 'react';
 const Button = props => {
 	const {active, ...reftProps} = props;
 	let className = 'btn btn-large btn-default';
-	if (props.active) {
+	if (active) {
 		className += ' active';
 	}
 	return (
@@ -30,10 +30,10 @@ const handleScreenshot = (onClick, targetId) => {
 	}
 };
 
-const handleMute = (onClick, muted) => {
+const handleMute = (onClick, targetId, muted) => {
 	if (onClick) {
 		return () => {
-			onClick(!muted);
+			onClick(targetId, !muted);
 		};
 	}
 };
@@ -45,7 +45,7 @@ const ToolButtons = props => {
 				<Button onClick={handleScreenshot(props.onClickScreenshot, props.screenshotTargetId)}>
 					<span className="icon icon-camera"/>
 				</Button>
-				<Button active={props.muted} onClick={handleMute(props.onClickMute, props.muted)}>
+				<Button active={props.muted} onClick={handleMute(props.onClickMute, props.screenshotTargetId, props.muted)}>
 					<span className={props.muted ? 'icon icon-mute' : 'icon icon-sound'}/>
 				</Button>
 				<Button active={props.pinned} onClick={props.onClickPin}>

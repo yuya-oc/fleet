@@ -1,12 +1,13 @@
 import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
-import {createStore, combineReducers, compose} from 'redux';
+import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import {Router, Route, IndexRoute, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import {electronEnhancer} from 'redux-electron-store';
 
 import reducers from '../reducers';
+import electronMiddleware from './middleware/electronMiddleware';
 import App from './components/App';
 import Overview from './components/Overview';
 import Settings from './containers/Settings';
@@ -22,6 +23,7 @@ let store = createStore(
 	}),
 	{},
 	composeEnhancers(
+		applyMiddleware(electronMiddleware),
 		electronEnhancer({
 			dispatchProxy: a => store.dispatch(a)
 		})
