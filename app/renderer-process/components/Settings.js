@@ -20,12 +20,11 @@ const Settings = (props, context) => (
 	<form onSubmit={handleSubmit(props.onSave, context)}>
 		<div className="form-group">
 			<label>Screenshot directory</label><br/>
-			<DirectorySelectButton btnClass="btn btn-default" onClick>Select</DirectorySelectButton>
+			<DirectorySelectButton btnClass="btn btn-default">Select</DirectorySelectButton>
 			{` ${props.screenshotDir}`}
 		</div>
 		<div className="form-actions">
 			<button className="btn btn-form btn-default" onClick={handleCancel(props.onCancel, context)} to="/">Cancel</button>
-			{' '}
 			<button className="btn btn-form btn-primary" type="submit">Save</button>
 		</div>
 	</form>
