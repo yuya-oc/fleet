@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import {takeScreenshot, setAudioMuted} from '../../actions';
+import {takeScreenshot, setAudioMuted, setWebviewScale} from '../../actions';
 
 import ToolButtons from '../components/ToolButtons';
 
@@ -14,6 +14,9 @@ const mapDispatchToProps = dispatch => ({
 	},
 	onClickMute: (targetId, nextMuted) => {
 		dispatch(setAudioMuted(targetId, nextMuted));
+	},
+	onClickScale: scale => {
+		dispatch(setWebviewScale(scale));
 	}
 });
 

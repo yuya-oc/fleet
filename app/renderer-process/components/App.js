@@ -22,11 +22,13 @@ const childStyle = {
 	minWidth: '300px'
 };
 
+const possibleScales = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];
+
 const App = props => (
 	<div style={parentStyle}>
 		<div style={mainStyle}>
 			<KanColle muted id={props.route.webviewId} src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"/>
-			<ToolButtons screenshotTargetId={props.route.webviewId}/>
+			<ToolButtons screenshotTargetId={props.route.webviewId} initialScale={1.0} possibleScales={possibleScales}/>
 		</div>
 		<div style={childStyle}>
 			<Main>

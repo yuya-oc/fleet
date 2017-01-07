@@ -38,7 +38,27 @@ const handleMute = (onClick, targetId, muted) => {
 	}
 };
 
+function getHigherScale(scales, currentScale) {
+	const length = scales.length;
+	const i = scales.indexOf(currentScale);
+	return scales[Math.min(i + 1, length - 1)];
+}
+
+function getLowerScale(scales, currentScale) {
+	const i = scales.indexOf(currentScale);
+	return scales[Math.max(i - 1, 0)];
+}
+
 const ToolButtons = props => {
+	const handleScaleUp = () => {
+		props.onClickScale(getHigherScale(props.possibleScales, props.scale));
+	};
+	const handleScaleDown = () => {
+		props.onClickScale(getLowerScale(props.possibleScales, props.scale));
+	};
+	const handleScaleReset = () => {
+		props.onClickScale(props.initialScale);
+	};
 	return (
 		<div>
 			<div className="btn-group">
@@ -51,8 +71,17 @@ const ToolButtons = props => {
 				<Button active={props.pinned} onClick={props.onClickPin}>
 					<span className="icon icon-check"/>
 				</Button>
-				<Button style={{fontSize: '11.5px'}} onClick={props.onClickScale}>
+			</div>
+			{' '}
+			<div className="btn-group">
+				<Button onClick={handleScaleDown}>
+					<span className="icon icon-minus"/>
+				</Button>
+				<Button style={{fontSize: '11.5px'}} onClick={handleScaleReset}>
 					<span>{props.scale * 100}%</span>
+				</Button>
+				<Button onClick={handleScaleUp}>
+					<span className="icon icon-plus"/>
 				</Button>
 			</div>
 			{' '}
@@ -68,6 +97,8 @@ ToolButtons.propTypes = {
 	muted: React.PropTypes.bool,
 	pinned: React.PropTypes.bool,
 	scale: React.PropTypes.number,
+	possibleScales: React.PropTypes.array,
+	initialScale: React.PropTypes.number,
 	onClickScreenshot: React.PropTypes.func,
 	onClickMute: React.PropTypes.func,
 	onClickPin: React.PropTypes.func,
