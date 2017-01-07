@@ -1,18 +1,19 @@
 import React from 'react';
 
 const Button = props => {
-	const {active, ...reftProps} = props;
+	const {active, btnStyle, ...reftProps} = props;
 	let className = 'btn btn-large btn-default';
 	if (active) {
 		className += ' active';
 	}
 	return (
-		<button className={className} {...reftProps}/>
+		<button className={className} style={btnStyle} {...reftProps}/>
 	);
 };
 
 Button.propTypes = {
-	active: React.PropTypes.bool
+	active: React.PropTypes.bool,
+	btnStyle: React.PropTypes.object
 };
 
 const handleScreenshot = (onClick, targetId) => {
@@ -50,15 +51,9 @@ function getLowerScale(scales, currentScale) {
 }
 
 const ToolButtons = props => {
-	const handleScaleUp = () => {
-		props.onClickScale(getHigherScale(props.possibleScales, props.scale));
-	};
-	const handleScaleDown = () => {
-		props.onClickScale(getLowerScale(props.possibleScales, props.scale));
-	};
-	const handleScaleReset = () => {
-		props.onClickScale(props.initialScale);
-	};
+	const handleScaleUp = props.onClickScale.bind(this, getHigherScale(props.possibleScales, props.scale));
+	const handleScaleDown = props.onClickScale.bind(this, getLowerScale(props.possibleScales, props.scale));
+	const handleScaleReset = props.onClickScale.bind(this, props.initialScale);
 	return (
 		<div>
 			<div className="btn-group">
@@ -77,7 +72,7 @@ const ToolButtons = props => {
 				<Button onClick={handleScaleDown}>
 					<span className="icon icon-minus"/>
 				</Button>
-				<Button style={{fontSize: '11.5px'}} onClick={handleScaleReset}>
+				<Button btnStyle={{fontSize: '11.5px'}} onClick={handleScaleReset}>
 					<span>{props.scale * 100}%</span>
 				</Button>
 				<Button onClick={handleScaleUp}>

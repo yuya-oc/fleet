@@ -1,6 +1,6 @@
 import {SET_AUDIO_MUTED} from '../../actions';
 
-const electronMiddleware = store => next => action => {
+const electronMiddleware = () => next => action => {
 	switch (action.type) {
 		case SET_AUDIO_MUTED: {
 			const webview = document.getElementById(action.targetId); // eslint-disable-line no-undef

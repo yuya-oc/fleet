@@ -12,7 +12,7 @@ import App from './components/App';
 import Overview from './components/Overview';
 import Settings from './containers/Settings';
 
-import photon from '!style!css!photon/dist/css/photon.css';
+import '!style!css!photon/dist/css/photon.css';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-undef
 

@@ -18,7 +18,7 @@ const Main = props => (
 );
 
 Main.propTypes = {
-	route: React.PropTypes.object
+	children: React.PropTypes.node
 };
 
 export default Main;
