@@ -70,3 +70,21 @@ export const setKcsapiPortData = data => ({
 	type: SET_KCSAPI_PORT_DATA,
 	data
 });
+
+export const TOGGLE_ALWAYS_ON_TOP = 'TOGGLE_ALWAYS_ON_TOP';
+export const SET_ALWAYS_ON_TOP = 'SET_ALWAYS_ON_TOP';
+
+export const toggleAlwaysOnTop = () => ({
+	type: TOGGLE_ALWAYS_ON_TOP
+});
+
+export const setAlwaysOnTop = flag => ({
+	type: SET_ALWAYS_ON_TOP,
+	flag
+});
+
+export const RELOAD_WEBVIEW = 'RELOAD_WEBVIEW';
+export const reloadWebview = targetId => ({
+	type: RELOAD_WEBVIEW,
+	targetId
+});

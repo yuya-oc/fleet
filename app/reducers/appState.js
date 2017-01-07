@@ -1,6 +1,6 @@
-import {SET_AUDIO_MUTED, SET_WEBVIEW_SCALE} from '../actions';
+import {SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, SET_WEBVIEW_SCALE} from '../actions';
 
-const initialState = {muted: false, webviewScale: 1.0};
+const initialState = {muted: false, webviewScale: 1.0, alwaysOnTop: false};
 
 const appState = (state = initialState, action) => {
 	switch (action.type) {
@@ -8,6 +8,8 @@ const appState = (state = initialState, action) => {
 			return Object.assign({}, state, {muted: action.muted});
 		case SET_WEBVIEW_SCALE:
 			return Object.assign({}, state, {webviewScale: action.scale});
+		case SET_ALWAYS_ON_TOP:
+			return Object.assign({}, state, {alwaysOnTop: action.flag});
 		default:
 			return state;
 	}

@@ -1,11 +1,12 @@
 import {connect} from 'react-redux';
-import {takeScreenshot, setAudioMuted, setWebviewScale} from '../../actions';
+import {takeScreenshot, setAudioMuted, setWebviewScale, toggleAlwaysOnTop, reloadWebview} from '../../actions';
 
 import ToolButtons from '../components/ToolButtons';
 
 const mapStateToProps = state => ({
 	muted: state.appState.muted,
-	scale: state.appState.webviewScale
+	scale: state.appState.webviewScale,
+	pinned: state.appState.alwaysOnTop
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -15,8 +16,14 @@ const mapDispatchToProps = dispatch => ({
 	onClickMute: (targetId, nextMuted) => {
 		dispatch(setAudioMuted(targetId, nextMuted));
 	},
+	onClickPin: () => {
+		dispatch(toggleAlwaysOnTop());
+	},
 	onClickScale: scale => {
 		dispatch(setWebviewScale(scale));
+	},
+	onClickReload: targetId => {
+		dispatch(reloadWebview(targetId));
 	}
 });
 

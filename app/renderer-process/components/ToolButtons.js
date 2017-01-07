@@ -54,6 +54,7 @@ const ToolButtons = props => {
 	const handleScaleUp = props.onClickScale.bind(this, getHigherScale(props.possibleScales, props.scale));
 	const handleScaleDown = props.onClickScale.bind(this, getLowerScale(props.possibleScales, props.scale));
 	const handleScaleReset = props.onClickScale.bind(this, props.initialScale);
+	const handleReload = props.onClickReload.bind(this, props.screenshotTargetId);
 	return (
 		<div>
 			<div className="btn-group">
@@ -80,7 +81,7 @@ const ToolButtons = props => {
 				</Button>
 			</div>
 			{' '}
-			<Button onClick={props.onClickReload}>
+			<Button onClick={handleReload}>
 				<span className="icon icon-cw"/>
 			</Button>
 		</div>
