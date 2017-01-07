@@ -1,7 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
-
-import ScreenshotDirectoryFormGroup from '../containers/ScreenshotDirectoryFormGroup';
+import DirectorySelectButton from '../containers/ScreenshotDirectorySelectButton';
 
 const handleSubmit = (callback, context) => event => {
 	event.preventDefault();
@@ -19,18 +17,22 @@ const handleCancel = (callback, context) => () => {
 };
 
 const Settings = (props, context) => (
-	<div>
-		<h1>Settings</h1>
-		<form onSubmit={handleSubmit(props.onSave, context)}>
-			<ScreenshotDirectoryFormGroup/>
-			<Button onClick={handleCancel(props.onCancel, context)} to="/">Cancel</Button>
+	<form onSubmit={handleSubmit(props.onSave, context)}>
+		<div className="form-group">
+			<label>Screenshot directory</label><br/>
+			<DirectorySelectButton btnClass="btn btn-default" onClick>Select</DirectorySelectButton>
+			{` ${props.screenshotDir}`}
+		</div>
+		<div className="form-actions">
+			<button className="btn btn-form btn-default" onClick={handleCancel(props.onCancel, context)} to="/">Cancel</button>
 			{' '}
-			<Button bsStyle="primary" type="submit">Save</Button>
-		</form>
-	</div>
+			<button className="btn btn-form btn-primary" type="submit">Save</button>
+		</div>
+	</form>
 );
 
 Settings.propTypes = {
+	screenshotDir: React.PropTypes.string,
 	onSave: React.PropTypes.func,
 	onCancel: React.PropTypes.func
 };

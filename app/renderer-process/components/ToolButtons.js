@@ -1,4 +1,6 @@
 import React from 'react';
+import {shell} from 'electron';
+import fs from 'fs';
 
 const Button = props => {
 	const {active, btnStyle, ...reftProps} = props;
@@ -28,6 +30,12 @@ const handleScreenshot = (onClick, targetId) => {
 			};
 			onClick(bounds);
 		};
+	}
+};
+
+const handleOpenDirectory = screenshotDir => () => {
+	if (fs.statSync(screenshotDir).isDirectory()) {
+		shell.openItem(screenshotDir);
 	}
 };
 
@@ -61,6 +69,12 @@ const ToolButtons = props => {
 				<Button onClick={handleScreenshot(props.onClickScreenshot, props.screenshotTargetId)}>
 					<span className="icon icon-camera"/>
 				</Button>
+				<Button onClick={handleOpenDirectory(props.screenshotDir)}>
+					<span className="icon icon-folder"/>
+				</Button>
+			</div>
+			{' '}
+			<div className="btn-group">
 				<Button active={props.muted} onClick={handleMute(props.onClickMute, props.screenshotTargetId, props.muted)}>
 					<span className={props.muted ? 'icon icon-mute' : 'icon icon-sound'}/>
 				</Button>
@@ -90,6 +104,7 @@ const ToolButtons = props => {
 
 ToolButtons.propTypes = {
 	screenshotTargetId: React.PropTypes.string,
+	screenshotDir: React.PropTypes.string,
 	muted: React.PropTypes.bool,
 	pinned: React.PropTypes.bool,
 	scale: React.PropTypes.number,

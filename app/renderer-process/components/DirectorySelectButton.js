@@ -1,5 +1,4 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
 import {remote} from 'electron';
 
 function selectDirectory(onSelect) {
@@ -18,18 +17,20 @@ class DirectorySelectButton extends React.Component {
 		this.handleClick = this.handleClick.bind(this);
 	}
 
-	handleClick() {
+	handleClick(event) {
+		event.preventDefault();
 		selectDirectory(this.props.onDirectorySelect);
 	}
 
 	render() {
 		return (
-			<Button onClick={this.handleClick}>{this.props.children}</Button>
+			<button className={this.props.btnClass} onClick={this.handleClick}>{this.props.children}</button>
 		);
 	}
 }
 
 DirectorySelectButton.propTypes = {
+	btnClass: React.PropTypes.string,
 	children: React.PropTypes.node,
 	onDirectorySelect: React.PropTypes.func
 };

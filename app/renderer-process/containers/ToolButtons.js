@@ -4,6 +4,7 @@ import {takeScreenshot, setAudioMuted, setWebviewScale, toggleAlwaysOnTop, reloa
 import ToolButtons from '../components/ToolButtons';
 
 const mapStateToProps = state => ({
+	screenshotDir: state.config.screenshotDir,
 	muted: state.appState.muted,
 	scale: state.appState.webviewScale,
 	pinned: state.appState.alwaysOnTop

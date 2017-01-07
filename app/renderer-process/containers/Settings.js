@@ -3,17 +3,19 @@ import {connect} from 'react-redux';
 import {saveConfig, loadConfig} from '../../actions';
 import Settings from '../components/Settings';
 
-function mapDispatchToProps(dispath) {
-	return {
-		onSave: () => {
-			dispath(saveConfig('config'));
-		},
-		onCancel: () => {
-			dispath(loadConfig());
-		}
-	};
-}
+const mapStateToProps = state => ({
+	screenshotDir: state.config.screenshotDir
+});
 
-const SettingsContainer = connect(null, mapDispatchToProps)(Settings);
+const mapDispatchToProps = dispath => ({
+	onSave: () => {
+		dispath(saveConfig('config'));
+	},
+	onCancel: () => {
+		dispath(loadConfig());
+	}
+});
+
+const SettingsContainer = connect(mapStateToProps, mapDispatchToProps)(Settings);
 
 export default SettingsContainer;
