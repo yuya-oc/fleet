@@ -62,7 +62,9 @@ const ToolButtons = props => {
 	const handleScaleUp = props.onClickScale.bind(this, getHigherScale(props.possibleScales, props.scale));
 	const handleScaleDown = props.onClickScale.bind(this, getLowerScale(props.possibleScales, props.scale));
 	const handleScaleReset = props.onClickScale.bind(this, props.initialScale);
-	const handleReload = props.onClickReload.bind(this, props.screenshotTargetId);
+	const handleReload = event => {
+		props.onClickReload(props.screenshotTargetId, event.shiftKey);
+	};
 	return (
 		<div>
 			<div className="btn-group">

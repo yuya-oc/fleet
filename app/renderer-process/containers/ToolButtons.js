@@ -23,8 +23,8 @@ const mapDispatchToProps = dispatch => ({
 	onClickScale: scale => {
 		dispatch(setWebviewScale(scale));
 	},
-	onClickReload: targetId => {
-		dispatch(reloadWebview(targetId));
+	onClickReload: (targetId, clearCache) => {
+		dispatch(reloadWebview(targetId, clearCache));
 	}
 });
 

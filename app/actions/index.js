@@ -84,7 +84,8 @@ export const setAlwaysOnTop = flag => ({
 });
 
 export const RELOAD_WEBVIEW = 'RELOAD_WEBVIEW';
-export const reloadWebview = targetId => ({
+export const reloadWebview = (targetId, clearCache) => ({
 	type: RELOAD_WEBVIEW,
-	targetId
+	targetId,
+	clearCache
 });

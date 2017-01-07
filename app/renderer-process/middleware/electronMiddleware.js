@@ -18,7 +18,13 @@ const electronMiddleware = store => next => action => {
 			break;
 		case RELOAD_WEBVIEW: {
 			const webview = document.getElementById(action.targetId); // eslint-disable-line no-undef
-			webview.reload();
+			if (action.clearCache) {
+				webview.getWebContents().session.clearCache(() => {
+					webview.reload();
+				});
+			} else {
+				webview.reload();
+			}
 			break;
 		}
 		default:
