@@ -53,7 +53,7 @@ app.on('quit', () => {
 });
 
 app.on('ready', () => {
-	mainWindow = new BrowserWindow({show: false});
+	mainWindow = new BrowserWindow({show: false, backgroundColor: '#f5f5f5'});
 	store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
 
 	if (isDev) {

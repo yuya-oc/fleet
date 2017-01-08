@@ -4,14 +4,14 @@ import LinkTab from './LinkTab';
 const Main = props => (
 	<div>
 		<div className="tab-group">
-			<LinkTab to="/">
+			<LinkTab to="/overview">
 				概要
 			</LinkTab>
 			<LinkTab to="/settings">
 				設定
 			</LinkTab>
 		</div>
-		<div>
+		<div style={{padding: '8px'}}>
 			{props.children}
 		</div>
 	</div>

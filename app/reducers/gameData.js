@@ -20,6 +20,10 @@ const gameData = (state = initialState, action) => {
 					ships: action.data.api_data.api_mst_ship.map(ship => ({
 						id: ship.api_id,
 						name: ship.api_name
+					})),
+					missions: action.data.api_data.api_mst_mission.map(mission => ({
+						id: mission.api_id,
+						name: mission.api_name
 					}))
 				}
 			});

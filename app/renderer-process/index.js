@@ -2,14 +2,14 @@ import React from 'react';
 import {render} from 'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
-import {Router, Route, IndexRoute, hashHistory} from 'react-router';
+import {Router, Route, IndexRedirect, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import {electronEnhancer} from 'redux-electron-store';
 
 import reducers from '../reducers';
 import electronMiddleware from './middleware/electronMiddleware';
 import App from './components/App';
-import Overview from './components/Overview';
+import Overview from './containers/Overview';
 import Settings from './containers/Settings';
 
 import '!style!css!photon/dist/css/photon.css';
@@ -38,7 +38,11 @@ render(
 	<Provider store={store}>
 		<Router history={history}>
 			<Route path="/" component={App} webviewId={webviewId}>
-				<IndexRoute component={Overview} webviewId={webviewId}/>
+				<IndexRedirect to="/overview"/>
+				<Route path="/overview">
+					<IndexRedirect to="/overview/0"/>
+					<Route path="/overview/:fleetIndex" component={Overview}/>
+				</Route>
 				<Route path="/settings" component={Settings}/>
 			</Route>
 		</Router>
