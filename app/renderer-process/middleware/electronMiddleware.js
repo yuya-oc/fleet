@@ -1,8 +1,24 @@
-import {SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, setAlwaysOnTop} from '../../actions';
+import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, setAlwaysOnTop} from '../../actions';
 import {remote} from 'electron';
+
+const sec = 1000;
+const minute = 60 * sec;
 
 const electronMiddleware = store => next => action => {
 	switch (action.type) {
+		case SET_CURRENT_DATE_VALUE: {
+			store.getState().gameData.user.fleets.forEach(fleet => {
+				const mission = fleet.mission;
+				if (mission.sortie && Math.abs(mission.completionDateValue - minute - action.value) <= sec / 2) {
+					const notification = new Notification(mission.name, {body: 'まもなく帰還します'}); // eslint-disable-line no-undef
+					const currentWindow = remote.getCurrentWindow();
+					notification.onclick = () => {
+						currentWindow.show();
+					};
+				}
+			});
+			break;
+		}
 		case SET_AUDIO_MUTED: {
 			const webview = document.getElementById(action.targetId); // eslint-disable-line no-undef
 			webview.getWebContents().setAudioMuted(action.muted);

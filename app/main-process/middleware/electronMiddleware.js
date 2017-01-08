@@ -33,7 +33,9 @@ function takeScreenshot(browserWindow, screenshotDir, webviewBounds, webviewScal
 const electronMiddleware = mainWindow => {
 	return store => {
 		setInterval(() => {
-			store.dispatch(setCurrentDateValue(Date.now()));
+			setImmediate(() => {
+				store.dispatch(setCurrentDateValue(Date.now()));
+			});
 		}, 1000);
 
 		return next => action => {
