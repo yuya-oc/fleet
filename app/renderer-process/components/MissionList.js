@@ -1,21 +1,34 @@
 import React from 'react';
+import dateFormat from 'dateformat';
 
-const MissionListItem = props => (
-	<li className="list-group-item">
-		<strong>{props.mission.name}</strong> {props.mission.remains}
-	</li>
-);
+const MissionListItem = props => {
+	const mission = props.mission;
+	const remains = mission.sortie ?
+		dateFormat(new Date(mission.completionDateValue - props.currentDateValue), 'UTC:HH:MM:ss') :
+		'--:--:--';
+	return (
+		<li className="list-group-item">
+			<strong>{mission.sortie ? mission.name : '-'}</strong> {remains}
+		</li>
+	);
+};
 
 MissionListItem.propTypes = {
+	currentDateValue: React.PropTypes.number,
 	mission: React.PropTypes.object
 };
 
-const MissionList = () => (
+const MissionList = props => (
 	<ul className="list-group">
-		<MissionListItem mission={{name: 'TEST 1', remains: '00:20:00'}}/>
-		<MissionListItem mission={{name: 'TEST 2', remains: '05:00:00'}}/>
-		<MissionListItem mission={{name: 'TEST 3', remains: '02:50:00'}}/>
+		{props.missions ? props.missions.map((mission, i) => (
+			<MissionListItem key={i} currentDateValue={props.currentDateValue} mission={mission}/>
+		)) : null}
 	</ul>
 );
+
+MissionList.propTypes = {
+	currentDateValue: React.PropTypes.number,
+	missions: React.PropTypes.array
+};
 
 export default MissionList;

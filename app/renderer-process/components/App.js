@@ -19,7 +19,7 @@ const mainStyle = {
 
 const childStyle = {
 	flex: 1,
-	minWidth: '300px'
+	minWidth: '250px'
 };
 
 const possibleScales = [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0];

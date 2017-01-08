@@ -5,7 +5,9 @@ const mapStateToProps = (state, ownProps) => {
 	const index = ownProps.params.fleetIndex;
 	const fleets = state.gameData.user.fleets;
 	return {
-		ships: fleets[index] ? fleets[index].ships : null
+		currentDateValue: state.appState.currentDateValue,
+		ships: fleets[index] ? fleets[index].ships : null,
+		missions: fleets.slice(1).map(fleet => fleet.mission)
 	};
 };
 

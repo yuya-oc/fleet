@@ -1,6 +1,6 @@
 import fs from 'fs';
 import dateFormat from 'dateformat';
-import {TAKE_SCREENSHOT} from '../../actions';
+import {TAKE_SCREENSHOT, setCurrentDateValue} from '../../actions';
 
 function getFileName(date) {
 	return `fleet_${dateFormat(date, 'yyyy-mm-dd_HH-MM-ss-l')}.png`;
@@ -31,17 +31,23 @@ function takeScreenshot(browserWindow, screenshotDir, webviewBounds, webviewScal
 }
 
 const electronMiddleware = mainWindow => {
-	return store => next => action => {
-		switch (action.type) {
-			case TAKE_SCREENSHOT: {
-				const state = store.getState();
-				takeScreenshot(mainWindow, state.config.screenshotDir, action.bounds, state.appState.webviewScale);
-				break;
+	return store => {
+		setInterval(() => {
+			store.dispatch(setCurrentDateValue(Date.now()));
+		}, 1000);
+
+		return next => action => {
+			switch (action.type) {
+				case TAKE_SCREENSHOT: {
+					const state = store.getState();
+					takeScreenshot(mainWindow, state.config.screenshotDir, action.bounds, state.appState.webviewScale);
+					break;
+				}
+				default:
+					break;
 			}
-			default:
-				break;
-		}
-		return next(action);
+			return next(action);
+		};
 	};
 };
 

@@ -1,9 +1,16 @@
-import {SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, SET_WEBVIEW_SCALE} from '../actions';
+import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, SET_WEBVIEW_SCALE} from '../actions';
 
-const initialState = {muted: false, webviewScale: 1.0, alwaysOnTop: false};
+const initialState = {
+	currentDateValue: 0,
+	muted: false,
+	webviewScale: 1.0,
+	alwaysOnTop: false
+};
 
 const appState = (state = initialState, action) => {
 	switch (action.type) {
+		case SET_CURRENT_DATE_VALUE:
+			return Object.assign({}, state, {currentDateValue: action.value});
 		case SET_AUDIO_MUTED:
 			return Object.assign({}, state, {muted: action.muted});
 		case SET_WEBVIEW_SCALE:

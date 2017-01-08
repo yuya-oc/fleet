@@ -29,6 +29,7 @@ function createReduxStore(mainWindow) {
 		config,
 		fleets: {},
 		appState: {
+			currentDateValue: 0,
 			muted: false,
 			webviewScale: 1.0,
 			alwaysOnTop: false

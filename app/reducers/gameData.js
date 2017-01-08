@@ -12,6 +12,13 @@ function getShipName(master, shipId) {
 	return master.ships.find(ship => ship.id === shipId).name;
 }
 
+function getMissionName(master, missionId) {
+	if (missionId === 0) {
+		return '';
+	}
+	return master.missions.find(mission => mission.id === missionId).name;
+}
+
 const gameData = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_KCSAPI_MASTER_DATA:
@@ -47,7 +54,12 @@ const gameData = (state = initialState, action) => {
 						ships.push(newState.user.ships.find(ship => ship.id === shipId));
 					}
 					return ships;
-				}, [])
+				}, []),
+				mission: {
+					sortie: deck.api_mission[0] === 1,
+					name: getMissionName(state.master, deck.api_mission[1]),
+					completionDateValue: deck.api_mission[2]
+				}
 			}));
 			return newState;
 		}

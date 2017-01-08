@@ -32,6 +32,12 @@ export const setConfig = config => {
 	};
 };
 
+export const SET_CURRENT_DATE_VALUE = 'SET_CURRENT_DATE_VALUE';
+export const setCurrentDateValue = value => ({
+	type: SET_CURRENT_DATE_VALUE,
+	value
+});
+
 export const SET_AUDIO_MUTED = 'SET_MUTED';
 
 export const setAudioMuted = (targetId, muted) => {
