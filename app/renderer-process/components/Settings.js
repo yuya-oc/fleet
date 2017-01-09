@@ -19,13 +19,13 @@ const handleCancel = (callback, context) => () => {
 const Settings = (props, context) => (
 	<form onSubmit={handleSubmit(props.onSave, context)}>
 		<div className="form-group">
-			<label>Screenshot directory</label><br/>
-			<DirectorySelectButton btnClass="btn btn-default">Select</DirectorySelectButton>
+			<label>スクリーンショット保存先</label><br/>
+			<DirectorySelectButton btnClass="btn btn-default">選択</DirectorySelectButton>
 			{` ${props.screenshotDir}`}
 		</div>
 		<div className="form-actions">
-			<button className="btn btn-form btn-default" onClick={handleCancel(props.onCancel, context)} to="/">Cancel</button>
-			<button className="btn btn-form btn-primary" type="submit">Save</button>
+			<button className="btn btn-form btn-default" onClick={handleCancel(props.onCancel, context)} to="/">キャンセル</button>
+			<button className="btn btn-form btn-primary" type="submit">保存</button>
 		</div>
 	</form>
 );
