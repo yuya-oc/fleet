@@ -14,7 +14,7 @@ import Settings from './containers/Settings';
 
 import '!style!css!photon/dist/css/photon.css';
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose; // eslint-disable-line no-undef
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 let store = createStore(
 	combineReducers({
@@ -47,5 +47,5 @@ render(
 			</Route>
 		</Router>
 	</Provider>,
-	document.getElementById('root') // eslint-disable-line no-undef
+	document.getElementById('root')
 );

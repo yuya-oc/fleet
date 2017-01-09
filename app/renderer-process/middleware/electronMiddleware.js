@@ -10,7 +10,7 @@ const electronMiddleware = store => next => action => {
 			store.getState().gameData.user.fleets.forEach(fleet => {
 				const mission = fleet.mission;
 				if (mission.sortie && Math.abs(mission.completionDateValue - minute - action.value) <= sec / 2) {
-					const notification = new Notification(mission.name, {body: 'まもなく帰還します'}); // eslint-disable-line no-undef
+					const notification = new Notification(mission.name, {body: 'まもなく帰還します'});
 					const currentWindow = remote.getCurrentWindow();
 					notification.onclick = () => {
 						currentWindow.show();
@@ -20,7 +20,7 @@ const electronMiddleware = store => next => action => {
 			break;
 		}
 		case SET_AUDIO_MUTED: {
-			const webview = document.getElementById(action.targetId); // eslint-disable-line no-undef
+			const webview = document.getElementById(action.targetId);
 			webview.getWebContents().setAudioMuted(action.muted);
 			break;
 		}
@@ -33,7 +33,7 @@ const electronMiddleware = store => next => action => {
 			});
 			break;
 		case RELOAD_WEBVIEW: {
-			const webview = document.getElementById(action.targetId); // eslint-disable-line no-undef
+			const webview = document.getElementById(action.targetId);
 			if (action.clearCache) {
 				webview.getWebContents().session.clearCache(() => {
 					webview.reload();

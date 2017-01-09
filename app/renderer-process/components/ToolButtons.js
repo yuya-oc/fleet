@@ -21,7 +21,7 @@ Button.propTypes = {
 const handleScreenshot = (onClick, targetId) => {
 	if (onClick) {
 		return () => {
-			const rect = document.getElementById(targetId).getBoundingClientRect(); // eslint-disable-line no-undef
+			const rect = document.getElementById(targetId).getBoundingClientRect();
 			const bounds = {
 				x: rect.left,
 				y: rect.top,

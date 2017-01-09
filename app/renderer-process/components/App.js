@@ -1,5 +1,4 @@
 /* eslint react/jsx-no-bind:0 */
-/* eslint-env browser */
 
 import React from 'react';
 import electron, {remote} from 'electron';
