@@ -26,4 +26,4 @@ function createMainWindow() {
 	return mainWindow;
 }
 
-export default createMainWindow();
+export default createMainWindow;
