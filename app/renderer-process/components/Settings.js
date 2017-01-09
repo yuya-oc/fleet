@@ -17,7 +17,7 @@ const handleCancel = (callback, context) => () => {
 };
 
 const Settings = (props, context) => (
-	<form onSubmit={handleSubmit(props.onSave, context)}>
+	<form style={{padding: '8px'}} onSubmit={handleSubmit(props.onSave, context)}>
 		<div className="form-group">
 			<label>スクリーンショット保存先</label><br/>
 			<DirectorySelectButton btnClass="btn btn-default">選択</DirectorySelectButton>

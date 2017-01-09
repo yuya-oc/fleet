@@ -34,12 +34,12 @@ class KanColle extends React.Component {
 		return (
 			<webview
 				id={this.props.id}
-				style={{
+				style={Object.assign({}, {
 					display: 'inline-flex',
 					background: 'gray',
 					width: `${800 * this.props.scale / deviceScaleFactor}px`,
 					height: `${480 * this.props.scale / deviceScaleFactor}px`
-				}}
+				}, this.props.style)}
 				ref={webview => { // eslint-disable-line react/jsx-no-bind
 					this.webview = webview;
 				}}
@@ -52,7 +52,8 @@ class KanColle extends React.Component {
 KanColle.propTypes = {
 	id: PropTypes.string,
 	src: PropTypes.string.isRequired,
-	scale: PropTypes.number
+	scale: PropTypes.number,
+	style: PropTypes.object
 };
 
 KanColle.defaultProps = {

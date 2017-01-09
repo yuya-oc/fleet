@@ -20,7 +20,8 @@ const mainStyle = {
 	display: 'flex',
 	flexFlow: 'column nowrap',
 	justifyContent: 'center',
-	alignItems: 'center'
+	alignItems: 'center',
+	marginBottom: '16px'
 };
 
 const childStyle = {
@@ -88,7 +89,7 @@ class App extends React.Component {
 						this.mainDiv = div;
 					}}
 					>
-					<KanColle muted id={this.props.route.webviewId} src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"/>
+					<KanColle style={{marginBottom: '8px'}} muted id={this.props.route.webviewId} src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"/>
 					<ToolButtons screenshotTargetId={this.props.route.webviewId} initialScale={1.0} possibleScales={possibleScales}/>
 				</div>
 				<div style={childStyle}>

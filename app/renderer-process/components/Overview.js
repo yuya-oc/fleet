@@ -11,15 +11,15 @@ const panelStyle = {
 
 const panelHeaderStyle = {
 	borderBottom: '1px solid gray',
-	marginBottom: 0
+	margin: 0
 };
 
 const Overview = props => (
 	<div style={{display: 'flex', flexFlow: 'row wrap', justifyContent: 'start'}}>
 		<div style={panelStyle}>
 			<div style={{display: 'flex', flexFlow: 'row nowrap', alignItems: 'center', borderBottom: '1px solid gray'}}>
-				<h3 style={{marginBottom: '0px'}}>艦隊</h3>
-				<div style={{display: 'flex', marginTop: '20px', marginLeft: '8px'}} className="btn-group">
+				<h3 style={{margin: '0px'}}>艦隊</h3>
+				<div style={{display: 'flex', marginLeft: '8px'}} className="btn-group">
 					<LinkButton to="/overview/0">1</LinkButton>
 					<LinkButton to="/overview/1">2</LinkButton>
 					<LinkButton to="/overview/2">3</LinkButton>
