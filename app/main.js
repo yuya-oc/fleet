@@ -1,4 +1,4 @@
-import {app, BrowserWindow, dialog} from 'electron';
+import {app, dialog} from 'electron';
 import fs from 'fs';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
@@ -8,6 +8,7 @@ import mkdirp from 'mkdirp';
 import {setKcsapiMasterData, setKcsapiPortData} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
+import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
 
 const localProxyPort = 20010;
@@ -57,8 +58,13 @@ app.on('quit', () => {
 });
 
 app.on('ready', () => {
-	mainWindow = new BrowserWindow({show: false, backgroundColor: '#f5f5f5'});
+	mainWindow = createMainWindow();
+	mainWindow.on('closed', () => {
+		mainWindow = null;
+	});
+
 	store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
+
 	loginModal = createLoginModal(mainWindow, store);
 	loginModal.on('closed', () => {
 		loginModal = null;
@@ -74,28 +80,7 @@ app.on('ready', () => {
 		installExtension(REDUX_DEVTOOLS).then(name => {
 			console.log(`Added Extension: ${name}`);
 		});
-		mainWindow.loadURL(`http://localhost:8080/`);
-	} else {
-		mainWindow.loadURL(`file://${app.getAppPath()}/index.html`);
 	}
-
-	mainWindow.once('ready-to-show', () => {
-		mainWindow.show();
-		if (isDev) {
-			mainWindow.openDevTools();
-		}
-	});
-
-	mainWindow.webContents.on('did-fail-load', () => {
-		if (isDev) {
-			console.log('You need to execute `yarn run watch` in another console.');
-			app.quit();
-		}
-	});
-
-	mainWindow.on('closed', () => {
-		mainWindow = null;
-	});
 });
 
 app.on('window-all-closed', () => {
