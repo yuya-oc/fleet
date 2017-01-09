@@ -1,4 +1,4 @@
-const {ipcRenderer, remote} = require('electron');
+const {ipcRenderer} = require('electron');
 const url = require('url');
 
 let webview;

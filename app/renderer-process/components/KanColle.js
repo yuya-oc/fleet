@@ -1,8 +1,6 @@
 import React, {PropTypes} from 'react';
 import electron from 'electron';
 const {remote} = electron;
-import path from 'path';
-import url from 'url';
 
 function getCurrentDeviceScaleFactor() {
 	const currentDisplay = electron.screen.getDisplayMatching(remote.getCurrentWindow().getBounds());
