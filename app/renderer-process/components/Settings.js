@@ -9,7 +9,8 @@ const handleSubmit = (callback, context) => event => {
 	context.router.push('/');
 };
 
-const handleCancel = (callback, context) => () => {
+const handleCancel = (callback, context) => event => {
+	event.preventDefault();
 	if (callback) {
 		callback(context);
 	}
