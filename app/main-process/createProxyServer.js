@@ -20,7 +20,7 @@ function createProxyServer() {
 			proxyRes.on('end', () => {
 				const buffer = Buffer.concat(chunks);
 				const body = JSON.parse(buffer.toString().replace(/^svdata=/, ''));
-				proxyServer.emit('kcsapiRes', req, parsed.pathname, body);
+				proxyServer.emit('kcsapiRes', proxyRes, req, parsed.pathname, body);
 			});
 		}
 	});

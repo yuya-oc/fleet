@@ -1,6 +1,6 @@
 import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_PORT_DATA} from '../actions';
 
-const initialState = {
+export const initialState = {
 	master: null,
 	user: {
 		ships: [],

@@ -22,9 +22,9 @@ class KanColle extends React.Component {
 //			this.webview.openDevTools();
 //		});
 		this.webview.addEventListener('did-finish-load', () => {
-			if (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
-				setWebViewScale(this.webview, this.props.scale);
-			}
+//			if (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
+			setWebViewScale(this.webview, this.props.scale);
+//			}
 		});
 		this.webview.setAttribute('plugins', true);
 	}
@@ -44,7 +44,6 @@ class KanColle extends React.Component {
 					this.webview = webview;
 				}}
 				src={this.props.src}
-				preload={`file://${path.resolve(remote.app.getAppPath(), 'renderer-process/components/KanCollePreload.js')}`}
 				/>);
 	}
 }

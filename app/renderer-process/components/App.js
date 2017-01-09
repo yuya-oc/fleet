@@ -89,7 +89,7 @@ class App extends React.Component {
 						this.mainDiv = div;
 					}}
 					>
-					<KanColle appendStyle={{marginBottom: '8px'}} muted id={this.props.route.webviewId} src="http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/"/>
+					<KanColle appendStyle={{marginBottom: '8px'}} muted id={this.props.route.webviewId}/>
 					<ToolButtons screenshotTargetId={this.props.route.webviewId} initialScale={1.0} possibleScales={possibleScales}/>
 				</div>
 				<div style={childStyle}>

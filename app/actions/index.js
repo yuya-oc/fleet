@@ -95,3 +95,9 @@ export const reloadWebview = (targetId, clearCache) => ({
 	targetId,
 	clearCache
 });
+
+export const SET_SWF_URL = 'SET_SWF_URL';
+export const setSwfURL = swfURL => ({
+	type: SET_SWF_URL,
+	swfURL
+});

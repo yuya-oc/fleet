@@ -26,20 +26,7 @@ function createReduxStore(mainWindow) {
 		})
 	);
 
-	const initialState = {
-		config,
-		fleets: {},
-		appState: {
-			currentDateValue: 0,
-			muted: false,
-			webviewScale: 1.0,
-			alwaysOnTop: false
-		},
-		userData: {
-			ships: null,
-			fleets: []
-		}
-	};
+	const initialState = Object.assign({}, reducers.initialState, {config});
 
 	store = createStore(combineReducers(reducers), initialState, enhancer);
 	store.dispatch(setWebviewScale(1.0));

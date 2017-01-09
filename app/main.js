@@ -8,10 +8,12 @@ import mkdirp from 'mkdirp';
 import {setKcsapiMasterData, setKcsapiPortData} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
+import createLoginModal from './main-process/createLoginModal';
 
 const localProxyPort = 20010;
 
 let mainWindow;
+let loginModal;
 let store;
 
 try {
@@ -24,24 +26,26 @@ try {
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
-proxyServer.on('kcsapiRes', (req, pathname, body) => {
-	console.log(pathname);
+proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
+	console.log(proxyRes.statusCode, pathname);
 	try {
 		const match = pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
 		const dir = `${app.getPath('userData')}/${match[1]}`;
 		const file = match[2];
-		console.log(dir, file);
+		console.log(dir, '/', file);
 		mkdirp.sync(dir);
 		fs.writeFileSync(`${dir}/${file}`, JSON.stringify(body, null, '  '));
-		switch (pathname) {
-			case '/kcsapi/api_start2':
-				store.dispatch(setKcsapiMasterData(body));
-				break;
-			case '/kcsapi/api_port/port':
-				store.dispatch(setKcsapiPortData(body));
-				break;
-			default:
-				break;
+		if (proxyRes.statusCode === 200) {
+			switch (pathname) {
+				case '/kcsapi/api_start2':
+					store.dispatch(setKcsapiMasterData(body));
+					break;
+				case '/kcsapi/api_port/port':
+					store.dispatch(setKcsapiPortData(body));
+					break;
+				default:
+					break;
+			}
 		}
 	} catch (e) {
 		console.error(e);
@@ -55,6 +59,13 @@ app.on('quit', () => {
 app.on('ready', () => {
 	mainWindow = new BrowserWindow({show: false, backgroundColor: '#f5f5f5'});
 	store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
+	loginModal = createLoginModal(mainWindow, store);
+	loginModal.on('closed', () => {
+		loginModal = null;
+		if (store.getState().appState.swfURL === '') {
+			mainWindow.close();
+		}
+	});
 
 	if (isDev) {
 		installExtension(REACT_DEVELOPER_TOOLS).then(name => {

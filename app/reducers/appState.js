@@ -1,6 +1,7 @@
-import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, SET_WEBVIEW_SCALE} from '../actions';
+import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, SET_WEBVIEW_SCALE, SET_SWF_URL} from '../actions';
 
-const initialState = {
+export const initialState = {
+	swfURL: '',
 	currentDateValue: 0,
 	muted: false,
 	webviewScale: 1.0,
@@ -17,6 +18,8 @@ const appState = (state = initialState, action) => {
 			return Object.assign({}, state, {webviewScale: action.scale});
 		case SET_ALWAYS_ON_TOP:
 			return Object.assign({}, state, {alwaysOnTop: action.flag});
+		case SET_SWF_URL:
+			return Object.assign({}, state, {swfURL: action.swfURL});
 		default:
 			return state;
 	}

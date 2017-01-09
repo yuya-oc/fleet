@@ -1,6 +1,6 @@
 import {SET_CONFIG, SET_SCREENSHOT_DIR} from '../actions';
 
-const initialState = {screenshotDir: '.'};
+export const initialState = {screenshotDir: '.'};
 
 const config = (state = initialState, action) => {
 	switch (action.type) {
