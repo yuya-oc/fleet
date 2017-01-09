@@ -62,7 +62,6 @@ class App extends React.Component {
 				newX -= newX % multiplier;
 			}
 		}
-		console.log(newX);
 		this.setState({mainDivLeft: newX});
 	}
 

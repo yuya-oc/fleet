@@ -1,6 +1,7 @@
 import fs from 'fs';
+import electron from 'electron';
 import dateFormat from 'dateformat';
-import {TAKE_SCREENSHOT, setCurrentDateValue} from '../../actions';
+import {TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, setCurrentDateValue} from '../../actions';
 
 function getFileName(date) {
 	return `fleet_${dateFormat(date, 'yyyy-mm-dd_HH-MM-ss-l')}.png`;
@@ -30,6 +31,11 @@ function takeScreenshot(browserWindow, screenshotDir, webviewBounds, webviewScal
 	});
 }
 
+function getCurrentDeviceScaleFactor(browserWindow) {
+	const currentDisplay = electron.screen.getDisplayMatching(browserWindow.getBounds());
+	return currentDisplay.scaleFactor;
+}
+
 const electronMiddleware = mainWindow => {
 	return store => {
 		setInterval(() => {
@@ -43,6 +49,12 @@ const electronMiddleware = mainWindow => {
 				case TAKE_SCREENSHOT: {
 					const state = store.getState();
 					takeScreenshot(mainWindow, state.config.screenshotDir, action.bounds, state.appState.webviewScale);
+					break;
+				}
+				case SET_WEBVIEW_SCALE: {
+					const factor = getCurrentDeviceScaleFactor(mainWindow);
+					mainWindow.setMinimumSize(Math.ceil(850 * action.scale / factor), Math.ceil(650 * action.scale / factor));
+					console.log(mainWindow.getMinimumSize());
 					break;
 				}
 				default:

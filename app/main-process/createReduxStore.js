@@ -2,6 +2,7 @@ import fs from 'fs';
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {electronEnhancer} from 'redux-electron-store';
 
+import {setWebviewScale} from '../actions';
 import reducers from '../reducers';
 import electronMiddleware from './middleware/electronMiddleware';
 import configManager, {configFile} from './middleware/configManager';
@@ -41,6 +42,7 @@ function createReduxStore(mainWindow) {
 	};
 
 	store = createStore(combineReducers(reducers), initialState, enhancer);
+	store.dispatch(setWebviewScale(1.0));
 
 	return store;
 }
