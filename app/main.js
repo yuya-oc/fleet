@@ -30,12 +30,14 @@ const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
 	console.log(proxyRes.statusCode, pathname);
 	try {
-		const match = pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
-		const dir = `${app.getPath('userData')}/${match[1]}`;
-		const file = match[2];
-		console.log(dir, '/', file);
-		mkdirp.sync(dir);
-		fs.writeFileSync(`${dir}/${file}`, JSON.stringify(body, null, '  '));
+		if (isDev) {
+			const match = pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
+			const dir = `${app.getPath('userData')}/${match[1]}`;
+			const file = match[2];
+			console.log(dir, '/', file);
+			mkdirp.sync(dir);
+			fs.writeFileSync(`${dir}/${file}`, JSON.stringify(body, null, '  '));
+		}
 		if (proxyRes.statusCode === 200) {
 			switch (pathname) {
 				case '/kcsapi/api_start2':
