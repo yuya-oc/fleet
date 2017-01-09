@@ -1,6 +1,7 @@
 import fs from 'fs';
 import electron from 'electron';
 import dateFormat from 'dateformat';
+import mkdirp from 'mkdirp';
 import {TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, setCurrentDateValue} from '../../actions';
 
 function getFileName(date) {
@@ -22,6 +23,15 @@ function takeScreenshot(browserWindow, screenshotDir, webviewBounds, webviewScal
 			width: Math.round(800 * webviewScale),
 			height: Math.round(480 * webviewScale)
 		});
+		if (!fs.existsSync(screenshotDir)) {
+			mkdirp.sync(screenshotDir);
+			electron.dialog.showMessageBox(browserWindow, {
+				type: 'info',
+				message: 'スクリーンショット保存先フォルダを作成しました',
+				detail: screenshotDir,
+				buttons: ['OK']
+			});
+		}
 		const filename = `${screenshotDir}/${getFileName(date)}`;
 		fs.writeFile(filename, screenshot.toPNG(), err => {
 			if (err) {
