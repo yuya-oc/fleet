@@ -8,13 +8,13 @@ function getFileName(date) {
 
 function takeScreenshot(browserWindow, screenshotDir, webviewBounds, webviewScale) {
 	const bounds = Object.assign({}, webviewBounds, {
-		width: Math.floor(webviewBounds.width) + 1,
-		height: Math.floor(webviewBounds.height) + 1
+		x: Math.floor(webviewBounds.x),
+		y: Math.floor(webviewBounds.y),
+		width: Math.ceil(webviewBounds.width),
+		height: Math.ceil(webviewBounds.height)
 	});
 	const date = new Date();
-	console.log(bounds);
 	browserWindow.webContents.capturePage(bounds, image => {
-		console.log(webviewScale);
 		const screenshot = image.crop({
 			x: 0,
 			y: 0,
