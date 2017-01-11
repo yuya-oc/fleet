@@ -76,12 +76,12 @@ app.on('ready', () => {
 	});
 
 	if (isDev) {
-		installExtension(REACT_DEVELOPER_TOOLS).then(name => {
-			console.log(`Added Extension: ${name}`);
-		});
-		installExtension(REDUX_DEVTOOLS).then(name => {
-			console.log(`Added Extension: ${name}`);
-		});
+		installExtension(REACT_DEVELOPER_TOOLS)
+			.then(name => console.log(`Added Extension:  ${name}`))
+			.catch(err => console.log('An error occurred: ', err));
+		installExtension(REDUX_DEVTOOLS)
+			.then(name => console.log(`Added Extension:  ${name}`))
+			.catch(err => console.log('An error occurred: ', err));
 	}
 });
 
