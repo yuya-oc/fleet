@@ -19,7 +19,7 @@ function createProxyServer() {
 
 			proxyRes.on('end', () => {
 				const buffer = Buffer.concat(chunks);
-				const body = JSON.parse(buffer.toString().replace(/^svdata=/, ''));
+				const body = buffer.toString();
 				proxyServer.emit('kcsapiRes', proxyRes, req, parsed.pathname, body);
 			});
 		}

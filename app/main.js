@@ -36,15 +36,16 @@ proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
 			const file = match[2];
 			console.log(dir, '/', file);
 			mkdirp.sync(dir);
-			fs.writeFileSync(`${dir}/${file}`, JSON.stringify(body, null, '  '));
+			fs.writeFileSync(`${dir}/${file}`, body);
 		}
 		if (proxyRes.statusCode === 200) {
+			const data = JSON.parse(body.replace(/^svdata=/, ''));
 			switch (pathname) {
 				case '/kcsapi/api_start2':
-					store.dispatch(setKcsapiMasterData(body));
+					store.dispatch(setKcsapiMasterData(data));
 					break;
 				case '/kcsapi/api_port/port':
-					store.dispatch(setKcsapiPortData(body));
+					store.dispatch(setKcsapiPortData(data));
 					break;
 				default:
 					break;
