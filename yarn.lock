@@ -1544,9 +1544,9 @@ electron-connect:
     tree-kill "^1.1.0"
     ws "^1.1.1"
 
-electron-devtools-installer:
+electron-devtools-installer@MarshallOfSound/electron-devtools-installer:
   version "2.0.1"
-  resolved "https://registry.yarnpkg.com/electron-devtools-installer/-/electron-devtools-installer-2.0.1.tgz#d52dcb3a430a95b771dc01d8deb13fcbdaa8d13c"
+  resolved "https://codeload.github.com/MarshallOfSound/electron-devtools-installer/tar.gz/af4713414e81095161076d1ad67a9b3c6dc03f7f"
   dependencies:
     "7zip" "0.0.6"
     cross-unzip "0.0.2"
