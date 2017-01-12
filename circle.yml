@@ -18,3 +18,4 @@ dependencies:
     - yarn run build
     - yarn run pack
     - find dist -name "*.zip" -exec mv -v {} ${CIRCLE_ARTIFACTS}/ \;
+    - mv dist/*.AppImage ${CIRCLE_ARTIFACTS}/
