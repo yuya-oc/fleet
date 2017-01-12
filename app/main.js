@@ -30,7 +30,7 @@ const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
 	console.log(proxyRes.statusCode, pathname);
 	try {
-		if (isDev) {
+		if (isDev || process.argv.includes('--save-kcsapi')) {
 			const match = pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
 			const dir = `${app.getPath('userData')}/${match[1]}`;
 			const file = match[2];
@@ -38,8 +38,14 @@ proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
 			mkdirp.sync(dir);
 			fs.writeFileSync(`${dir}/${file}`, body);
 		}
-		if (proxyRes.statusCode === 200) {
-			const data = JSON.parse(body.replace(/^svdata=/, ''));
+	} catch (e) {
+		console.error(e);
+	}
+	const index = body.indexOf('svdata=');
+	const dataString = index === -1 ? body : body.substr(index + 7);
+	if (proxyRes.statusCode === 200) {
+		try {
+			const data = JSON.parse(dataString);
 			switch (pathname) {
 				case '/kcsapi/api_start2':
 					store.dispatch(setKcsapiMasterData(data));
@@ -50,9 +56,11 @@ proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
 				default:
 					break;
 			}
+		} catch (e) {
+			console.log(e);
+			console.log('index:', index);
+			console.log('dataString:', dataString.slice(0, 10), '...');
 		}
-	} catch (e) {
-		console.error(e);
 	}
 });
 
