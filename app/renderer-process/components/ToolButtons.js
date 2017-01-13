@@ -33,9 +33,10 @@ const handleScreenshot = (onClick, targetId) => {
 	}
 };
 
-const handleOpenDirectory = screenshotDir => () => {
+const handleOpenDirectory = screenshotDir => event => {
+	event.preventDefault();
 	if (fs.statSync(screenshotDir).isDirectory()) {
-		shell.openItem(screenshotDir);
+		shell.openExternal(`file://${screenshotDir}`);
 	}
 };
 
