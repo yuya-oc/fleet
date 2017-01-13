@@ -1,6 +1,7 @@
 import httpProxy from 'http-proxy';
 import http from 'http';
 import url from 'url';
+import stripBomBuf from 'strip-bom-buf';
 
 function createProxyServer() {
 	const proxy = httpProxy.createProxyServer();
@@ -19,7 +20,7 @@ function createProxyServer() {
 
 			proxyRes.on('end', () => {
 				const buffer = Buffer.concat(chunks);
-				const body = buffer.toString();
+				const body = stripBomBuf(buffer).toString();
 				proxyServer.emit('kcsapiRes', proxyRes, req, parsed.pathname, body);
 			});
 		}
