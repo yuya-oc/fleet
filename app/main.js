@@ -17,6 +17,19 @@ let mainWindow;
 let loginModal;
 let store;
 
+const shouldQuit = app.makeSingleInstance(() => {
+	if (mainWindow) {
+		if (mainWindow.isMinimized()) {
+			mainWindow.restore();
+		}
+		mainWindow.focus();
+	}
+});
+
+if (shouldQuit) {
+	app.quit();
+}
+
 try {
 	app.commandLine.appendSwitch('ppapi-flash-path', app.getPath('pepperFlashSystemPlugin'));
 } catch (err) {
