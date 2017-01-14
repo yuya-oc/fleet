@@ -2,10 +2,12 @@ import httpProxy from 'http-proxy';
 import http from 'http';
 import url from 'url';
 import fs from 'fs';
+import zlib from 'zlib';
 import stripBomBuf from 'strip-bom-buf';
 import mkdirp from 'mkdirp';
 import {app} from 'electron';
 import isDev from 'electron-is-dev';
+import streamBuffers from 'stream-buffers';
 
 function createProxyServer() {
 	const proxy = httpProxy.createProxyServer();
@@ -17,13 +19,22 @@ function createProxyServer() {
 	proxy.on('proxyRes', function (proxyRes, req) {
 		const parsed = url.parse(req.url);
 		if (parsed.path.startsWith('/kcsapi/')) {
-			const chunks = [];
-			proxyRes.on('data', chunk => {
-				chunks.push(chunk);
-			});
-
+			const bufStream = new streamBuffers.WritableStreamBuffer();
+			const contentEncoding = proxyRes.headers['content-encoding'];
+			console.log('content-encoding:', contentEncoding);
+			switch (contentEncoding) {
+				case 'gzip':
+					proxyRes.pipe(zlib.createGunzip()).pipe(bufStream);
+					break;
+				case 'deflate':
+					proxyRes.pipe(zlib.createInflate()).pipe(bufStream);
+					break;
+				default:
+					proxyRes.pipe(bufStream);
+					break;
+			}
 			proxyRes.on('end', () => {
-				const buffer = Buffer.concat(chunks);
+				const buffer = bufStream.getContents();
 				try {
 					if (isDev || process.argv.includes('--save-kcsapi')) {
 						console.log('content-type:', proxyRes.headers['content-type']);
