@@ -1,4 +1,5 @@
 import {app, dialog} from 'electron';
+import url from 'url';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
@@ -8,6 +9,7 @@ import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
 import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
+import kcsapi from './lib/kcsapi';
 
 const localProxyPort = 20010;
 
@@ -25,29 +27,36 @@ try {
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
-proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
-	console.log(proxyRes.statusCode, pathname);
-	const index = body.indexOf('svdata=');
-	const dataString = index === -1 ? body : body.substr(index + 7);
-	if (proxyRes.statusCode === 200) {
-		try {
-			const data = JSON.parse(dataString);
-			console.log('api_result:', data.api_result);
-			switch (pathname) {
-				case '/kcsapi/api_start2':
-					store.dispatch(setKcsapiMasterData(data));
-					break;
-				case '/kcsapi/api_port/port':
-					store.dispatch(setKcsapiPortData(data));
-					break;
-				default:
-					break;
+proxyServer.on('proxyRes', (proxyRes, req) => {
+	if (kcsapi.isKcsapiURL(req.url)) {
+		kcsapi.getResponseBuffer(proxyRes, buffer => {
+			const pathname = url.parse(req.url).pathname;
+			try {
+				const data = kcsapi.parseResponseBuffer(buffer);
+				if (kcsapi.isSucceeded(data)) {
+					switch (pathname) {
+						case '/kcsapi/api_start2':
+							store.dispatch(setKcsapiMasterData(data));
+							break;
+						case '/kcsapi/api_port/port':
+							store.dispatch(setKcsapiPortData(data));
+							break;
+						default:
+							break;
+					}
+				}
+			} catch (err) {
+				console.log(err);
 			}
-		} catch (e) {
-			console.log(e);
-			console.log('index:', index);
-			console.log('dataString:', dataString.slice(0, 10), '...');
-		}
+
+			if (isDev || process.argv.includes('--save-kcsapi')) {
+				kcsapi.saveToDirectory(app.getPath('userData'), pathname, buffer, err => {
+					if (err) {
+						console.log(err);
+					}
+				});
+			}
+		});
 	}
 });
 
