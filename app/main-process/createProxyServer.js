@@ -22,18 +22,19 @@ function createProxyServer() {
 			const bufStream = new streamBuffers.WritableStreamBuffer();
 			const contentEncoding = proxyRes.headers['content-encoding'];
 			console.log('content-encoding:', contentEncoding);
+			let resStream;
 			switch (contentEncoding) {
 				case 'gzip':
-					proxyRes.pipe(zlib.createGunzip()).pipe(bufStream);
+					resStream = proxyRes.pipe(zlib.createGunzip()).pipe(bufStream);
 					break;
 				case 'deflate':
-					proxyRes.pipe(zlib.createInflate()).pipe(bufStream);
+					resStream = proxyRes.pipe(zlib.createInflate()).pipe(bufStream);
 					break;
 				default:
-					proxyRes.pipe(bufStream);
+					resStream = proxyRes.pipe(bufStream);
 					break;
 			}
-			proxyRes.on('end', () => {
+			resStream.on('finish', () => {
 				const buffer = bufStream.getContents();
 				try {
 					if (isDev || process.argv.includes('--save-kcsapi')) {
