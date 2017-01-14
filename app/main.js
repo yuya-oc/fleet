@@ -1,9 +1,7 @@
 import {app, dialog} from 'electron';
-import fs from 'fs';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
-import mkdirp from 'mkdirp';
 
 import {setKcsapiMasterData, setKcsapiPortData} from './actions';
 import createProxyServer from './main-process/createProxyServer';
@@ -29,18 +27,6 @@ app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`)
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
 	console.log(proxyRes.statusCode, pathname);
-	try {
-		if (isDev || process.argv.includes('--save-kcsapi')) {
-			const match = pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
-			const dir = `${app.getPath('userData')}/${match[1]}`;
-			const file = match[2];
-			console.log(dir, '/', file);
-			mkdirp.sync(dir);
-			fs.writeFileSync(`${dir}/${file}`, body);
-		}
-	} catch (e) {
-		console.error(e);
-	}
 	const index = body.indexOf('svdata=');
 	const dataString = index === -1 ? body : body.substr(index + 7);
 	if (proxyRes.statusCode === 200) {
