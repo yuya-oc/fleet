@@ -32,6 +32,7 @@ proxyServer.on('kcsapiRes', (proxyRes, req, pathname, body) => {
 	if (proxyRes.statusCode === 200) {
 		try {
 			const data = JSON.parse(dataString);
+			console.log('api_result:', data.api_result);
 			switch (pathname) {
 				case '/kcsapi/api_start2':
 					store.dispatch(setKcsapiMasterData(data));

@@ -26,12 +26,22 @@ function createProxyServer() {
 				const buffer = Buffer.concat(chunks);
 				try {
 					if (isDev || process.argv.includes('--save-kcsapi')) {
+						console.log('content-type:', proxyRes.headers['content-type']);
 						const match = parsed.pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
 						const dir = `${app.getPath('userData')}/${match[1]}`;
 						const file = match[2];
-						console.log(dir, '/', file);
-						mkdirp.sync(dir);
-						fs.writeFileSync(`${dir}/${file}`, buffer);
+						console.log('file:', dir + '/' + file);
+						mkdirp(dir, err => {
+							if (err) {
+								console.error(err);
+								return;
+							}
+							fs.writeFile(`${dir}/${file}`, buffer, err => {
+								if (err) {
+									console.error(err);
+								}
+							});
+						});
 					}
 				} catch (e) {
 					console.error(e);
