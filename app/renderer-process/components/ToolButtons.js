@@ -91,7 +91,7 @@ const ToolButtons = props => {
 					<span className="icon icon-minus"/>
 				</Button>
 				<Button btnStyle={{fontSize: '11.5px'}} onClick={handleScaleReset}>
-					<span>{props.scale * 100}%</span>
+					{`${props.scale * 100}%`}
 				</Button>
 				<Button onClick={handleScaleUp}>
 					<span className="icon icon-plus"/>

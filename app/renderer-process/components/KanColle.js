@@ -16,9 +16,10 @@ function setWebViewScale(webview, scale) {
 
 class KanColle extends React.Component {
 	componentDidMount() {
-//		this.webview.addEventListener('dom-ready', () => {
+		this.webview.addEventListener('dom-ready', () => {
 //			this.webview.openDevTools();
-//		});
+			this.webview.setVisualZoomLevelLimits(1, 1);
+		});
 		this.webview.addEventListener('did-finish-load', () => {
 //			if (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
 			setWebViewScale(this.webview, this.props.scale);
