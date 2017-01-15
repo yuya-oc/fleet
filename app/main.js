@@ -1,4 +1,4 @@
-import {app, dialog} from 'electron';
+import {app, dialog, session} from 'electron';
 import url from 'url';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
@@ -42,6 +42,7 @@ app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`)
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('proxyRes', (proxyRes, req) => {
 	if (kcsapi.isKcsapiURL(req.url)) {
+		console.log(req.headers['user-agent']);
 		kcsapi.getResponseBuffer(proxyRes, buffer => {
 			const pathname = url.parse(req.url).pathname;
 			try {
@@ -78,6 +79,11 @@ app.on('quit', () => {
 });
 
 app.on('ready', () => {
+	const userAgent = session.defaultSession.getUserAgent()
+					.replace(new RegExp(`${app.getName()}\\/[^\\s]+\\s*`), '')
+					.replace(/Electron\/[^\s]+\s*/, '');
+	session.defaultSession.setUserAgent(userAgent);
+
 	mainWindow = createMainWindow();
 	mainWindow.on('closed', () => {
 		mainWindow = null;
