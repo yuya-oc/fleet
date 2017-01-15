@@ -3,6 +3,7 @@ import url from 'url';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
+import winston from 'winston';
 
 import {setKcsapiMasterData, setKcsapiPortData} from './actions';
 import createProxyServer from './main-process/createProxyServer';
@@ -16,6 +17,10 @@ const localProxyPort = 20010;
 let mainWindow;
 let loginModal;
 let store;
+
+if (isDev || process.argv.includes('--log-level=debug')) {
+	winston.level = 'debug';
+}
 
 const shouldQuit = app.makeSingleInstance(() => {
 	if (mainWindow) {
@@ -33,7 +38,7 @@ if (shouldQuit) {
 try {
 	app.commandLine.appendSwitch('ppapi-flash-path', app.getPath('pepperFlashSystemPlugin'));
 } catch (err) {
-	console.log(err);
+	winston.error(err);
 	dialog.showErrorBox('Flash Plugin not found', `You need to install Flash Plugin (PPAPI)\n\n${err}`);
 	app.quit();
 }
@@ -42,7 +47,7 @@ app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`)
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('proxyRes', (proxyRes, req) => {
 	if (kcsapi.isKcsapiURL(req.url)) {
-		console.log(req.headers['user-agent']);
+		winston.silly(req.url);
 		kcsapi.getResponseBuffer(proxyRes, buffer => {
 			const pathname = url.parse(req.url).pathname;
 			try {
@@ -56,17 +61,18 @@ proxyServer.on('proxyRes', (proxyRes, req) => {
 							store.dispatch(setKcsapiPortData(data));
 							break;
 						default:
+							winston.debug('Unhandled API:', pathname);
 							break;
 					}
 				}
 			} catch (err) {
-				console.log(err);
+				winston.error(err);
 			}
 
 			if (isDev || process.argv.includes('--save-kcsapi')) {
 				kcsapi.saveToDirectory(app.getPath('userData'), pathname, buffer, err => {
 					if (err) {
-						console.log(err);
+						winston.warn(err);
 					}
 				});
 			}
@@ -101,11 +107,11 @@ app.on('ready', () => {
 
 	if (isDev) {
 		installExtension(REACT_DEVELOPER_TOOLS)
-			.then(name => console.log(`Added Extension:  ${name}`))
-			.catch(err => console.log('An error occurred: ', err));
+			.then(name => winston.info(`Added Extension:  ${name}`))
+			.catch(err => winston.warn('An error occurred: ', err));
 		installExtension(REDUX_DEVTOOLS)
-			.then(name => console.log(`Added Extension:  ${name}`))
-			.catch(err => console.log('An error occurred: ', err));
+			.then(name => winston.info(`Added Extension:  ${name}`))
+			.catch(err => console.warn('An error occurred: ', err));
 	}
 });
 
