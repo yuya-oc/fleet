@@ -1,8 +1,15 @@
-import {app, BrowserWindow} from 'electron';
+import {app, BrowserWindow, screen} from 'electron';
 import isDev from 'electron-is-dev';
 
 function createMainWindow() {
-	const mainWindow = new BrowserWindow({show: false, backgroundColor: '#f5f5f5'});
+	const scaleFactor = screen.getPrimaryDisplay().scaleFactor;
+
+	const mainWindow = new BrowserWindow({
+		show: false,
+		autoHideMenuBar: true,
+		width: (800 + 400) / scaleFactor,
+		backgroundColor: '#f5f5f5'
+	});
 	if (isDev) {
 		mainWindow.loadURL(`http://localhost:8080/`);
 	} else {

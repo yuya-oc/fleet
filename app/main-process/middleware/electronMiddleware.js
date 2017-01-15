@@ -63,7 +63,7 @@ const electronMiddleware = mainWindow => {
 				}
 				case SET_WEBVIEW_SCALE: {
 					const factor = getCurrentDeviceScaleFactor(mainWindow);
-					mainWindow.setMinimumSize(Math.ceil(850 * action.scale / factor), Math.ceil(650 * action.scale / factor));
+					mainWindow.setMinimumSize(Math.ceil(830 * action.scale / factor), Math.ceil(600 * action.scale / factor));
 					break;
 				}
 				default:
