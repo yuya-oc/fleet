@@ -5,7 +5,7 @@ import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-
 import isDev from 'electron-is-dev';
 import winston from 'winston';
 
-import {setKcsapiMasterData, setKcsapiPortData} from './actions';
+import {setKcsapiMasterData, setKcsapiShip, setKcsapiDeckPort} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
 import createMainWindow from './main-process/createMainWindow';
@@ -58,7 +58,11 @@ proxyServer.on('proxyRes', (proxyRes, req) => {
 							store.dispatch(setKcsapiMasterData(data));
 							break;
 						case '/kcsapi/api_port/port':
-							store.dispatch(setKcsapiPortData(data));
+							store.dispatch(setKcsapiShip(data.api_data.api_ship));
+							store.dispatch(setKcsapiDeckPort(data.api_data.api_deck_port));
+							break;
+						case '/kcsapi/api_get_member/deck':
+							store.dispatch(setKcsapiDeckPort(data.api_data));
 							break;
 						default:
 							winston.debug('Unhandled API:', pathname);

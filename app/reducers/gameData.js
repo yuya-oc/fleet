@@ -1,4 +1,4 @@
-import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_PORT_DATA} from '../actions';
+import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_SHIP, SET_KCSAPI_DECK_PORT} from '../actions';
 
 export const initialState = {
 	master: null,
@@ -34,35 +34,39 @@ const gameData = (state = initialState, action) => {
 					}))
 				}
 			});
-		case SET_KCSAPI_PORT_DATA: {
-			const data = action.data.api_data;
-			const newState = Object.assign({}, state, {
+		case SET_KCSAPI_SHIP:
+			return Object.assign({}, state, {
 				user: {
-					ships: data.api_ship.map(ship => ({
+					ships: action.data.map(ship => ({
 						id: ship.api_id,
 						name: getShipName(state.master, ship.api_ship_id),
 						level: ship.api_lv,
 						condition: ship.api_cond
-					})
-				)}
-			});
-			newState.user.fleets = data.api_deck_port.map(deck => ({
-				id: deck.api_id,
-				name: deck.api_name,
-				ships: deck.api_ship.reduce((ships, shipId) => {
-					if (shipId >= 0) {
-						ships.push(newState.user.ships.find(ship => ship.id === shipId));
-					}
-					return ships;
-				}, []),
-				mission: {
-					sortie: deck.api_mission[0] === 1,
-					name: getMissionName(state.master, deck.api_mission[1]),
-					completionDateValue: deck.api_mission[2]
+					})),
+					fleets: state.fleets
 				}
-			}));
-			return newState;
-		}
+			});
+		case SET_KCSAPI_DECK_PORT:
+			return Object.assign({}, state, {
+				user: {
+					ships: state.ships,
+					fleets: action.data.map(deck => ({
+						id: deck.api_id,
+						name: deck.api_name,
+						ships: deck.api_ship.reduce((ships, shipId) => {
+							if (shipId >= 0) {
+								ships.push(state.user.ships.find(ship => ship.id === shipId));
+							}
+							return ships;
+						}, []),
+						mission: {
+							sortie: deck.api_mission[0] !== 0,
+							name: getMissionName(state.master, deck.api_mission[1]),
+							completionDateValue: deck.api_mission[2]
+						}
+					}))
+				}
+			});
 		default:
 			return state;
 	}
