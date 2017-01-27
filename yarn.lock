@@ -1668,13 +1668,12 @@ electron-connect:
     tree-kill "^1.1.0"
     ws "^1.1.1"
 
-electron-devtools-installer@MarshallOfSound/electron-devtools-installer:
-  version "2.0.1"
-  resolved "https://codeload.github.com/MarshallOfSound/electron-devtools-installer/tar.gz/af4713414e81095161076d1ad67a9b3c6dc03f7f"
+electron-devtools-installer@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/electron-devtools-installer/-/electron-devtools-installer-2.1.0.tgz#fee3b23e491aa10dfc77192c58cf5596cc2ba53e"
   dependencies:
     "7zip" "0.0.6"
     cross-unzip "0.0.2"
-    request "^2.72.0"
     rimraf "^2.5.2"
     semver "^5.3.0"
 
@@ -4628,7 +4627,7 @@ request@2.74.0:
     tough-cookie "~2.3.0"
     tunnel-agent "~0.4.1"
 
-request@^2.45.0, request@^2.65.0, request@^2.72.0, request@^2.79.0:
+request@^2.45.0, request@^2.65.0, request@^2.79.0:
   version "2.79.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.79.0.tgz#4dfe5bf6be8b8cdc37fcf93e04b65577722710de"
   dependencies:

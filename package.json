@@ -4,7 +4,6 @@
   "description": "KanColle browser",
   "main": "index.js",
   "scripts": {
-    "install": "cd node_modules/electron-devtools-installer && yarn && yarn run compile",
     "build": "run-p build:*",
     "build:main": "cross-env NODE_ENV=production webpack --config webpack.config.main.js --optimize-minimize",
     "build:renderer": "cross-env NODE_ENV=production webpack --config webpack.config.renderer.js --optimize-minimize",
@@ -52,7 +51,7 @@
     "electron": "1.4.12",
     "electron-builder": "^10.11.0",
     "electron-connect": "^0.6.1",
-    "electron-devtools-installer": "MarshallOfSound/electron-devtools-installer",
+    "electron-devtools-installer": "^2.1.0",
     "eslint": "^3.12.0",
     "eslint-config-xo": "^0.17.0",
     "eslint-config-xo-react": "^0.10.0",
