@@ -45,41 +45,43 @@ try {
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
-proxyServer.on('proxyRes', (proxyRes, req) => {
+proxyServer.on('proxyReq', (proxyReq, req) => {
 	if (kcsapi.isKcsapiURL(req.url)) {
-		winston.silly(req.url);
-		kcsapi.getResponseBuffer(proxyRes, buffer => {
-			const pathname = url.parse(req.url).pathname;
-			try {
-				const data = kcsapi.parseResponseBuffer(buffer);
-				if (kcsapi.isSucceeded(data)) {
-					switch (pathname) {
-						case '/kcsapi/api_start2':
-							store.dispatch(setKcsapiMasterData(data));
-							break;
-						case '/kcsapi/api_port/port':
-							store.dispatch(setKcsapiShip(data.api_data.api_ship));
-							store.dispatch(setKcsapiDeckPort(data.api_data.api_deck_port));
-							break;
-						case '/kcsapi/api_get_member/deck':
-							store.dispatch(setKcsapiDeckPort(data.api_data));
-							break;
-						default:
-							winston.debug('Unhandled API:', pathname);
-							break;
+		proxyReq.on('response', proxyRes => {
+			winston.silly(req.url);
+			kcsapi.getResponseBuffer(proxyRes, buffer => {
+				const pathname = url.parse(req.url).pathname;
+				try {
+					const data = kcsapi.parseResponseBuffer(buffer);
+					if (kcsapi.isSucceeded(data)) {
+						switch (pathname) {
+							case '/kcsapi/api_start2':
+								store.dispatch(setKcsapiMasterData(data));
+								break;
+							case '/kcsapi/api_port/port':
+								store.dispatch(setKcsapiShip(data.api_data.api_ship));
+								store.dispatch(setKcsapiDeckPort(data.api_data.api_deck_port));
+								break;
+							case '/kcsapi/api_get_member/deck':
+								store.dispatch(setKcsapiDeckPort(data.api_data));
+								break;
+							default:
+								winston.debug('Unhandled API:', pathname);
+								break;
+						}
 					}
+				} catch (err) {
+					winston.error(err);
 				}
-			} catch (err) {
-				winston.error(err);
-			}
 
-			if (isDev || process.argv.includes('--save-kcsapi')) {
-				kcsapi.saveToDirectory(app.getPath('userData'), pathname, buffer, err => {
-					if (err) {
-						winston.warn(err);
-					}
-				});
-			}
+				if (isDev || process.argv.includes('--save-kcsapi')) {
+					kcsapi.saveToDirectory(app.getPath('userData'), pathname, buffer, err => {
+						if (err) {
+							winston.warn(err);
+						}
+					});
+				}
+			});
 		});
 	}
 });

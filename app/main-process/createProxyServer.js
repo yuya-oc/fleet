@@ -9,8 +9,8 @@ function createProxyServer() {
 		const target = `${parsed.protocol}//${parsed.host}`;
 		proxy.web(req, res, {target});
 	});
-	proxy.on('proxyRes', (proxyRes, req, res) => {
-		proxyServer.emit('proxyRes', proxyRes, req, res);
+	proxy.on('proxyReq', (proxyReq, req, res) => {
+		proxyServer.emit('proxyReq', proxyReq, req, res);
 	});
 	return proxyServer;
 }
