@@ -50,10 +50,46 @@ function saveToDirectory(destDir, pathname, buffer, callback) {
 	});
 }
 
+function resolveUserShip(masterData, userData, userShipId) {
+	const userShip = Object.assign({}, userData.api_ship.find(ship => ship.api_id === userShipId));
+	const masterShip = masterData.api_mst_ship.find(ship => ship.api_id === userShip.api_ship_id);
+	return Object.assign(userShip, masterShip);
+}
+
+function resolveFleet(masterData, userData, index) {
+	const deck = userData.api_deck_port[index];
+	return {
+		name: deck.api_name,
+		ship: deck.api_ship.reduce((ships, shipId) => {
+			if (shipId >= 0) {
+				ships.push(resolveUserShip(masterData, userData, shipId));
+			}
+			return ships;
+		}, [])
+	};
+}
+
+function resolveMission(masterData, missionId) {
+	if (missionId === 0) {
+		return null;
+	}
+	return masterData.api_mst_mission.find(mission => mission.api_id === missionId);
+}
+
+function resolveMissions(masterData, userData) {
+	return userData.api_deck_port.slice(1).map(deck => ({
+		sortie: deck.api_mission[0] !== 0,
+		...resolveMission(masterData, deck.api_mission[1]),
+		completionDateValue: deck.api_mission[2]
+	}));
+}
+
 export default {
 	isKcsapiURL,
 	getResponseBuffer,
 	parseResponseBuffer,
 	isSucceeded,
-	saveToDirectory
+	saveToDirectory,
+	resolveFleet,
+	resolveMissions
 };

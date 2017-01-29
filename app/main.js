@@ -5,7 +5,7 @@ import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-
 import isDev from 'electron-is-dev';
 import winston from 'winston';
 
-import {setKcsapiMasterData, setKcsapiShip, setKcsapiDeckPort} from './actions';
+import {setKcsapiMasterData, setKcsapiUserData} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
 import createMainWindow from './main-process/createMainWindow';
@@ -55,15 +55,11 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 					const data = kcsapi.parseResponseBuffer(buffer);
 					if (kcsapi.isSucceeded(data)) {
 						switch (pathname) {
-							case '/kcsapi/api_start2':
-								store.dispatch(setKcsapiMasterData(data));
+							case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
+								store.dispatch(setKcsapiMasterData(data.api_data));
 								break;
-							case '/kcsapi/api_port/port':
-								store.dispatch(setKcsapiShip(data.api_data.api_ship));
-								store.dispatch(setKcsapiDeckPort(data.api_data.api_deck_port));
-								break;
-							case '/kcsapi/api_get_member/deck':
-								store.dispatch(setKcsapiDeckPort(data.api_data));
+							case '/kcsapi/api_port/port': // 母港帰投時
+								store.dispatch(setKcsapiUserData(data.api_data));
 								break;
 							default:
 								winston.debug('Unhandled API:', pathname);

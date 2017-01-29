@@ -65,7 +65,7 @@ export const takeScreenshot = bounds => ({
 });
 
 export const SET_KCSAPI_MASTER_DATA = 'SET_KCSAPI_MASTER_DATA';
-export const SET_KCSAPI_SHIP = 'SET_KCSAPI_SHIP';
+export const SET_KCSAPI_USER_DATA = 'SET_KCSAPI_USER_DATA';
 export const SET_KCSAPI_DECK_PORT = 'SET_KCSAPI_DECK_PORT';
 
 export const setKcsapiMasterData = data => ({
@@ -73,8 +73,8 @@ export const setKcsapiMasterData = data => ({
 	data
 });
 
-export const setKcsapiShip = data => ({
-	type: SET_KCSAPI_SHIP,
+export const setKcsapiUserData = data => ({
+	type: SET_KCSAPI_USER_DATA,
 	data
 });
 

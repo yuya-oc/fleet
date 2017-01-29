@@ -1,13 +1,24 @@
 import {connect} from 'react-redux';
 import Overview from '../components/Overview';
+import kcsapi from '../../lib/kcsapi';
 
 const mapStateToProps = (state, ownProps) => {
 	const index = ownProps.params.fleetIndex;
-	const fleets = state.gameData.user.fleets;
+	const fleets = state.gameData.user.api_deck_port ?
+		[0, 1, 2, 3].map(i => kcsapi.resolveFleet(state.gameData.master, state.gameData.user, i)) : [];
+	const missions = state.gameData.user.api_deck_port ? kcsapi.resolveMissions(state.gameData.master, state.gameData.user) : [];
 	return {
 		currentDateValue: state.appState.currentDateValue,
-		ships: fleets[index] ? fleets[index].ships : null,
-		missions: fleets.slice(1).map(fleet => fleet.mission)
+		ships: fleets[index] ? fleets[index].ship.map(ship => ({
+			name: ship.api_name,
+			level: ship.api_lv,
+			condition: ship.api_cond
+		})) : null,
+		missions: missions.map(mission => ({
+			sortie: mission.sortie,
+			name: mission.api_name,
+			completionDateValue: mission.completionDateValue
+		}))
 	};
 };
 
