@@ -8,21 +8,13 @@ function createLoginModal(mainWindow, store) {
 	console.log('getSwfURL', gameURL);
 	const loginModal = new BrowserWindow({
 		parent: mainWindow,
-		modal: true,
-		show: false
+		modal: true
 	});
 	if (isDev) {
 		loginModal.loadURL('http://localhost:8080/login.html');
 	} else {
 		loginModal.loadURL(`file://${app.getAppPath()}/login.html`);
 	}
-	ipcMain.on('SHOW_LOGIN_WINDOW', (e, show) => {
-		if (show) {
-			loginModal.show();
-		} else {
-			loginModal.hide();
-		}
-	});
 	ipcMain.once(SET_SWF_URL, (e, swfURL) => {
 		store.dispatch(setSwfURL(swfURL));
 	});
