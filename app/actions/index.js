@@ -83,6 +83,9 @@ export const SET_KCSAPI_MASTER_DATA = 'SET_KCSAPI_MASTER_DATA';
 export const SET_KCSAPI_USER_DATA = 'SET_KCSAPI_USER_DATA';
 export const SET_KCSAPI_DECK_SHIP = 'SET_KCSAPI_DECK_SHIP';
 export const SET_KCSAPI_DECK = 'SET_KCSAPI_DECK';
+export const SET_KCSAPI_PRESET_DECK = 'SET_KCSAPI_PRESET_DECK';
+export const SET_KCSAPI_PRESET_SELECT = 'SET_KCSAPI_PRESET_SELECT';
+export const SET_KCSAPI_PRESET_REGISTER = 'SET_KCSAPI_PRESET_REGISTER';
 
 export const setKcsapiMasterData = data => ({
 	type: SET_KCSAPI_MASTER_DATA,
@@ -101,6 +104,21 @@ export const setKcsapiDeckShip = data => ({
 
 export const setKcsapiDeck = data => ({
 	type: SET_KCSAPI_DECK,
+	data
+});
+
+export const setKcsapiPresetDeck = data => ({
+	type: SET_KCSAPI_PRESET_DECK,
+	data
+});
+
+export const setKcsapiPresetSelect = data => ({
+	type: SET_KCSAPI_PRESET_SELECT,
+	data
+});
+
+export const setKcsapiPresetRegister = data => ({
+	type: SET_KCSAPI_PRESET_REGISTER,
 	data
 });
 

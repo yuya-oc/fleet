@@ -5,7 +5,7 @@ import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-
 import isDev from 'electron-is-dev';
 import winston from 'winston';
 
-import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, setKcsapiDeck, setLoginRequired, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
+import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, setKcsapiDeck, setKcsapiPresetDeck, setKcsapiPresetSelect, setKcsapiPresetRegister, setLoginRequired, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
@@ -58,11 +58,20 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 						case '/kcsapi/api_port/port': // 母港帰投時
 							mainWindow.dispatch(setKcsapiUserData(responseData.api_data));
 							break;
+						case '/kcsapi/api_get_member/deck':
+							mainWindow.dispatch(setKcsapiDeck(responseData.api_data));
+							break;
+						case '/kcsapi/api_get_member/preset_deck':
+							mainWindow.dispatch(setKcsapiPresetDeck(responseData.api_data));
+							break;
 						case '/kcsapi/api_req_hensei/change':
 							mainWindow.dispatch(setKcsapiDeckShip(requestData));
 							break;
-						case '/kcsapi/api_get_member/deck':
-							mainWindow.dispatch(setKcsapiDeck(responseData.api_data));
+						case '/kcsapi/api_req_hensei/preset_register':
+							mainWindow.dispatch(setKcsapiPresetRegister(requestData));
+							break;
+						case '/kcsapi/api_req_hensei/preset_select':
+							mainWindow.dispatch(setKcsapiPresetSelect(requestData));
 							break;
 						default:
 							winston.debug('Unhandled API:', pathname);
