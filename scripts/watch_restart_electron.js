@@ -10,7 +10,7 @@ const appPath = process.argv[2];
 let child;
 
 function spawnElectron() {
-	return spawn('electron', [appPath], {stdio: 'inherit'});
+	return spawn('electron', ['-r', 'babel-register', appPath], {stdio: 'inherit'});
 }
 
 webpack(config).watch({}, (err, stats) => {
