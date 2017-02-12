@@ -1,6 +1,7 @@
 import {SAVE_CONFIG, LOAD_CONFIG, setConfig} from '../../actions';
 import fs from 'fs';
 import path from 'path';
+import winston from 'winston';
 
 const configManager = userDataPath => {
 	const configFile = path.resolve(userDataPath, 'config.json');
@@ -12,14 +13,14 @@ const configManager = userDataPath => {
 				JSON.stringify(store.getState()[action.key], null, '  '),
 				err => {
 					if (err) {
-						console.error(err);
+						winston.error(err);
 					}
 				});
 				break;
 			case LOAD_CONFIG:
 				fs.readFile(configFile, 'utf-8', (err, data) => {
 					if (err) {
-						console.error(err);
+						winston.error(err);
 					} else {
 						next(setConfig(JSON.parse(data)));
 					}

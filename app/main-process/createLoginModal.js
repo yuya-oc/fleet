@@ -2,10 +2,7 @@ import {app, BrowserWindow, ipcMain} from 'electron';
 import {SET_SWF_URL, setSwfURL} from '../actions';
 import isDev from 'electron-is-dev';
 
-const gameURL = 'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';
-
 function createLoginModal(mainWindow) {
-	console.log('getSwfURL', gameURL);
 	const loginModal = new BrowserWindow({
 		parent: mainWindow,
 		modal: true,

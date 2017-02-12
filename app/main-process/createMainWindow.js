@@ -1,6 +1,7 @@
 import {app, BrowserWindow, screen} from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
+import winston from 'winston';
 
 function createMainWindow() {
 	const scaleFactor = screen.getPrimaryDisplay().scaleFactor;
@@ -34,7 +35,7 @@ function createMainWindow() {
 
 	mainWindow.webContents.on('did-fail-load', () => {
 		if (isDev) {
-			console.log('You need to execute `yarn run watch` in another console.');
+			winston.error('You need to execute `yarn run watch` in another console.');
 			app.quit();
 		}
 	});

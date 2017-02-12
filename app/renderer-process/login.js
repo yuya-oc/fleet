@@ -9,7 +9,6 @@ window.onload = () => {
 		// webview.openDevTools();
 		if (timer !== null) {
 			timer = setInterval(() => {
-				console.log('executeJavaScript');
 				webview.executeJavaScript(`
 					var gameFrame = document.getElementById('game_frame');
 					if (gameFrame) {

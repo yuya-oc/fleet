@@ -2,6 +2,7 @@ import fs from 'fs';
 import electron from 'electron';
 import dateFormat from 'dateformat';
 import mkdirp from 'mkdirp';
+import winston from 'winston';
 
 function getFileName(date) {
 	return `fleet_${dateFormat(date, 'yyyy-mm-dd_HH-MM-ss-l')}.png`;
@@ -34,7 +35,7 @@ export function takeScreenshot(browserWindow, screenshotDir, webviewBounds, webv
 		const filename = `${screenshotDir}/${getFileName(date)}`;
 		fs.writeFile(filename, screenshot.toPNG(), err => {
 			if (err) {
-				console.error(err);
+				winston.error(err);
 			}
 		});
 	});

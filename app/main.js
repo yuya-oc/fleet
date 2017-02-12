@@ -132,7 +132,7 @@ app.on('ready', () => {
 			.catch(err => winston.warn('An error occurred: ', err));
 		installExtension(REDUX_DEVTOOLS)
 			.then(name => winston.info(`Added Extension:  ${name}`))
-			.catch(err => console.warn('An error occurred: ', err));
+			.catch(err => winston.warn('An error occurred: ', err));
 	}
 });
 

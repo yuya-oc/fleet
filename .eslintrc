@@ -1,3 +1,6 @@
 {
-  "extends": ["xo", "xo-react"]
+  "extends": ["xo", "xo-react"],
+  "rules": {
+    "no-console": 1
+  }
 }
