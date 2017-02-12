@@ -22,12 +22,20 @@ const gameData = (state = initialState, action) => {
 			const newState = Object.assign({}, state, {
 				user: state.user
 			});
-			const fleetIndex = Math.floor(action.data.api_ship_idx / 6);
-			const shipIndex = action.data.api_ship_idx % 6;
-			console.log(newState.user.api_deck_port[fleetIndex].api_ship[shipIndex]);
-			newState.user.api_deck_port[fleetIndex].api_ship = [...newState.user.api_deck_port[fleetIndex].api_ship]; // eslint-disable-line camelcase
-			newState.user.api_deck_port[fleetIndex].api_ship[shipIndex] = action.data.api_ship_id;
-			console.log(newState.user.api_deck_port[fleetIndex].api_ship[shipIndex]);
+			const fleetIndex = action.data.api_id - 1;
+			const shipIndex = action.data.api_ship_idx;
+			switch (action.data.api_ship_id) {
+				case -1: // はずす
+					newState.user.api_deck_port[fleetIndex].api_ship.splice(shipIndex, 1, -1);
+					break;
+				case -2: // 随伴艦一括解除
+					newState.user.api_deck_port[fleetIndex].api_ship.splice(1, 5, -1, -1, -1, -1, -1);
+					break;
+				default: {
+					newState.user.api_deck_port[fleetIndex].api_ship[shipIndex] = action.data.api_ship_id;
+					break;
+				}
+			}
 			return newState;
 		}
 		default:

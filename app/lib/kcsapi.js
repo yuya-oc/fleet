@@ -16,7 +16,7 @@ function parseRequestBuffer(buffer) {
 	const obj = {};
 	for (const pair of data.split('&')) {
 		const [key, value] = pair.split('=');
-		if (value.match(/-?[0-9]+/)) {
+		if (value.match(/^-?[0-9]+$/)) {
 			obj[key] = parseInt(value, 10);
 		} else {
 			obj[key] = value;
