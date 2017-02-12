@@ -24,6 +24,7 @@
   "dependencies": {
     "dateformat": "^2.0.0",
     "electron-is-dev": "^0.1.2",
+    "electron-window-state": "^4.0.2",
     "http-proxy": "^1.16.2",
     "mkdirp": "^0.5.1",
     "photon": "https://github.com/connors/photon.git",

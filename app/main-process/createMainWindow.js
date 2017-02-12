@@ -1,15 +1,24 @@
 import {app, BrowserWindow, screen} from 'electron';
 import isDev from 'electron-is-dev';
+import windowStateKeeper from 'electron-window-state';
 
 function createMainWindow() {
 	const scaleFactor = screen.getPrimaryDisplay().scaleFactor;
+	const mainWindowState = windowStateKeeper({
+		defaultWidth: (800 + 400) / scaleFactor,
+		defaultHeight: 600
+	});
 
 	const mainWindow = new BrowserWindow({
 		show: false,
 		autoHideMenuBar: true,
-		width: (800 + 400) / scaleFactor,
+		x: mainWindowState.x,
+		y: mainWindowState.y,
+		width: mainWindowState.width,
+		height: mainWindowState.height,
 		backgroundColor: '#f5f5f5'
 	});
+	mainWindowState.manage(mainWindow);
 	if (isDev) {
 		mainWindow.loadURL(`http://localhost:8080/`);
 	} else {
