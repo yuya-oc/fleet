@@ -1,4 +1,4 @@
-import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_USER_DATA, SET_KCSAPI_DECK_PORT} from '../actions';
+import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_USER_DATA, SET_KCSAPI_DECK_SHIP} from '../actions';
 
 export const initialState = {
 	master: null,
@@ -29,10 +29,19 @@ const gameData = (state = initialState, action) => {
 			return Object.assign({}, state, {
 				user: action.data
 			});
-		case SET_KCSAPI_DECK_PORT:
-			return Object.assign({}, state, {
-				user: Object.assign({}, state.user.api_deck_port, action.data)
+		case SET_KCSAPI_DECK_SHIP: {
+			const newState = Object.assign({}, state, {
+				user: state.user
 			});
+			console.log(action.data);
+			const fleetIndex = Math.floor(action.data.api_ship_idx / 6);
+			const shipIndex = action.data.api_ship_idx % 6;
+			console.log(newState.user.api_deck_port[fleetIndex].api_ship[shipIndex]);
+			newState.user.api_deck_port[fleetIndex].api_ship = [...newState.user.api_deck_port[fleetIndex].api_ship];
+			newState.user.api_deck_port[fleetIndex].api_ship[shipIndex] = action.data.api_ship_id;
+			console.log(newState.user.api_deck_port[fleetIndex].api_ship[shipIndex]);
+			return newState;
+		}
 		default:
 			return state;
 	}

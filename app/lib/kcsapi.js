@@ -11,6 +11,29 @@ function isKcsapiURL(URL) {
 	return url.parse(URL).path.startsWith('/kcsapi/');
 }
 
+function parseRequestBuffer(buffer) {
+	const data = decodeURIComponent(buffer.toString());
+	const obj = {};
+	for (const pair of data.split('&')) {
+		const [key, value] = pair.split('=');
+		obj[key] = value;
+	}
+	return obj;
+}
+
+function getRequestBuffer(req, callback) {
+	const bufStream = new WritableStreamBuffer();
+	req.pipe(bufStream).on('finish', () => {
+		callback(bufStream.getContents());
+	});
+}
+
+function getRequestData(req, callback) {
+	getRequestBuffer(req, buffer => {
+		callback(parseRequestBuffer(buffer));
+	});
+}
+
 function getResponseStream(res) {
 	switch (res.headers['content-encoding']) {
 		case 'gzip':
@@ -31,6 +54,12 @@ function getResponseBuffer(res, callback) {
 	const bufStream = new WritableStreamBuffer();
 	getResponseStream(res).pipe(bufStream).on('finish', () => {
 		callback(bufStream.getContents());
+	});
+}
+
+function getResponseData(res, callback) {
+	getResponseBuffer(res, buffer => {
+		callback(parseResponseBuffer(buffer));
 	});
 }
 
@@ -86,8 +115,8 @@ function resolveMissions(masterData, userData) {
 
 export default {
 	isKcsapiURL,
-	getResponseBuffer,
-	parseResponseBuffer,
+	getRequestData,
+	getResponseData,
 	isSucceeded,
 	saveToDirectory,
 	resolveFleet,

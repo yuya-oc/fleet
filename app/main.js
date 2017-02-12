@@ -5,7 +5,7 @@ import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-
 import isDev from 'electron-is-dev';
 import winston from 'winston';
 
-import {setKcsapiMasterData, setKcsapiUserData} from './actions';
+import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createReduxStore from './main-process/createReduxStore';
 import createMainWindow from './main-process/createMainWindow';
@@ -47,12 +47,20 @@ app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`)
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('proxyReq', (proxyReq, req) => {
 	if (kcsapi.isKcsapiURL(req.url)) {
+		const pathname = url.parse(req.url).pathname;
+		kcsapi.getRequestData(req, data => {
+			switch (pathname) {
+				case '/kcsapi/api_req_hensei/change':
+					store.dispatch(setKcsapiDeckShip(data));
+					break;
+				default:
+			}
+		});
+
 		proxyReq.on('response', proxyRes => {
 			winston.silly(req.url);
-			kcsapi.getResponseBuffer(proxyRes, buffer => {
-				const pathname = url.parse(req.url).pathname;
+			kcsapi.getResponseData(proxyRes, data => {
 				try {
-					const data = kcsapi.parseResponseBuffer(buffer);
 					if (kcsapi.isSucceeded(data)) {
 						switch (pathname) {
 							case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
@@ -71,7 +79,7 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 				}
 
 				if (isDev || process.argv.includes('--save-kcsapi')) {
-					kcsapi.saveToDirectory(app.getPath('userData'), pathname, buffer, err => {
+					kcsapi.saveToDirectory(app.getPath('userData'), pathname, data, err => {
 						if (err) {
 							winston.warn(err);
 						}
@@ -98,6 +106,12 @@ app.on('ready', () => {
 	});
 
 	store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
+	store.subscribe(() => {
+		const state = store.getState();
+		if (state.gameData) {
+			console.log(state.gameData.user.api_deck_port);
+		}
+	});
 
 	loginModal = createLoginModal(mainWindow, store);
 	loginModal.on('closed', () => {
