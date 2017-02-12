@@ -4,9 +4,6 @@ machine:
 
 dependencies:
   pre:
-    - curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-    - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
-
     - sudo dpkg --add-architecture i386
     - sudo add-apt-repository ppa:ubuntu-wine/ppa -y
 
@@ -17,10 +14,12 @@ dependencies:
 
     - sudo apt-get update
     - sudo apt-get install --no-install-recommends -y
-      yarn wine1.8 mono-devel ca-certificates-mono adobe-flashplugin
+      wine1.8 mono-devel ca-certificates-mono adobe-flashplugin
     - unset DISPLAY && wineboot --init
   override:
     - yarn
+  cache_directories:
+    - ~/.cache/yarn
 compile:
   override:
     - yarn run build
