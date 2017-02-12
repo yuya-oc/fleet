@@ -12,7 +12,7 @@ const electronMiddleware = store => next => action => {
 			const missions = state.gameData.user.api_deck_port ? kcsapi.resolveMissions(state.gameData.master, state.gameData.user) : [];
 			missions.forEach(mission => {
 				if (mission.sortie && Math.abs(mission.completionDateValue - minute - action.value) <= sec / 2) {
-					const notification = new Notification(mission.name, {body: 'まもなく帰還します'});
+					const notification = new Notification(mission.api_name, {body: 'まもなく帰還します'});
 					const currentWindow = remote.getCurrentWindow();
 					notification.onclick = () => {
 						currentWindow.show();
