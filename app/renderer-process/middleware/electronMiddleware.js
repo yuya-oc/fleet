@@ -1,5 +1,5 @@
-import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, setAlwaysOnTop} from '../../actions';
-import {remote} from 'electron';
+import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, setAlwaysOnTop} from '../../actions';
+import {ipcRenderer, remote} from 'electron';
 import kcsapi from '../../lib/kcsapi';
 
 const sec = 1000;
@@ -45,6 +45,10 @@ const electronMiddleware = store => next => action => {
 			}
 			break;
 		}
+		case SET_WEBVIEW_SCALE: // fallthrough
+		case TAKE_SCREENSHOT:
+			ipcRenderer.send('IPC_REDUX_ACTION', action, store.getState());
+			break;
 		default:
 			break;
 	}

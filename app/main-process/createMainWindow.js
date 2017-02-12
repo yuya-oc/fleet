@@ -30,6 +30,10 @@ function createMainWindow() {
 		}
 	});
 
+	mainWindow.dispatch = action => {
+		mainWindow.webContents.send('IPC_REDUX_DISPATCH', action);
+	};
+
 	return mainWindow;
 }
 

@@ -4,7 +4,7 @@ import isDev from 'electron-is-dev';
 
 const gameURL = 'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';
 
-function createLoginModal(mainWindow, store) {
+function createLoginModal(mainWindow) {
 	console.log('getSwfURL', gameURL);
 	const loginModal = new BrowserWindow({
 		parent: mainWindow,
@@ -16,7 +16,7 @@ function createLoginModal(mainWindow, store) {
 		loginModal.loadURL(`file://${app.getAppPath()}/login.html`);
 	}
 	ipcMain.once(SET_SWF_URL, (e, swfURL) => {
-		store.dispatch(setSwfURL(swfURL));
+		mainWindow.dispatch(setSwfURL(swfURL));
 	});
 	return loginModal;
 }

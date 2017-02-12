@@ -4,11 +4,12 @@ import {Provider} from 'react-redux';
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import {Router, Route, IndexRedirect, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
-import {webFrame} from 'electron';
-import {electronEnhancer} from 'redux-electron-store';
+import {ipcRenderer, remote, webFrame} from 'electron';
 
+import {loadConfig, setCurrentDateValue} from '../actions';
 import reducers from '../reducers';
 import electronMiddleware from './middleware/electronMiddleware';
+import configManager from './middleware/configManager';
 import App from './components/App';
 import Overview from './containers/Overview';
 import Settings from './containers/Settings';
@@ -24,12 +25,18 @@ let store = createStore(
 	}),
 	{},
 	composeEnhancers(
-		applyMiddleware(electronMiddleware),
-		electronEnhancer({
-			dispatchProxy: a => store.dispatch(a)
-		})
+		applyMiddleware(electronMiddleware, configManager(remote.app.getPath('userData')))
 	)
 );
+store.dispatch(loadConfig());
+
+ipcRenderer.on('IPC_REDUX_DISPATCH', (event, action) => {
+	store.dispatch(action);
+});
+
+setInterval(() => {
+	store.dispatch(setCurrentDateValue(Date.now()));
+}, 1000);
 
 const history = syncHistoryWithStore(hashHistory, store);
 

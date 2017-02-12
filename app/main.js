@@ -1,22 +1,21 @@
-import {app, dialog, session} from 'electron';
+import {app, dialog, ipcMain, session} from 'electron';
 import url from 'url';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import winston from 'winston';
 
-import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip} from './actions';
+import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
 import createProxyServer from './main-process/createProxyServer';
-import createReduxStore from './main-process/createReduxStore';
 import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
+import {takeScreenshot, getCurrentDeviceScaleFactor} from './main-process/ipcReduxActions';
 import kcsapi from './lib/kcsapi';
 
 const localProxyPort = 20010;
 
 let mainWindow;
 let loginModal;
-let store;
 
 if (isDev || process.argv.includes('--log-level=debug')) {
 	winston.level = 'debug';
@@ -51,7 +50,7 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 		kcsapi.getRequestData(req, data => {
 			switch (pathname) {
 				case '/kcsapi/api_req_hensei/change':
-					store.dispatch(setKcsapiDeckShip(data));
+					mainWindow.dispatch(setKcsapiDeckShip(data));
 					break;
 				default:
 			}
@@ -64,10 +63,10 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 					if (kcsapi.isSucceeded(data)) {
 						switch (pathname) {
 							case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
-								store.dispatch(setKcsapiMasterData(data.api_data));
+								mainWindow.dispatch(setKcsapiMasterData(data.api_data));
 								break;
 							case '/kcsapi/api_port/port': // 母港帰投時
-								store.dispatch(setKcsapiUserData(data.api_data));
+								mainWindow.dispatch(setKcsapiUserData(data.api_data));
 								break;
 							default:
 								winston.debug('Unhandled API:', pathname);
@@ -105,20 +104,24 @@ app.on('ready', () => {
 		mainWindow = null;
 	});
 
-	store = createReduxStore(mainWindow); // eslint-disable-line no-unused-vars
-	store.subscribe(() => {
-		const state = store.getState();
-		if (state.gameData) {
-			console.log(state.gameData.user.api_deck_port);
+	ipcMain.on('IPC_REDUX_ACTION', (event, action, state) => {
+		switch (action.type) {
+			case TAKE_SCREENSHOT:
+				takeScreenshot(mainWindow, state.config.screenshotDir, action.bounds, state.appState.webviewScale);
+				break;
+			case SET_WEBVIEW_SCALE: {
+				const factor = getCurrentDeviceScaleFactor(mainWindow);
+				mainWindow.setMinimumSize(Math.ceil(830 * action.scale / factor), Math.ceil(600 * action.scale / factor));
+				break;
+			}
+			default:
+				break;
 		}
 	});
 
-	loginModal = createLoginModal(mainWindow, store);
+	loginModal = createLoginModal(mainWindow);
 	loginModal.on('closed', () => {
 		loginModal = null;
-		if (store.getState().appState.swfURL === '') {
-			mainWindow.close();
-		}
 	});
 
 	if (isDev) {
