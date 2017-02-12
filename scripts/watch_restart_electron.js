@@ -1,16 +1,30 @@
-const chokidar = require('chokidar');
+
+const webpack = require('webpack');
 const spawn = require('cross-spawn');
 const kill = require('tree-kill');
 
+const config = require('../webpack.config.main');
+
 const appPath = process.argv[2];
-const files = process.argv.slice(3);
+
+let child;
 
 function spawnElectron() {
-	return spawn('electron', ['-r', 'babel-register', appPath], {stdio: 'inherit'});
+	return spawn('electron', [appPath], {stdio: 'inherit'});
 }
 
-var child = spawnElectron();
-chokidar.watch(files).on('change', () => {
-	kill(child.pid, 'SIGINT');
+webpack(config).watch({}, (err, stats) => {
+	if (err) {
+		console.log(err);
+		return;
+	}
+
+	console.log(stats.toString({colors: true}));
+	if (stats.hasErrors()) {
+		return;
+	}
+	if (child) {
+		kill(child.pid, 'SIGINT');
+	}
 	child = spawnElectron();
 });
