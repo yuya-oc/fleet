@@ -46,6 +46,8 @@ const electronMiddleware = store => next => action => {
 			break;
 		}
 		case SET_WEBVIEW_SCALE: // fallthrough
+			ipcRenderer.send('IPC_REDUX_ACTION', action);
+			break;
 		case TAKE_SCREENSHOT:
 			ipcRenderer.send('IPC_REDUX_ACTION', action, store.getState());
 			break;
