@@ -46,41 +46,31 @@ app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`)
 const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
 proxyServer.on('proxyReq', (proxyReq, req) => {
 	if (kcsapi.isKcsapiURL(req.url)) {
-		const pathname = url.parse(req.url).pathname;
-		kcsapi.getRequestData(req, data => {
-			switch (pathname) {
-				case '/kcsapi/api_req_hensei/change':
-					mainWindow.dispatch(setKcsapiDeckShip(data));
-					break;
-				default:
-			}
-		});
-
-		proxyReq.on('response', proxyRes => {
+		kcsapi.getRequestData(req, requestData => {
 			winston.silly(req.url);
-			kcsapi.getResponseData(proxyRes, data => {
-				try {
-					if (kcsapi.isSucceeded(data)) {
-						switch (pathname) {
-							case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
-								mainWindow.dispatch(setKcsapiMasterData(data.api_data));
-								break;
-							case '/kcsapi/api_port/port': // 母港帰投時
-								mainWindow.dispatch(setKcsapiUserData(data.api_data));
-								break;
-							default:
-								winston.debug('Unhandled API:', pathname);
-								break;
-						}
-					} else {
-						mainWindow.dispatch(setLoginRequired(true));
+			kcsapi.getProxyResponseData(proxyReq, responseData => {
+				const pathname = url.parse(req.url).pathname;
+				if (kcsapi.isSucceeded(responseData)) {
+					switch (pathname) {
+						case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
+							mainWindow.dispatch(setKcsapiMasterData(responseData.api_data));
+							break;
+						case '/kcsapi/api_port/port': // 母港帰投時
+							mainWindow.dispatch(setKcsapiUserData(responseData.api_data));
+							break;
+						case '/kcsapi/api_req_hensei/change':
+							mainWindow.dispatch(setKcsapiDeckShip(requestData));
+							break;
+						default:
+							winston.debug('Unhandled API:', pathname);
+							break;
 					}
-				} catch (err) {
-					winston.error(err);
+				} else {
+					winston.info('API response failed: Need to login');
+					mainWindow.dispatch(setLoginRequired(true));
 				}
-
 				if (isDev || process.argv.includes('--save-kcsapi')) {
-					kcsapi.saveToDirectory(app.getPath('userData'), pathname, data, err => {
+					kcsapi.saveToDirectory(app.getPath('userData'), pathname, responseData, err => {
 						if (err) {
 							winston.warn(err);
 						}

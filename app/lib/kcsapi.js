@@ -61,6 +61,12 @@ function getResponseBuffer(res, callback) {
 	});
 }
 
+function getProxyResponseData(proxyReq, callback) {
+	proxyReq.on('response', proxyRes => {
+		getResponseData(proxyRes, callback);
+	});
+}
+
 function getResponseData(res, callback) {
 	getResponseBuffer(res, buffer => {
 		callback(parseResponseBuffer(buffer));
@@ -120,7 +126,7 @@ function resolveMissions(masterData, userData) {
 export default {
 	isKcsapiURL,
 	getRequestData,
-	getResponseData,
+	getProxyResponseData,
 	isSucceeded,
 	saveToDirectory,
 	resolveFleet,
