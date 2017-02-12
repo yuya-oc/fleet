@@ -14,7 +14,7 @@ import App from './components/App';
 import Overview from './containers/Overview';
 import Settings from './containers/Settings';
 
-import '!style!css!photon/dist/css/photon.css';
+import '!style-loader!css-loader!photon/dist/css/photon.css';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 

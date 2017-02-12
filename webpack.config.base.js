@@ -6,16 +6,15 @@ module.exports = {
 		filename: '[name]_bundle.js'
 	},
 	module: {
-		loaders: [
+		rules: [
 			{
 				test: /\.js$/,
 				exclude: /(node_modules|bower_components)/,
 				loader: 'babel-loader'
 			}, {
-				test: /\.json$/,
-				loader: 'json'
-			},
-			{test: /\.(png|woff|woff2|eot|ttf|svg)$/, loader: 'url-loader?limit=100000'}
+				test: /\.(png|woff|woff2|eot|ttf|svg)$/,
+				loader: 'url-loader?limit=100000'
+			}
 		]
 	},
 	plugins: [
@@ -24,5 +23,5 @@ module.exports = {
 		})
 	],
 	target: 'electron',
-	devtool: process.env.NODE_ENV === 'production' ? null : '#inline-source-map'
+	devtool: process.env.NODE_ENV === 'production' ? false : '#inline-source-map'
 };
