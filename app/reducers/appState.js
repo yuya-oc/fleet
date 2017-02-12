@@ -1,11 +1,12 @@
-import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, SET_WEBVIEW_SCALE, SET_SWF_URL} from '../actions';
+import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, SET_LOGIN_REQUIRED, SET_ALWAYS_ON_TOP, SET_WEBVIEW_SCALE, SET_SWF_URL} from '../actions';
 
 export const initialState = {
 	swfURL: '',
 	currentDateValue: 0,
 	muted: false,
 	webviewScale: 1.0,
-	alwaysOnTop: false
+	alwaysOnTop: false,
+	loginRequired: true
 };
 
 const appState = (state = initialState, action) => {
@@ -19,7 +20,9 @@ const appState = (state = initialState, action) => {
 		case SET_ALWAYS_ON_TOP:
 			return Object.assign({}, state, {alwaysOnTop: action.flag});
 		case SET_SWF_URL:
-			return Object.assign({}, state, {swfURL: action.swfURL});
+			return Object.assign({}, state, {swfURL: action.swfURL, loginRequired: false});
+		case SET_LOGIN_REQUIRED:
+			return Object.assign({}, state, {loginRequired: action.loginRequired});
 		default:
 			return state;
 	}

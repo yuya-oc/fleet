@@ -1,4 +1,4 @@
-import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, setAlwaysOnTop} from '../../actions';
+import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, requestLogin, setAlwaysOnTop} from '../../actions';
 import {ipcRenderer, remote} from 'electron';
 import kcsapi from '../../lib/kcsapi';
 
@@ -34,22 +34,30 @@ const electronMiddleware = store => next => action => {
 				store.dispatch(setAlwaysOnTop(!isAlwaysOnTop));
 			});
 			break;
-		case RELOAD_WEBVIEW: {
-			const webview = document.getElementById(action.targetId);
-			if (action.clearCache) {
-				webview.getWebContents().session.clearCache(() => {
-					webview.reload();
+		case RELOAD_WEBVIEW:
+			if (store.getState().appState.loginRequired) {
+				setImmediate(() => {
+					store.dispatch(requestLogin());
 				});
 			} else {
-				webview.reload();
+				const webview = document.getElementById(action.targetId);
+				if (action.clearCache) {
+					webview.getWebContents().session.clearCache(() => {
+						webview.reload();
+					});
+				} else {
+					webview.reload();
+				}
 			}
 			break;
-		}
 		case SET_WEBVIEW_SCALE: // fallthrough
 			ipcRenderer.send('IPC_REDUX_ACTION', action);
 			break;
 		case TAKE_SCREENSHOT:
 			ipcRenderer.send('IPC_REDUX_ACTION', action, store.getState());
+			break;
+		case REQUEST_LOGIN:
+			ipcRenderer.send('IPC_REDUX_ACTION', action);
 			break;
 		default:
 			break;

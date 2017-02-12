@@ -11,6 +11,8 @@ export const setScreenshotDir = directory => {
 export const SAVE_CONFIG = 'SAVE_CONFIG';
 export const LOAD_CONFIG = 'LOAD_CONFIG';
 export const SET_CONFIG = 'SET_CONFIG';
+export const REQUEST_LOGIN = 'REQUEST_LOGIN';
+export const SET_LOGIN_REQUIRED = 'SET_LOGIN_REQUIRED';
 
 export const saveConfig = key => {
 	return {
@@ -29,6 +31,19 @@ export const setConfig = config => {
 	return {
 		type: SET_CONFIG,
 		config
+	};
+};
+
+export const requestLogin = () => {
+	return {
+		type: REQUEST_LOGIN
+	};
+};
+
+export const setLoginRequired = loginRequired => {
+	return {
+		type: SET_LOGIN_REQUIRED,
+		loginRequired
 	};
 };
 

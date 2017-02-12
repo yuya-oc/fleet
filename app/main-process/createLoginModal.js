@@ -16,13 +16,6 @@ function createLoginModal(mainWindow) {
 	} else {
 		loginModal.loadURL(`file://${app.getAppPath()}/login.html`);
 	}
-	ipcMain.on('SHOW_LOGIN_WINDOW', (e, show) => {
-		if (show) {
-			loginModal.show();
-		} else {
-			loginModal.hide();
-		}
-	});
 	ipcMain.once(SET_SWF_URL, (e, swfURL) => {
 		mainWindow.dispatch(setSwfURL(swfURL));
 	});

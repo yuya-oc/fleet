@@ -5,7 +5,7 @@ import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-
 import isDev from 'electron-is-dev';
 import winston from 'winston';
 
-import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
+import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, setLoginRequired, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
 import createProxyServer from './main-process/createProxyServer';
 import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
@@ -14,8 +14,8 @@ import kcsapi from './lib/kcsapi';
 
 const localProxyPort = 20010;
 
-let mainWindow;
-let loginModal;
+let mainWindow = null;
+let loginModal = null;
 
 if (isDev || process.argv.includes('--log-level=debug')) {
 	winston.level = 'debug';
@@ -72,6 +72,8 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 								winston.debug('Unhandled API:', pathname);
 								break;
 						}
+					} else {
+						mainWindow.dispatch(setLoginRequired(true));
 					}
 				} catch (err) {
 					winston.error(err);
@@ -103,6 +105,13 @@ app.on('ready', () => {
 	mainWindow.on('closed', () => {
 		mainWindow = null;
 	});
+	ipcMain.on('SHOW_LOGIN_WINDOW', (e, show) => {
+		if (show) {
+			loginModal.show();
+		} else {
+			loginModal.hide();
+		}
+	});
 
 	ipcMain.on('IPC_REDUX_ACTION', (event, action, state) => {
 		switch (action.type) {
@@ -114,14 +123,17 @@ app.on('ready', () => {
 				mainWindow.setMinimumSize(Math.ceil(830 * action.scale / factor), Math.ceil(600 * action.scale / factor));
 				break;
 			}
+			case REQUEST_LOGIN:
+				if (loginModal === null) {
+					loginModal = createLoginModal(mainWindow);
+					loginModal.on('closed', () => {
+						loginModal = null;
+					});
+				}
+				break;
 			default:
 				break;
 		}
-	});
-
-	loginModal = createLoginModal(mainWindow);
-	loginModal.on('closed', () => {
-		loginModal = null;
 	});
 
 	if (isDev) {

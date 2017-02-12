@@ -6,7 +6,7 @@ import {Router, Route, IndexRedirect, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import {ipcRenderer, remote, webFrame} from 'electron';
 
-import {loadConfig, setCurrentDateValue} from '../actions';
+import {loadConfig, requestLogin, setCurrentDateValue} from '../actions';
 import reducers from '../reducers';
 import electronMiddleware from './middleware/electronMiddleware';
 import configManager from './middleware/configManager';
@@ -29,6 +29,7 @@ let store = createStore(
 	)
 );
 store.dispatch(loadConfig());
+store.dispatch(requestLogin());
 
 ipcRenderer.on('IPC_REDUX_DISPATCH', (event, action) => {
 	store.dispatch(action);
