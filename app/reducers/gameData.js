@@ -1,4 +1,4 @@
-import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_USER_DATA, SET_KCSAPI_DECK_SHIP} from '../actions';
+import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_USER_DATA, SET_KCSAPI_DECK, SET_KCSAPI_DECK_SHIP} from '../actions';
 
 export const initialState = {
 	master: null,
@@ -36,6 +36,11 @@ const gameData = (state = initialState, action) => {
 					break;
 				}
 			}
+			return newState;
+		}
+		case SET_KCSAPI_DECK: {
+			const newState = Object.assign({}, state);
+			newState.user.api_deck_port = action.data; // eslint-disable-line camelcase
 			return newState;
 		}
 		default:
