@@ -1,4 +1,4 @@
 {
-  "presets": ["es2015", "react"],
+  "presets": ["es2015", "react", "babel-preset-power-assert"],
   "plugins": ["transform-object-rest-spread"]
 }
