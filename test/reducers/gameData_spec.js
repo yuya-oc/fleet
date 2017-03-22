@@ -6,7 +6,7 @@ import gameData from '../../app/reducers/gameData';
 
 describe('gameData.js', function () {
 	describe('SET_KCSAPI_DECK_SHIP', function () {
-		beforeEach(function () {
+		before(function () {
 			this.data = {
 				user: {
 					api_deck_port: [
