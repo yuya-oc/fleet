@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-import {SET_KCSAPI_MASTER_DATA, SET_KCSAPI_USER_DATA, SET_KCSAPI_DECK, SET_KCSAPI_DECK_SHIP, SET_KCSAPI_PRESET_DECK, SET_KCSAPI_PRESET_SELECT, SET_KCSAPI_PRESET_REGISTER} from '../actions';
+import {SET_KCSAPI_USER_DATA, SET_KCSAPI_DECK, SET_KCSAPI_DECK_SHIP, SET_KCSAPI_PRESET_DECK, SET_KCSAPI_PRESET_SELECT, SET_KCSAPI_PRESET_REGISTER} from '../actions';
 
 export const initialState = {
 	user: {},
@@ -23,10 +23,6 @@ function deepCopyState(state) {
 
 const gameData = (state = initialState, action) => {
 	switch (action.type) {
-		case SET_KCSAPI_MASTER_DATA:
-			return Object.assign({}, state, {
-				master: action.data
-			});
 		case SET_KCSAPI_USER_DATA:
 			return Object.assign({}, state, {
 				user: action.data
