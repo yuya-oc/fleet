@@ -1,26 +1,8 @@
-import {SET_CURRENT_DATE_VALUE, SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, requestLogin, setAlwaysOnTop} from '../../actions';
+import {SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, requestLogin, setAlwaysOnTop} from '../../actions';
 import {ipcRenderer, remote} from 'electron';
-import kcsapi from '../../lib/kcsapi';
-
-const sec = 1000;
-const minute = 60 * sec;
 
 const electronMiddleware = store => next => action => {
 	switch (action.type) {
-		case SET_CURRENT_DATE_VALUE: {
-			const state = store.getState();
-			const missions = state.gameData.user.api_deck_port ? kcsapi.resolveMissions(state.masterData, state.gameData.user) : [];
-			missions.forEach(mission => {
-				if (mission.sortie && Math.abs(mission.completionDateValue - minute - action.value) <= sec / 2) {
-					const notification = new Notification(mission.api_name, {body: 'まもなく帰還します'});
-					const currentWindow = remote.getCurrentWindow();
-					notification.onclick = () => {
-						currentWindow.show();
-					};
-				}
-			});
-			break;
-		}
 		case SET_AUDIO_MUTED: {
 			const webview = document.getElementById(action.targetId);
 			webview.getWebContents().setAudioMuted(action.muted);

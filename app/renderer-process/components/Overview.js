@@ -30,13 +30,12 @@ const Overview = props => (
 		</div>
 		<div style={panelStyle}>
 			<h3 style={panelHeaderStyle}>遠征</h3>
-			<MissionList currentDateValue={props.currentDateValue} missions={props.missions}/>
+			<MissionList currentDateValue={Date.now()} missions={props.missions}/>
 		</div>
 	</div>
 );
 
 Overview.propTypes = {
-	currentDateValue: React.PropTypes.number,
 	ships: React.PropTypes.array,
 	missions: React.PropTypes.array
 };

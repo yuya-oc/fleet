@@ -8,7 +8,6 @@ const mapStateToProps = (state, ownProps) => {
 		[0, 1, 2, 3].map(i => kcsapi.resolveFleet(state.masterData, state.gameData.user, i)) : [];
 	const missions = state.gameData.user.api_deck_port ? kcsapi.resolveMissions(state.masterData, state.gameData.user) : [];
 	return {
-		currentDateValue: state.appState.currentDateValue,
 		ships: fleets[index] ? fleets[index].ship.map(ship => ({
 			name: ship.api_name,
 			level: ship.api_lv,
