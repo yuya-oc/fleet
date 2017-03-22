@@ -9,29 +9,50 @@ describe('gameData.js', function () {
 		beforeEach(function () {
 			this.data = {
 				user: {
-					api_deck_port: [{
-						api_ship: [11, 12, 13, 14, 15, 16]
-					}, {
-						api_ship: [21, 22, 23, 24, 25, 26]
-					}]
+					api_deck_port: [
+						{api_ship: [11, 12, 13, 14, 15, 16]},
+						{api_ship: [21, 22, 23, 24, 25, 26]},
+						{api_ship: [31, -1, -1, -1, -1, -1]}
+					]
 				}
 			};
 		});
 
 		it('should handle selected ship', function () {
-			const newData1 = gameData(this.data, actions.setKcsapiDeckShip({
-				api_ship_id: 100,
-				api_id: 2,
-				api_ship_idx: 3
-			}));
-			assert.deepEqual(newData1.user.api_deck_port[1].api_ship, [21, 22, 23, 100, 25, 26]);
-
-			const newData2 = gameData(this.data, actions.setKcsapiDeckShip({
-				api_ship_id: 11,
-				api_id: 1,
-				api_ship_idx: 3
-			}));
-			assert.deepEqual(newData2.user.api_deck_port[0].api_ship, [14, 12, 13, 11, 15, 16]);
+			{
+				const newData1 = gameData(this.data, actions.setKcsapiDeckShip({
+					api_ship_id: 100,
+					api_id: 2,
+					api_ship_idx: 3
+				}));
+				assert.deepEqual(newData1.user.api_deck_port[1].api_ship, [21, 22, 23, 100, 25, 26]);
+			}
+			{
+				const newData2 = gameData(this.data, actions.setKcsapiDeckShip({
+					api_ship_id: 11,
+					api_id: 1,
+					api_ship_idx: 3
+				}));
+				assert.deepEqual(newData2.user.api_deck_port[0].api_ship, [14, 12, 13, 11, 15, 16]);
+			}
+			{
+				const newData3 = gameData(this.data, actions.setKcsapiDeckShip({
+					api_ship_id: 11,
+					api_id: 2,
+					api_ship_idx: 3
+				}));
+				assert.deepEqual(newData3.user.api_deck_port[0].api_ship, [24, 12, 13, 14, 15, 16]);
+				assert.deepEqual(newData3.user.api_deck_port[1].api_ship, [21, 22, 23, 11, 25, 26]);
+			}
+			{
+				const newData = gameData(this.data, actions.setKcsapiDeckShip({
+					api_ship_id: 11,
+					api_id: 3,
+					api_ship_idx: 1
+				}));
+				assert.deepEqual(newData.user.api_deck_port[0].api_ship, [12, 13, 14, 15, 16, -1]);
+				assert.deepEqual(newData.user.api_deck_port[2].api_ship, [31, 11, -1, -1, -1, -1]);
+			}
 		});
 
 		it('should handle data.api_ship_id === -1', function () {
