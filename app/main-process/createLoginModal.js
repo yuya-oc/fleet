@@ -5,6 +5,7 @@ import isDev from 'electron-is-dev';
 function createLoginModal(mainWindow) {
 	const loginModal = new BrowserWindow({
 		parent: mainWindow,
+		backgroundThrottling: false,
 		modal: true,
 		show: false
 	});
