@@ -71,6 +71,7 @@
     "webpack-merge": "^2.6.1"
   },
   "build": {
+    "icon": "app/assets/icon",
     "win": {
       "target": [
         "zip"

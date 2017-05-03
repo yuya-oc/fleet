@@ -10,7 +10,20 @@ function createMainWindow() {
 		defaultHeight: 600
 	});
 
+	let icon = `${app.getAppPath()}/assets/icon`;
+	switch (process.platform) {
+		case 'win32':
+			icon += '.ico';
+			break;
+		case 'linux':
+			icon += '.png';
+			break;
+		default:
+			break;
+	}
+
 	const mainWindow = new BrowserWindow({
+		icon,
 		show: false,
 		autoHideMenuBar: true,
 		x: mainWindowState.x,

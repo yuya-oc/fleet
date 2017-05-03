@@ -3,7 +3,19 @@ import {SET_SWF_URL, setSwfURL} from '../actions';
 import isDev from 'electron-is-dev';
 
 function createLoginModal(mainWindow) {
+	let icon = `${app.getAppPath()}/assets/icon`;
+	switch (process.platform) {
+		case 'win32':
+			icon += '.ico';
+			break;
+		case 'linux':
+			icon += '.png';
+			break;
+		default:
+			break;
+	}
 	const loginModal = new BrowserWindow({
+		icon,
 		parent: mainWindow,
 		backgroundThrottling: false,
 		modal: true,
