@@ -148,7 +148,6 @@ app.on('ready', () => {
 	}
 
 	ipcMain.on('SET_NOTIFICATION', (event, hasNotification) => {
-		console.log('SET_NOTIFICATION', hasNotification);
 		if (hasNotification) {
 			mainWindow.setOverlayIcon(`${app.getAppPath()}/assets/badge.ico`, `${app.getName()} has notifications`);
 		} else {
