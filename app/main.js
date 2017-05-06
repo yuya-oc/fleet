@@ -102,6 +102,9 @@ function setNotification(browserWindow, hasNotification) {
 				mainWindow.setOverlayIcon(null, `${app.getName()} has no notifications`);
 			}
 			break;
+		case 'darwin':
+			app.dock.setBadge(hasNotification ? '•' : '');
+			break;
 		default:
 			break;
 	}
