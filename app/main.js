@@ -105,6 +105,9 @@ function setNotification(browserWindow, hasNotification) {
 		case 'darwin':
 			app.dock.setBadge(hasNotification ? '•' : '');
 			break;
+		case 'linux':
+			app.setBadgeCount(hasNotification ? 1 : 0);
+			break;
 		default:
 			break;
 	}
