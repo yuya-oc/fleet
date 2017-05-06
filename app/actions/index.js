@@ -140,3 +140,9 @@ export const setSwfURL = swfURL => ({
 	type: SET_SWF_URL,
 	swfURL
 });
+
+export const SET_HAS_NOTIFICATION = 'SET_HAS_NOTIFICATION';
+export const setHasNotification = hasNotification => ({
+	type: SET_HAS_NOTIFICATION,
+	hasNotification
+});

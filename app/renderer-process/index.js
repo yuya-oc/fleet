@@ -6,7 +6,7 @@ import {Router, Route, IndexRedirect, hashHistory} from 'react-router';
 import {syncHistoryWithStore, routerReducer} from 'react-router-redux';
 import {ipcRenderer, remote, webFrame} from 'electron';
 
-import {loadConfig, requestLogin} from '../actions';
+import {loadConfig, requestLogin, setHasNotification} from '../actions';
 import reducers from '../reducers';
 import electronMiddleware from './middleware/electronMiddleware';
 import configManager from './middleware/configManager';
@@ -79,4 +79,24 @@ setInterval(() => {
 			};
 		}
 	});
+
+	let hasNotification = false;
+	for (let mission of missions) {
+		if (mission.sortie && mission.completionDateValue - Date.now() < minute) {
+			hasNotification = true;
+			break;
+		}
+	}
+	if (state.appState.hasNotification !== hasNotification) {
+		store.dispatch(setHasNotification(hasNotification));
+	}
 }, 1000);
+
+let hasNotification = false;
+store.subscribe(() => {
+	const currentValue = store.getState().appState.hasNotification;
+	if (hasNotification !== currentValue) {
+		hasNotification = currentValue;
+		ipcRenderer.send('SET_NOTIFICATION', hasNotification);
+	}
+});

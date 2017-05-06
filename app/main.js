@@ -146,6 +146,15 @@ app.on('ready', () => {
 			.then(name => winston.info(`Added Extension:  ${name}`))
 			.catch(err => winston.warn('An error occurred: ', err));
 	}
+
+	ipcMain.on('SET_NOTIFICATION', (event, hasNotification) => {
+		console.log('SET_NOTIFICATION', hasNotification);
+		if (hasNotification) {
+			mainWindow.setOverlayIcon(`${app.getAppPath()}/assets/badge.ico`, `${app.getName()} has notifications`);
+		} else {
+			mainWindow.setOverlayIcon(null, '');
+		}
+	});
 });
 
 app.on('window-all-closed', () => {
