@@ -4,9 +4,13 @@ import {Provider} from 'react-redux';
 import {Router, Route, IndexRedirect, hashHistory} from 'react-router';
 import {syncHistoryWithStore} from 'react-router-redux';
 import {ipcRenderer, remote, webFrame} from 'electron';
+import winston from 'winston';
+import fs from 'fs';
+import path from 'path';
 
 import {loadConfig, requestLogin, setHasNotification} from '../actions';
 import {createReduxStore} from './createReduxStore';
+import {hasNotificationHandler, appStateHandler, restoreAppState} from './reduxHandlers';
 import App from './components/App';
 import Overview from './containers/Overview';
 import Settings from './containers/Settings';
@@ -15,15 +19,23 @@ import kcsapi from '../lib/kcsapi';
 
 import '!style-loader!css-loader!photon/dist/css/photon.css';
 
+const appStateJsonPath = path.join(remote.app.getPath('userData'), 'appState.json');
+
 webFrame.setVisualZoomLevelLimits(1, 1);
 
-function hasNotificationHandler(hasNotification) {
-	ipcRenderer.send('SET_NOTIFICATION', hasNotification);
+const store = createReduxStore({
+	onChangeHasNotification: hasNotificationHandler,
+	onChangeAppState: appStateHandler(appStateJsonPath)
+});
+
+try {
+	const data = fs.readFileSync(appStateJsonPath, 'utf8');
+	const appState = JSON.parse(data);
+	restoreAppState(store, appState);
+} catch (err) {
+	winston.info(err);
 }
 
-const store = createReduxStore({
-	onChangeHasNotification: hasNotificationHandler
-});
 store.dispatch(loadConfig());
 store.dispatch(requestLogin());
 

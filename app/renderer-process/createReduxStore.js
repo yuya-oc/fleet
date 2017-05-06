@@ -1,7 +1,7 @@
 import {createStore, combineReducers, compose, applyMiddleware} from 'redux';
 import {routerReducer} from 'react-router-redux';
 import {remote} from 'electron';
-import reducers from '../reducers';
+import reducers, {initialState} from '../reducers';
 import electronMiddleware from './middleware/electronMiddleware';
 import configManager from './middleware/configManager';
 
@@ -15,12 +15,17 @@ function selectHasNotification(state) {
 }
 
 function subscribe(store, handlers) {
-	let currentState = reducers.initialState;
+	let currentState = initialState;
 	store.subscribe(() => {
 		const nextState = store.getState();
 		if (selectHasNotification(currentState) !== selectHasNotification(nextState)) {
 			if (handlers.onChangeHasNotification) {
 				handlers.onChangeHasNotification(selectHasNotification(nextState));
+			}
+		}
+		if (currentState.appState !== nextState.appState) {
+			if (handlers.onChangeAppState) {
+				handlers.onChangeAppState(nextState.appState);
 			}
 		}
 		currentState = nextState;
