@@ -73,11 +73,12 @@ export const takeScreenshot = bounds => ({
 	bounds
 });
 
-export const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
-export const sendNotification = (title, options) => ({
-	type: 'SEND_NOTIFICATION',
+export const SEND_FILE_NOTIFICATION = 'SEND_FILE_NOTIFICATION';
+export const sendFileNotification = (title, options, fullPath) => ({
+	type: 'SEND_FILE_NOTIFICATION',
 	title,
-	options
+	options,
+	fullPath
 });
 
 export const SET_KCSAPI_MASTER_DATA = 'SET_KCSAPI_MASTER_DATA';
