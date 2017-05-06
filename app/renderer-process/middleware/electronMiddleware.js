@@ -1,4 +1,4 @@
-import {SET_AUDIO_MUTED, TOGGLE_ALWAYS_ON_TOP, RELOAD_WEBVIEW, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, requestLogin, setAlwaysOnTop} from '../../actions';
+import {SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, RELOAD_WEBVIEW, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, requestLogin} from '../../actions';
 import {ipcRenderer, remote} from 'electron';
 
 const electronMiddleware = store => next => action => {
@@ -8,13 +8,8 @@ const electronMiddleware = store => next => action => {
 			webview.getWebContents().setAudioMuted(action.muted);
 			break;
 		}
-		case TOGGLE_ALWAYS_ON_TOP:
-			setImmediate(() => {
-				const currentWindow = remote.getCurrentWindow();
-				const isAlwaysOnTop = currentWindow.isAlwaysOnTop();
-				currentWindow.setAlwaysOnTop(!isAlwaysOnTop);
-				store.dispatch(setAlwaysOnTop(!isAlwaysOnTop));
-			});
+		case SET_ALWAYS_ON_TOP:
+			remote.getCurrentWindow().setAlwaysOnTop(action.flag);
 			break;
 		case RELOAD_WEBVIEW:
 			if (store.getState().appState.loginRequired) {

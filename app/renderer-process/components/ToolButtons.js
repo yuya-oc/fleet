@@ -48,6 +48,14 @@ const handleMute = (onClick, targetId, muted) => {
 	}
 };
 
+const handlePin = (onClick, pinned) => {
+	if (onClick) {
+		return () => {
+			onClick(!pinned);
+		};
+	}
+};
+
 function getHigherScale(scales, currentScale) {
 	const length = scales.length;
 	const i = scales.indexOf(currentScale);
@@ -81,7 +89,7 @@ const ToolButtons = props => {
 				<Button active={props.muted} onClick={handleMute(props.onClickMute, props.screenshotTargetId, props.muted)}>
 					<span className={props.muted ? 'icon icon-mute' : 'icon icon-sound'}/>
 				</Button>
-				<Button active={props.pinned} onClick={props.onClickPin}>
+				<Button active={props.pinned} onClick={handlePin(props.onClickPin, props.pinned)}>
 					<span className="icon icon-check"/>
 				</Button>
 			</div>

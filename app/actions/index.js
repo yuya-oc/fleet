@@ -116,12 +116,7 @@ export const setKcsapiPresetRegister = data => ({
 	data
 });
 
-export const TOGGLE_ALWAYS_ON_TOP = 'TOGGLE_ALWAYS_ON_TOP';
 export const SET_ALWAYS_ON_TOP = 'SET_ALWAYS_ON_TOP';
-
-export const toggleAlwaysOnTop = () => ({
-	type: TOGGLE_ALWAYS_ON_TOP
-});
 
 export const setAlwaysOnTop = flag => ({
 	type: SET_ALWAYS_ON_TOP,
