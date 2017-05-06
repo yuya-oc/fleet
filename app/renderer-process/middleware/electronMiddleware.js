@@ -1,4 +1,4 @@
-import {SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, RELOAD_WEBVIEW, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE, requestLogin} from '../../actions';
+import {SET_AUDIO_MUTED, SET_ALWAYS_ON_TOP, RELOAD_WEBVIEW, REQUEST_LOGIN, TAKE_SCREENSHOT, SEND_NOTIFICATION, SET_WEBVIEW_SCALE, requestLogin} from '../../actions';
 import {ipcRenderer, remote} from 'electron';
 
 const electronMiddleware = store => next => action => {
@@ -32,6 +32,11 @@ const electronMiddleware = store => next => action => {
 			break;
 		case TAKE_SCREENSHOT:
 			ipcRenderer.send('IPC_REDUX_ACTION', action, store.getState());
+			break;
+		case SEND_NOTIFICATION:
+			new Notification(action.title, action.options).onclick = () => {
+				remote.getCurrentWindow().show();
+			};
 			break;
 		case REQUEST_LOGIN:
 			ipcRenderer.send('IPC_REDUX_ACTION', action);

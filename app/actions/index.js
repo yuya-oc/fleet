@@ -73,6 +73,13 @@ export const takeScreenshot = bounds => ({
 	bounds
 });
 
+export const SEND_NOTIFICATION = 'SEND_NOTIFICATION';
+export const sendNotification = (title, options) => ({
+	type: 'SEND_NOTIFICATION',
+	title,
+	options
+});
+
 export const SET_KCSAPI_MASTER_DATA = 'SET_KCSAPI_MASTER_DATA';
 export const SET_KCSAPI_USER_DATA = 'SET_KCSAPI_USER_DATA';
 export const SET_KCSAPI_DECK_SHIP = 'SET_KCSAPI_DECK_SHIP';
