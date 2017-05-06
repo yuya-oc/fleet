@@ -93,6 +93,20 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 	}
 });
 
+function setNotification(browserWindow, hasNotification) {
+	switch (process.platform) {
+		case 'win32':
+			if (hasNotification) {
+				mainWindow.setOverlayIcon(`${app.getAppPath()}/assets/badge.ico`, `${app.getName()} has notifications`);
+			} else {
+				mainWindow.setOverlayIcon(null, `${app.getName()} has no notifications`);
+			}
+			break;
+		default:
+			break;
+	}
+}
+
 app.on('quit', () => {
 	proxyServer.close();
 });
@@ -148,11 +162,7 @@ app.on('ready', () => {
 	}
 
 	ipcMain.on('SET_NOTIFICATION', (event, hasNotification) => {
-		if (hasNotification) {
-			mainWindow.setOverlayIcon(`${app.getAppPath()}/assets/badge.ico`, `${app.getName()} has notifications`);
-		} else {
-			mainWindow.setOverlayIcon(null, '');
-		}
+		setNotification(mainWindow, hasNotification);
 	});
 });
 
