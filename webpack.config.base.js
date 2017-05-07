@@ -1,5 +1,6 @@
 const webpack = require('webpack');
 const BabiliPlugin = require('babili-webpack-plugin');
+const path = require('path');
 
 const plugins = [
 	new webpack.DefinePlugin({
@@ -12,7 +13,7 @@ if (process.env.NODE_ENV === 'production') {
 
 module.exports = {
 	output: {
-		path: './app',
+		path: path.resolve(__dirname, 'app'),
 		filename: '[name]_bundle.js'
 	},
 	module: {
