@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/fleet
+    docker:
+      - image: electronuserland/electron-builder:wine
+    steps:
+      - checkout
+      - restore_cache:
+          key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
+      - run: yarn
+      - run: yarn run build
+      - run: yarn run pack
+      - run: mkdir -p /tmp/fleet-artifacts
+      - run: mv dist/*.zip /tmp/fleet-artifacts/
+      - run: mv dist/*.AppImage /tmp/fleet-artifacts/
+      - save_cache:
+          key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
+          paths:
+            - "node_modules"
+            - "~/.cache/yarn"
+      - store_artifacts:
+          path: /tmp/fleet-artifacts/
+          destination: packages
+      - run: yarn test
