@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import FleetList from './FleetList';
 import MissionList from './MissionList';
 import LinkButton from './LinkButton';
@@ -36,8 +37,13 @@ const Overview = props => (
 );
 
 Overview.propTypes = {
-	ships: React.PropTypes.array,
-	missions: React.PropTypes.array
+	ships: PropTypes.array,
+	missions: PropTypes.array
+};
+
+Overview.defaultProps = {
+	ships: [],
+	missions: []
 };
 
 export default Overview;

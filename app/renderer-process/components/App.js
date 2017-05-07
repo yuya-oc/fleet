@@ -1,6 +1,7 @@
 /* eslint react/jsx-no-bind:0 */
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import electron, {remote} from 'electron';
 
 import KanColle from '../containers/KanColle';
@@ -52,7 +53,7 @@ class App extends React.Component {
 	}
 
 	resizeListener() {
-		// make dot-by-dot for screenshot
+		// Make dot-by-dot for screenshot
 		const scaleFactor = getCurrentDeviceScaleFactor();
 		const multiplier = getMultiplierForScaleFactor(scaleFactor);
 
@@ -89,7 +90,7 @@ class App extends React.Component {
 						this.mainDiv = div;
 					}}
 					>
-					<KanColle appendStyle={{marginBottom: '8px'}} muted id={this.props.route.webviewId}/>
+					<KanColle muted appendStyle={{marginBottom: '8px'}} id={this.props.route.webviewId}/>
 					<ToolButtons screenshotTargetId={this.props.route.webviewId} initialScale={1.0} possibleScales={possibleScales}/>
 				</div>
 				<div style={childStyle}>
@@ -103,8 +104,8 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-	children: React.PropTypes.object,
-	route: React.PropTypes.object
+	children: PropTypes.object.isRequired,
+	route: PropTypes.object.isRequired
 };
 
 export default App;

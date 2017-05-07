@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import dateFormat from 'dateformat';
 
 const MissionListItem = props => {
@@ -18,21 +19,35 @@ const MissionListItem = props => {
 };
 
 MissionListItem.propTypes = {
-	currentDateValue: React.PropTypes.number,
-	mission: React.PropTypes.object
+	currentDateValue: PropTypes.number.isRequired,
+	mission: PropTypes.object
+};
+
+MissionListItem.defaultProps = {
+	mission: {
+		sortie: false,
+		name: 'default mission name'
+	}
 };
 
 const MissionList = props => (
 	<ul className="list-group">
-		{props.missions ? props.missions.map((mission, i) => (
-			<MissionListItem key={i} currentDateValue={props.currentDateValue} mission={mission}/>
-		)) : null}
+		{props.missions ? props.missions.map((mission, i) => {
+			const key = mission.id ? `mission-${mission.id}` : `mission-undefined-${i}`;
+			return (
+				<MissionListItem key={key} currentDateValue={props.currentDateValue} mission={mission}/>
+			);
+		}) : null}
 	</ul>
-);
+	);
 
 MissionList.propTypes = {
-	currentDateValue: React.PropTypes.number,
-	missions: React.PropTypes.array
+	currentDateValue: PropTypes.number.isRequired,
+	missions: PropTypes.array
+};
+
+MissionList.defaultProps = {
+	missions: []
 };
 
 export default MissionList;

@@ -6,7 +6,7 @@ let timer;
 window.onload = () => {
 	webview = document.getElementById('webview');
 	webview.addEventListener('dom-ready', () => {
-		// webview.openDevTools();
+		// Webview.openDevTools();
 		if (timer !== null) {
 			timer = setInterval(() => {
 				webview.executeJavaScript(`

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {Link} from 'react-router';
 
 const linkButtonStyle = {
@@ -15,8 +16,12 @@ const LinkButton = props => (
 );
 
 LinkButton.propTypes = {
-	to: React.PropTypes.string,
-	children: React.PropTypes.node
+	to: PropTypes.string.isRequired,
+	children: PropTypes.node
+};
+
+LinkButton.defaultProps = {
+	children: null
 };
 
 export default LinkButton;

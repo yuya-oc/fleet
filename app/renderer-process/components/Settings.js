@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DirectorySelectButton from '../containers/ScreenshotDirectorySelectButton';
 
 const handleSubmit = (callback, context) => event => {
@@ -25,20 +26,25 @@ const Settings = (props, context) => (
 			{` ${props.screenshotDir}`}
 		</div>
 		<div className="form-actions">
-			<button className="btn btn-form btn-default" onClick={handleCancel(props.onCancel, context)} to="/">キャンセル</button>
+			<button className="btn btn-form btn-default" to="/" onClick={handleCancel(props.onCancel, context)}>キャンセル</button>
 			<button className="btn btn-form btn-primary" type="submit">保存</button>
 		</div>
 	</form>
 );
 
 Settings.propTypes = {
-	screenshotDir: React.PropTypes.string,
-	onSave: React.PropTypes.func,
-	onCancel: React.PropTypes.func
+	screenshotDir: PropTypes.string.isRequired,
+	onSave: PropTypes.func,
+	onCancel: PropTypes.func
+};
+
+Settings.defaultProps = {
+	onSave: null,
+	onCancel: null
 };
 
 Settings.contextTypes = {
-	router: React.PropTypes.object.isRequired
+	router: PropTypes.object.isRequired
 };
 
 export default Settings;

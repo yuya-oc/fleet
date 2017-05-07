@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import {setWebviewScale} from '../../actions';
@@ -10,19 +11,23 @@ const handleSelect = (onSelect, scales) => eventKey => {
 };
 
 const ScaleDropdownButton = props => (
-	<DropdownButton title={props.title} onSelect={handleSelect(props.onSelect, props.scales)} id={props.id}>
+	<DropdownButton title={props.title} id={props.id} onSelect={handleSelect(props.onSelect, props.scales)}>
 		{props.scales.map((scale, i) => (
-			<MenuItem key={i} eventKey={i} active={scale === props.currentScale}>{`${scale * 100}%`}</MenuItem>
+			<MenuItem key={`scale-button-${scale[i]}`} eventKey={i} active={scale === props.currentScale}>{`${scale * 100}%`}</MenuItem>
 		))}
 	</DropdownButton>
 );
 
 ScaleDropdownButton.propTypes = {
-	id: React.PropTypes.string.isRequired,
-	title: React.PropTypes.string.isRequired,
-	currentScale: React.PropTypes.number.isRequired,
-	scales: React.PropTypes.array.isRequired,
-	onSelect: React.PropTypes.func
+	id: PropTypes.string.isRequired,
+	title: PropTypes.string.isRequired,
+	currentScale: PropTypes.number.isRequired,
+	scales: PropTypes.array.isRequired,
+	onSelect: PropTypes.func
+};
+
+ScaleDropdownButton.defaultProps = {
+	onSelect: null
 };
 
 const mapStateToPops = state => ({

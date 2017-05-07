@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {remote} from 'electron';
 
 function selectDirectory(onSelect) {
@@ -30,9 +31,15 @@ class DirectorySelectButton extends React.Component {
 }
 
 DirectorySelectButton.propTypes = {
-	btnClass: React.PropTypes.string,
-	children: React.PropTypes.node,
-	onDirectorySelect: React.PropTypes.func
+	btnClass: PropTypes.string,
+	children: PropTypes.node,
+	onDirectorySelect: PropTypes.func
+};
+
+DirectorySelectButton.defaultProps = {
+	btnClass: '',
+	children: null,
+	onDirectorySelect: null
 };
 
 export default DirectorySelectButton;

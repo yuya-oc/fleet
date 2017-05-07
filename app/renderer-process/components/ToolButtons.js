@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {shell} from 'electron';
 import fs from 'fs';
 
@@ -14,8 +15,13 @@ const Button = props => {
 };
 
 Button.propTypes = {
-	active: React.PropTypes.bool,
-	btnStyle: React.PropTypes.object
+	active: PropTypes.bool,
+	btnStyle: PropTypes.object
+};
+
+Button.defaultProps = {
+	active: false,
+	btnStyle: {}
 };
 
 const handleScreenshot = (onClick, targetId) => {
@@ -114,18 +120,31 @@ const ToolButtons = props => {
 };
 
 ToolButtons.propTypes = {
-	screenshotTargetId: React.PropTypes.string,
-	screenshotDir: React.PropTypes.string,
-	muted: React.PropTypes.bool,
-	pinned: React.PropTypes.bool,
-	scale: React.PropTypes.number,
-	possibleScales: React.PropTypes.array,
-	initialScale: React.PropTypes.number,
-	onClickScreenshot: React.PropTypes.func,
-	onClickMute: React.PropTypes.func,
-	onClickPin: React.PropTypes.func,
-	onClickScale: React.PropTypes.func,
-	onClickReload: React.PropTypes.func
+	screenshotTargetId: PropTypes.string.isRequired,
+	screenshotDir: PropTypes.string.isRequired,
+	muted: PropTypes.bool,
+	pinned: PropTypes.bool,
+	scale: PropTypes.number,
+	possibleScales: PropTypes.array,
+	initialScale: PropTypes.number,
+	onClickScreenshot: PropTypes.func,
+	onClickMute: PropTypes.func,
+	onClickPin: PropTypes.func,
+	onClickScale: PropTypes.func,
+	onClickReload: PropTypes.func
+};
+
+ToolButtons.defaultProps = {
+	muted: false,
+	pinned: false,
+	scale: 1,
+	possibleScales: [1],
+	initialScale: 1,
+	onClickScreenshot: null,
+	onClickMute: null,
+	onClickPin: null,
+	onClickScale: null,
+	onClickReload: null
 };
 
 export default ToolButtons;

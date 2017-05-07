@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import LinkTab from './LinkTab';
 
 const Main = props => (
@@ -18,7 +19,11 @@ const Main = props => (
 );
 
 Main.propTypes = {
-	children: React.PropTypes.node
+	children: PropTypes.node
+};
+
+Main.defaultProps = {
+	children: null
 };
 
 export default Main;

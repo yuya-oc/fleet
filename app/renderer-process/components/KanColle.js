@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import electron from 'electron';
 const {remote} = electron;
 
@@ -17,11 +18,11 @@ function setWebViewScale(webview, scale) {
 class KanColle extends React.Component {
 	componentDidMount() {
 		this.webview.addEventListener('dom-ready', () => {
-//			this.webview.openDevTools();
+//			This.webview.openDevTools();
 			this.webview.setVisualZoomLevelLimits(1, 1);
 		});
 		this.webview.addEventListener('did-finish-load', () => {
-//			if (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
+//			If (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
 			setWebViewScale(this.webview, this.props.scale);
 //			}
 		});
@@ -48,14 +49,15 @@ class KanColle extends React.Component {
 }
 
 KanColle.propTypes = {
-	id: PropTypes.string,
+	id: PropTypes.string.isRequired,
 	src: PropTypes.string.isRequired,
 	scale: PropTypes.number,
 	appendStyle: PropTypes.object
 };
 
 KanColle.defaultProps = {
-	scale: 1.0
+	scale: 1.0,
+	appendStyle: {}
 };
 
 export default KanColle;

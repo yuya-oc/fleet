@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const FleetListItem = props => (
 	<li className="list-group-item">
@@ -7,19 +8,31 @@ const FleetListItem = props => (
 );
 
 FleetListItem.propTypes = {
-	ship: React.PropTypes.object
+	ship: PropTypes.object
+};
+
+FleetListItem.defaultProps = {
+	ship: {
+		name: 'default name',
+		level: 0,
+		condition: 0
+	}
 };
 
 const FleetList = props => (
 	<ul className="list-group">
-		{props.ships ? props.ships.map((ship, i) => (
-			<FleetListItem key={i} ship={ship}/>
-		)) : null}
+		{props.ships ? props.ships.map(ship => (
+			<FleetListItem key={`ship-${ship.id}`} ship={ship}/>
+			)) : null}
 	</ul>
 );
 
 FleetList.propTypes = {
-	ships: React.PropTypes.array
+	ships: PropTypes.array
+};
+
+FleetList.defaultProps = {
+	ships: []
 };
 
 export default FleetList;

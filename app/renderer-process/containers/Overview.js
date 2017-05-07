@@ -11,12 +11,14 @@ const mapStateToProps = (state, ownProps) => {
 		ships: fleets[index] ? fleets[index].ship.map(ship => ({
 			name: ship.api_name,
 			level: ship.api_lv,
-			condition: ship.api_cond
+			condition: ship.api_cond,
+			id: ship.api_id
 		})) : null,
 		missions: missions.map(mission => ({
 			sortie: mission.sortie,
 			name: mission.api_name,
-			completionDateValue: mission.completionDateValue
+			completionDateValue: mission.completionDateValue,
+			id: mission.api_id
 		}))
 	};
 };
