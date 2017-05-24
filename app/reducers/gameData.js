@@ -21,6 +21,11 @@ function deepCopyState(state) {
 	return JSON.parse(JSON.stringify(state));
 }
 
+function normalizeDeckShips(ships) {
+	ships.push(-1, -1, -1, -1, -1, -1);
+	ships.length = 6;
+}
+
 const gameData = (state = initialState, action) => {
 	switch (action.type) {
 		case SET_KCSAPI_USER_DATA:
@@ -49,8 +54,7 @@ const gameData = (state = initialState, action) => {
 					}
 					newState.user.api_deck_port = newState.user.api_deck_port.map(deck => {
 						deck.api_ship = deck.api_ship.filter(v => v !== -1);
-						deck.api_ship.push(-1, -1, -1, -1, -1, -1);
-						deck.api_ship.length = 6;
+						normalizeDeckShips(deck.api_ship);
 						return deck;
 					});
 					break;
@@ -71,7 +75,18 @@ const gameData = (state = initialState, action) => {
 			const newState = deepCopyState(state);
 			const deckIndex = action.data.api_deck_id - 1;
 			const presetIndex = action.data.api_preset_no;
-			Object.assign(newState.user.api_deck_port[deckIndex], newState.presetDeck.api_deck[presetIndex]);
+			const presetDeck = state.presetDeck.api_deck[presetIndex];
+
+			const newShips = presetDeck.api_ship.filter(ship => {
+				const searchResult = searchShipFromDecks(state.user.api_deck_port, ship);
+				if (searchResult === null || searchResult.deckIndex === deckIndex) {
+					return true;
+				}
+				return false;
+			});
+			normalizeDeckShips(newShips);
+			const newDeck = Object.assign({}, state.presetDeck.api_deck[presetIndex], {api_ship: newShips});
+			Object.assign(newState.user.api_deck_port[deckIndex], newDeck);
 			return newState;
 		}
 		case SET_KCSAPI_PRESET_REGISTER: {
