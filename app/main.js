@@ -1,12 +1,12 @@
 import {app, dialog, ipcMain, session} from 'electron';
-import url from 'url';
+import {fork} from 'child_process';
+import path from 'path';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import winston from 'winston';
 
 import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, setKcsapiDeck, setKcsapiPresetDeck, setKcsapiPresetSelect, setKcsapiPresetRegister, setLoginRequired, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
-import createProxyServer from './main-process/createProxyServer';
 import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
 import {takeScreenshot, getCurrentDeviceScaleFactor} from './main-process/ipcReduxActions';
@@ -16,6 +16,7 @@ const localProxyPort = 20010;
 
 let mainWindow = null;
 let loginModal = null;
+let proxyProcess = null;
 
 if (isDev || process.argv.includes('--log-level=debug')) {
 	winston.level = 'debug';
@@ -43,55 +44,52 @@ try {
 }
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
-const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
-proxyServer.on('proxyReq', (proxyReq, req) => {
-	if (kcsapi.isKcsapiURL(req.url)) {
-		kcsapi.getRequestData(req, requestData => {
-			winston.silly(req.url);
-			kcsapi.getProxyResponseData(proxyReq, responseData => {
-				const pathname = url.parse(req.url).pathname;
-				if (kcsapi.isSucceeded(responseData)) {
-					switch (pathname) {
-						case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
-							mainWindow.dispatch(setKcsapiMasterData(responseData.api_data));
-							break;
-						case '/kcsapi/api_port/port': // 母港帰投時
-							mainWindow.dispatch(setKcsapiUserData(responseData.api_data));
-							break;
-						case '/kcsapi/api_get_member/deck':
-							mainWindow.dispatch(setKcsapiDeck(responseData.api_data));
-							break;
-						case '/kcsapi/api_get_member/preset_deck':
-							mainWindow.dispatch(setKcsapiPresetDeck(responseData.api_data));
-							break;
-						case '/kcsapi/api_req_hensei/change':
-							mainWindow.dispatch(setKcsapiDeckShip(requestData));
-							break;
-						case '/kcsapi/api_req_hensei/preset_register':
-							mainWindow.dispatch(setKcsapiPresetRegister(requestData));
-							break;
-						case '/kcsapi/api_req_hensei/preset_select':
-							mainWindow.dispatch(setKcsapiPresetSelect(requestData));
-							break;
-						default:
-							winston.debug('Unhandled API:', pathname);
-							break;
-					}
-				} else {
-					winston.info('API response failed: Need to login');
-					mainWindow.dispatch(setLoginRequired(true));
-				}
-				if (isDev || process.argv.includes('--save-kcsapi')) {
-					kcsapi.saveToDirectory(app.getPath('userData'), pathname, responseData, err => {
-						if (err) {
-							winston.warn(err);
-						}
-					});
+
+function createProxyProcess(proxyModule) {
+	const proxy = fork(proxyModule, [localProxyPort]);
+	proxy.on('message', message => {
+		const {pathname, requestData, responseData} = message;
+		if (kcsapi.isSucceeded(responseData)) {
+			switch (pathname) {
+				case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
+					mainWindow.dispatch(setKcsapiMasterData(responseData.api_data));
+					break;
+				case '/kcsapi/api_port/port': // 母港帰投時
+					mainWindow.dispatch(setKcsapiUserData(responseData.api_data));
+					break;
+				case '/kcsapi/api_get_member/deck':
+					mainWindow.dispatch(setKcsapiDeck(responseData.api_data));
+					break;
+				case '/kcsapi/api_get_member/preset_deck':
+					mainWindow.dispatch(setKcsapiPresetDeck(responseData.api_data));
+					break;
+				case '/kcsapi/api_req_hensei/change':
+					mainWindow.dispatch(setKcsapiDeckShip(requestData));
+					break;
+				case '/kcsapi/api_req_hensei/preset_register':
+					mainWindow.dispatch(setKcsapiPresetRegister(requestData));
+					break;
+				case '/kcsapi/api_req_hensei/preset_select':
+					mainWindow.dispatch(setKcsapiPresetSelect(requestData));
+					break;
+				default:
+					winston.debug('Unhandled API:', pathname);
+					break;
+			}
+		} else {
+			winston.info('API response failed: Need to login');
+			mainWindow.dispatch(setLoginRequired(true));
+		}
+		if (isDev || process.argv.includes('--save-kcsapi')) {
+			kcsapi.saveToDirectory(app.getPath('userData'), pathname, responseData, err => {
+				if (err) {
+					winston.warn(err);
 				}
 			});
-		});
-	}
-});
+		}
+	});
+	return proxy;
+}
 
 function setNotification(browserWindow, hasNotification) {
 	switch (process.platform) {
@@ -114,10 +112,11 @@ function setNotification(browserWindow, hasNotification) {
 }
 
 app.on('quit', () => {
-	proxyServer.close();
+	proxyProcess.kill();
 });
 
 app.on('ready', () => {
+	proxyProcess = createProxyProcess(path.join(app.getAppPath(), 'proxy-process/index_bundle.js'));
 	const userAgent = session.defaultSession.getUserAgent()
 					.replace(new RegExp(`${app.getName()}\\/[^\\s]+\\s*`), '')
 					.replace(/Electron\/[^\s]+\s*/, '');
