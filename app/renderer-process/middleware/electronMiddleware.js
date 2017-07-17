@@ -31,7 +31,10 @@ const electronMiddleware = store => next => action => {
 			ipcRenderer.send('IPC_REDUX_ACTION', action);
 			break;
 		case TAKE_SCREENSHOT:
-			ipcRenderer.send('IPC_REDUX_ACTION', action, store.getState());
+			{
+				const state = store.getState();
+				ipcRenderer.send('IPC_REDUX_ACTION', action, {config: state.config, appState: state.appState});
+			}
 			break;
 		case SEND_FILE_NOTIFICATION:
 			new Notification(action.title, action.options).onclick = () => {
