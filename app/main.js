@@ -9,6 +9,7 @@ import winston from 'winston';
 import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, setKcsapiDeck, setKcsapiPresetDeck, setKcsapiPresetSelect, setKcsapiPresetRegister, setLoginRequired, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
 import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
+import getFlashPluginPath, {hasPPAPIFlashPath} from './main-process/getFlashPluginPath';
 import {takeScreenshot, getCurrentDeviceScaleFactor} from './main-process/ipcReduxActions';
 import kcsapi from './lib/kcsapi';
 
@@ -35,12 +36,14 @@ if (shouldQuit) {
 	app.quit();
 }
 
-try {
-	app.commandLine.appendSwitch('ppapi-flash-path', app.getPath('pepperFlashSystemPlugin'));
-} catch (err) {
-	winston.error(err);
-	dialog.showErrorBox('Flash Plugin not found', `You need to install Flash Plugin (PPAPI)\n\n${err}`);
-	app.quit();
+if (!hasPPAPIFlashPath(process.argv)) {
+	try {
+		app.commandLine.appendSwitch('ppapi-flash-path', getFlashPluginPath());
+	} catch (err) {
+		winston.error(err);
+		dialog.showErrorBox('Flash Plugin not found', `You need to install Flash Plugin (PPAPI)\n\n${err}`);
+		app.quit();
+	}
 }
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
