@@ -45,32 +45,31 @@ try {
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
 
-function createProxyProcess(proxyModule) {
-	const proxy = fork(proxyModule, [localProxyPort]);
-	proxy.on('message', message => {
+function handleProxyMessage(win, message) {
+	if (message.event === 'kcsapi') {
 		const {pathname, requestData, responseData} = message;
 		if (kcsapi.isSucceeded(responseData)) {
 			switch (pathname) {
 				case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
-					mainWindow.dispatch(setKcsapiMasterData(responseData.api_data));
+					win.dispatch(setKcsapiMasterData(responseData.api_data));
 					break;
 				case '/kcsapi/api_port/port': // 母港帰投時
-					mainWindow.dispatch(setKcsapiUserData(responseData.api_data));
+					win.dispatch(setKcsapiUserData(responseData.api_data));
 					break;
 				case '/kcsapi/api_get_member/deck':
-					mainWindow.dispatch(setKcsapiDeck(responseData.api_data));
+					win.dispatch(setKcsapiDeck(responseData.api_data));
 					break;
 				case '/kcsapi/api_get_member/preset_deck':
-					mainWindow.dispatch(setKcsapiPresetDeck(responseData.api_data));
+					win.dispatch(setKcsapiPresetDeck(responseData.api_data));
 					break;
 				case '/kcsapi/api_req_hensei/change':
-					mainWindow.dispatch(setKcsapiDeckShip(requestData));
+					win.dispatch(setKcsapiDeckShip(requestData));
 					break;
 				case '/kcsapi/api_req_hensei/preset_register':
-					mainWindow.dispatch(setKcsapiPresetRegister(requestData));
+					win.dispatch(setKcsapiPresetRegister(requestData));
 					break;
 				case '/kcsapi/api_req_hensei/preset_select':
-					mainWindow.dispatch(setKcsapiPresetSelect(requestData));
+					win.dispatch(setKcsapiPresetSelect(requestData));
 					break;
 				default:
 					winston.debug('Unhandled API:', pathname);
@@ -78,7 +77,7 @@ function createProxyProcess(proxyModule) {
 			}
 		} else {
 			winston.info('API response failed: Need to login');
-			mainWindow.dispatch(setLoginRequired(true));
+			win.dispatch(setLoginRequired(true));
 		}
 		if (isDev || process.argv.includes('--save-kcsapi')) {
 			kcsapi.saveToDirectory(app.getPath('userData'), pathname, responseData, err => {
@@ -87,8 +86,20 @@ function createProxyProcess(proxyModule) {
 				}
 			});
 		}
+	}
+}
+
+function createProxyProcess(proxyModule) {
+	return new Promise((resolve, reject) => {
+		const proxy = fork(proxyModule, [localProxyPort]);
+		proxy.once('message', message => {
+			if (message.event === 'listening') {
+				resolve(proxy);
+			} else {
+				reject(new Error(`Unexpected message: ${message}`));
+			}
+		});
 	});
-	return proxy;
 }
 
 function setNotification(browserWindow, hasNotification) {
@@ -115,8 +126,8 @@ app.on('quit', () => {
 	proxyProcess.kill();
 });
 
-app.on('ready', () => {
-	proxyProcess = createProxyProcess(path.join(app.getAppPath(), 'proxy-process/index_bundle.js'));
+app.on('ready', async () => {
+	proxyProcess = await createProxyProcess(path.join(app.getAppPath(), 'proxy-process/index_bundle.js'));
 	const userAgent = session.defaultSession.getUserAgent()
 					.replace(new RegExp(`${app.getName()}\\/[^\\s]+\\s*`), '')
 					.replace(/Electron\/[^\s]+\s*/, '');
@@ -126,6 +137,11 @@ app.on('ready', () => {
 	mainWindow.on('closed', () => {
 		mainWindow = null;
 	});
+
+	proxyProcess.on('message', message => {
+		handleProxyMessage(mainWindow, message);
+	});
+
 	ipcMain.on('SHOW_LOGIN_WINDOW', (e, show) => {
 		if (show) {
 			loginModal.show();

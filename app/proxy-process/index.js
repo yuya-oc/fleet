@@ -4,7 +4,10 @@ import kcsapi from '../lib/kcsapi';
 
 const localProxyPort = process.argv[2];
 
-const proxyServer = createProxyServer().listen(localProxyPort, 'localhost');
+const proxyServer = createProxyServer().listen(localProxyPort, 'localhost', () => {
+	process.send({event: 'listening'});
+});
+
 proxyServer.on('proxyReq', (proxyReq, req) => {
 	if (kcsapi.isKcsapiURL(req.url)) {
 		kcsapi.getRequestData(req, requestData => {
@@ -12,6 +15,7 @@ proxyServer.on('proxyReq', (proxyReq, req) => {
 			kcsapi.getProxyResponseData(proxyReq, responseData => {
 				const pathname = url.parse(req.url).pathname;
 				process.send({
+					event: 'kcsapi',
 					pathname,
 					requestData,
 					responseData
