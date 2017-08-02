@@ -1,6 +1,6 @@
 # Fleet
 
-[![CircleCI](https://circleci.com/gh/yuya-oc/fleet.svg?style=svg)](https://circleci.com/gh/yuya-oc/fleet)
+[![CircleCI](https://circleci.com/gh/yuya-oc/fleet.svg?style=shield)](https://circleci.com/gh/yuya-oc/fleet)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 > A simple Kancolle browser
