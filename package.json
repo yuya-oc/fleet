@@ -1,7 +1,7 @@
 {
   "name": "fleet",
-  "version": "0.0.1",
-  "description": "KanColle browser",
+  "version": "0.1.0",
+  "description": "A simple Kancolle browser",
   "main": "index.js",
   "scripts": {
     "build": "run-p build:*",
