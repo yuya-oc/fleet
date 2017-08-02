@@ -76,7 +76,7 @@
     "icon": "app/assets/icon",
     "win": {
       "target": [
-        "zip"
+        "zip", "nsis"
       ]
     },
     "mac": {

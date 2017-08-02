@@ -11,15 +11,13 @@ jobs:
       - run: yarn
       - run: yarn run build
       - run: yarn run pack
-      - run: mkdir -p /tmp/fleet-artifacts
-      - run: mv dist/*.zip /tmp/fleet-artifacts/
-      - run: mv dist/*.AppImage /tmp/fleet-artifacts/
       - save_cache:
           key: yarn-{{ .Branch }}-{{ checksum "yarn.lock" }}
           paths:
             - "node_modules"
             - "~/.cache/yarn"
+      - run: rm -r dist/*-unpacked dist/mac
       - store_artifacts:
-          path: /tmp/fleet-artifacts/
+          path: ~/fleet/dist/
           destination: packages
       - run: yarn test
