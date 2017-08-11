@@ -1,6 +1,5 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
 import {SET_SWF_URL, setSwfURL} from '../actions';
-import isDev from 'electron-is-dev';
 
 function createLoginModal(mainWindow) {
 	let icon = `${app.getAppPath()}/assets/icon`;
@@ -19,13 +18,13 @@ function createLoginModal(mainWindow) {
 		parent: mainWindow,
 		backgroundThrottling: false,
 		modal: true,
-		show: false
+		show: false,
+		webPreferences: {
+			nodeIntegration: false,
+			preload: `${app.getAppPath()}/renderer-process/login.js`
+		}
 	});
-	if (isDev) {
-		loginModal.loadURL('http://localhost:8080/login.html');
-	} else {
-		loginModal.loadURL(`file://${app.getAppPath()}/login.html`);
-	}
+	loginModal.loadURL('http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/');
 	ipcMain.once(SET_SWF_URL, (e, swfURL) => {
 		mainWindow.dispatch(setSwfURL(swfURL));
 	});
