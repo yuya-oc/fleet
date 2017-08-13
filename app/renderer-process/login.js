@@ -1,16 +1,18 @@
-const {ipcRenderer} = require('electron');
-const url = require('url');
+const {ipcRenderer, remote} = require('electron');
 
-const timer = setInterval(() => { // eslint-disable-line no-unused-vars
+function loadFrameURL() {
 	let gameFrame = document.getElementById('game_frame');
 	if (gameFrame) {
 		window.location.href = gameFrame.src;
 	}
 	let embed = document.getElementById('externalswf');
 	if (embed) {
-		window.location.href = embed.src;
+		ipcRenderer.send('SET_SWF_URL', embed.src);
+		remote.getCurrentWindow().close();
 	}
-}, 100);
+	setTimeout(loadFrameURL, 100);
+}
+loadFrameURL();
 
 const pageURL = window.location.href;
 if (pageURL.includes('login')) {
@@ -18,13 +20,12 @@ if (pageURL.includes('login')) {
 } else {
 	ipcRenderer.send('SHOW_LOGIN_WINDOW', false);
 }
-if (url.parse(pageURL).pathname.endsWith('.swf')) {
-	ipcRenderer.send('SET_SWF_URL', pageURL);
-	window.close();
+if (pageURL === 'http://www.dmm.com/') {
+	window.location.href = 'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';
 }
 
 window.addEventListener('keydown', event => {
 	if (event.key === 'Escape') {
-		window.close();
+		remote.getCurrentWindow().close();
 	}
 });

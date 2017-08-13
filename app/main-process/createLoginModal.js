@@ -24,7 +24,7 @@ function createLoginModal(mainWindow) {
 			preload: `${app.getAppPath()}/renderer-process/login.js`
 		}
 	});
-	loginModal.loadURL('http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/');
+	loginModal.loadURL('https://www.dmm.com/my/-/login/', {extraHeaders: 'pragma: no-cache\n'});
 	ipcMain.once(SET_SWF_URL, (e, swfURL) => {
 		mainWindow.dispatch(setSwfURL(swfURL));
 	});
