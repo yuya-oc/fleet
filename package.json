@@ -25,6 +25,7 @@
   "dependencies": {
     "dateformat": "^2.0.0",
     "electron-is-dev": "^0.1.2",
+    "electron-updater": "^2.8.7",
     "electron-window-state": "^4.0.2",
     "eslint-config-react": "^1.1.7",
     "http-proxy": "^1.16.2",

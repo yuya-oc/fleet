@@ -1,9 +1,10 @@
-import {app, dialog, ipcMain, session} from 'electron';
+import {app, dialog, ipcMain, session, shell} from 'electron';
 import {fork} from 'child_process';
 import path from 'path';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
+import {autoUpdater} from 'electron-updater';
 import winston from 'winston';
 
 import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, setKcsapiDeck, setKcsapiPresetDeck, setKcsapiPresetSelect, setKcsapiPresetRegister, setLoginRequired, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
@@ -188,6 +189,29 @@ app.on('ready', async () => {
 	ipcMain.on('SET_NOTIFICATION', (event, hasNotification) => {
 		setNotification(mainWindow, hasNotification);
 	});
+
+	autoUpdater.on('update-available', info => {
+		dialog.showMessageBox({
+			type: 'info',
+			buttons: ['更新する', 'キャンセル'],
+			defaultId: 0,
+			title: '更新',
+			message: '新しいバージョンがあります。更新しますか？',
+			cancelId: 1
+		},
+		response => {
+			if (response === 0) {
+				shell.openExternal(`https://github.com/yuya-oc/fleet/releases/v${info.version}`);
+			}
+		});
+	}).on('error', err => {
+		console.err(err);
+	});
+	autoUpdater.autoDownload = false;
+	// If (isDev) {
+	//	autoUpdater.setFeedURL('http://localhost:8081');
+	// }
+	autoUpdater.checkForUpdates();
 });
 
 app.on('window-all-closed', () => {
