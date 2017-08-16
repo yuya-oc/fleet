@@ -1,0 +1,8 @@
+icon: "app/assets/icon"
+win:
+  target:
+    - "zip"
+    - "nsis"
+mac:
+  target:
+    - "zip"
