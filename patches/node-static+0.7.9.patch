@@ -1,0 +1,13 @@
+diff --git a/node_modules/node-static/lib/node-static.js b/node_modules/node-static/lib/node-static.js
+index 222dc7e..5530aac 100644
+--- a/node_modules/node-static/lib/node-static.js
++++ b/node_modules/node-static/lib/node-static.js
+@@ -366,7 +366,7 @@ Server.prototype.stream = function (pathname, files, length, startByte, res, cal
+             // Stream the file to the client
+             fs.createReadStream(file, {
+                 flags: 'r',
+-                mode: 0666,
++                mode: 0o666,
+                 start: startByte,
+                 end: startByte + (length ? length - 1 : 0)
+             }).on('data', function (chunk) {
