@@ -44,6 +44,10 @@ ipcRenderer.on('IPC_REDUX_DISPATCH', (event, action) => {
 	store.dispatch(action);
 });
 
+ipcRenderer.on('IPC_REQUEST_STATE', () => {
+	ipcRenderer.send('IPC_RESPOND_STATE', store.getState());
+});
+
 ipcRenderer.on('IPC_RELOAD_WEBVIEW', () => {
 	store.dispatch(reloadWebview(webviewId, false));
 });

@@ -1,4 +1,4 @@
-import {app, BrowserWindow, screen} from 'electron';
+import {app, BrowserWindow, ipcMain, screen} from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import winston from 'winston';
@@ -55,6 +55,15 @@ function createMainWindow() {
 
 	mainWindow.dispatch = action => {
 		mainWindow.webContents.send('IPC_REDUX_DISPATCH', action);
+	};
+
+	mainWindow.requestState = () => {
+		return new Promise(resolve => {
+			ipcMain.once('IPC_RESPOND_STATE', (event, state) => {
+				resolve(state);
+			});
+			mainWindow.webContents.send('IPC_REQUEST_STATE');
+		});
 	};
 
 	mainWindow.reloadWebview = () => {
