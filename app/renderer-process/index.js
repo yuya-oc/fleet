@@ -8,7 +8,7 @@ import winston from 'winston';
 import fs from 'fs';
 import path from 'path';
 
-import {loadConfig, requestLogin, setHasNotification} from '../actions';
+import {loadConfig, reloadWebview, requestLogin, setHasNotification} from '../actions';
 import {createReduxStore} from './createReduxStore';
 import {hasNotificationHandler, appStateHandler, restoreAppState} from './reduxHandlers';
 import App from './components/App';
@@ -20,6 +20,7 @@ import kcsapi from '../lib/kcsapi';
 import '!style-loader!css-loader!photon/dist/css/photon.css';
 
 const appStateJsonPath = path.join(remote.app.getPath('userData'), 'appState.json');
+const webviewId = 'kancolle';
 
 webFrame.setVisualZoomLevelLimits(1, 1);
 
@@ -43,8 +44,11 @@ ipcRenderer.on('IPC_REDUX_DISPATCH', (event, action) => {
 	store.dispatch(action);
 });
 
+ipcRenderer.on('IPC_RELOAD_WEBVIEW', () => {
+	store.dispatch(reloadWebview(webviewId, false));
+});
+
 const history = syncHistoryWithStore(hashHistory, store);
-const webviewId = 'kancolle';
 const routes = (
 	<Route path="/" component={App} webviewId={webviewId}>
 		<IndexRedirect to="/overview"/>

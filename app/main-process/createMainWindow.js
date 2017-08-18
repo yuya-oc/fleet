@@ -57,6 +57,10 @@ function createMainWindow() {
 		mainWindow.webContents.send('IPC_REDUX_DISPATCH', action);
 	};
 
+	mainWindow.reloadWebview = () => {
+		mainWindow.webContents.send('IPC_RELOAD_WEBVIEW');
+	};
+
 	return mainWindow;
 }
 
