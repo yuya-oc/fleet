@@ -84,7 +84,7 @@ function handleProxyMessage(win, message) {
 			win.dispatch(setLoginRequired(true));
 		}
 		if (isDev || process.argv.includes('--save-kcsapi')) {
-			kcsapi.saveToDirectory(app.getPath('userData'), pathname, responseData, err => {
+			kcsapi.saveToDirectory(app.getPath('userData'), pathname, requestData, responseData, err => {
 				if (err) {
 					winston.warn(err);
 				}

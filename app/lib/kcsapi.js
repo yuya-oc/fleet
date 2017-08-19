@@ -1,4 +1,5 @@
 import fs from 'fs';
+import path from 'path';
 import url from 'url';
 import zlib from 'zlib';
 import {WritableStreamBuffer} from 'stream-buffers';
@@ -77,15 +78,19 @@ function isSucceeded(data) {
 	return data.api_result === 1;
 }
 
-function saveToDirectory(destDir, pathname, buffer, callback) {
-	const match = pathname.match(/^\/(.*)\/([^\/]*)$/); // eslint-disable-line no-useless-escape
-	const dir = `${destDir}/${match[1]}`;
-	const file = match[2];
+function saveToDirectory(destDir, pathname, requestData, responseData, callback) {
+	const dir = path.join(destDir, pathname);
 	mkdirp(dir, err => {
 		if (err) {
 			callback(err);
 		}
-		fs.writeFile(`${dir}/${file}`, buffer, callback);
+		fs.writeFile(`${dir}/request`, JSON.stringify(requestData, null, 2), err => {
+			if (err) {
+				callback(err);
+				return;
+			}
+			fs.writeFile(`${dir}/response`, JSON.stringify(responseData, null, 2), callback);
+		});
 	});
 }
 
