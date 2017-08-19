@@ -56,6 +56,7 @@ proxyServer.intercept({
 	process.send({
 		event: 'kcsapi',
 		pathname: req.url,
+		method: req.method,
 		requestData,
 		responseData
 	});

@@ -104,7 +104,7 @@ async function handleProxyMessage(win, message) {
 					win.dispatch(setKcsapiPresetSelect(requestData));
 					break;
 				default:
-					winston.debug('Unhandled API:', pathname);
+					winston.debug('Unhandled API:', message.method, pathname);
 					break;
 			}
 		} else {
