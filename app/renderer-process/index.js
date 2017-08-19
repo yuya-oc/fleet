@@ -8,7 +8,7 @@ import winston from 'winston';
 import fs from 'fs';
 import path from 'path';
 
-import {loadConfig, reloadWebview, requestLogin, setHasNotification} from '../actions';
+import {loadConfig, reloadWebview, setHasNotification} from '../actions';
 import {createReduxStore} from './createReduxStore';
 import {hasNotificationHandler, appStateHandler, restoreAppState} from './reduxHandlers';
 import App from './components/App';
@@ -38,7 +38,6 @@ try {
 }
 
 store.dispatch(loadConfig());
-store.dispatch(requestLogin());
 
 ipcRenderer.on('IPC_REDUX_DISPATCH', (event, action) => {
 	store.dispatch(action);

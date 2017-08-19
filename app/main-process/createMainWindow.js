@@ -2,6 +2,7 @@ import {app, BrowserWindow, ipcMain, screen} from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 import winston from 'winston';
+import {requestLogin} from '../actions';
 
 function createMainWindow() {
 	const scaleFactor = screen.getPrimaryDisplay().scaleFactor;
@@ -41,6 +42,7 @@ function createMainWindow() {
 
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
+		mainWindow.dispatch(requestLogin());
 //		If (isDev) {
 //			mainWindow.openDevTools();
 //		}
