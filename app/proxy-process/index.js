@@ -27,6 +27,23 @@ proxyServer.intercept({
 	phase: 'request',
 	url: '/kcsapi/*',
 	as: 'params'
+}, (req, resp) => {
+	const requestData = parseIntInObject(req.params);
+	return new Promise(resolve => {
+		process.once('message', message => {
+			if (message.event === 'ack-accept-request') {
+				if (message.accept === false) {
+					resp.string = 'svdata={"api_result": "1", "api_result_msg": "失敗"}';
+				}
+				resolve();
+			}
+		});
+		process.send({
+			event: 'confirm-accept-request',
+			pathname: req.url,
+			requestData}
+		);
+	});
 });
 
 proxyServer.intercept({
