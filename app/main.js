@@ -239,10 +239,9 @@ app.on('ready', async () => {
 		console.err(err);
 	});
 	autoUpdater.autoDownload = false;
-	// If (isDev) {
-	//	autoUpdater.setFeedURL('http://localhost:8081');
-	// }
-	autoUpdater.checkForUpdates();
+	if (!isDev) {
+		autoUpdater.checkForUpdates();
+	}
 });
 
 app.on('window-all-closed', () => {
