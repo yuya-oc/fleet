@@ -31,7 +31,7 @@
     "eslint-config-react": "^1.1.7",
     "hoxy": "^3.2.2",
     "mkdirp": "^0.5.1",
-    "photon": "https://github.com/connors/photon.git",
+    "photonkit": "https://github.com/connors/photon.git",
     "prop-types": "^15.5.8",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",

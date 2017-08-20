@@ -4546,7 +4546,7 @@ performance-now@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-0.2.0.tgz#33ef30c5c77d4ea21c5a53869d91b56d8f2555e5"
 
-"photon@https://github.com/connors/photon.git":
+"photonkit@https://github.com/connors/photon.git":
   version "0.1.2"
   resolved "https://github.com/connors/photon.git#ba7b496f5d69ff486cdcf446bbfce3838bd6a4d0"
 

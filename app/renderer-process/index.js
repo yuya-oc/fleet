@@ -17,7 +17,7 @@ import Settings from './containers/Settings';
 
 import kcsapi from '../lib/kcsapi';
 
-import '!style-loader!css-loader!photon/dist/css/photon.css';
+import '!style-loader!css-loader!photonkit/dist/css/photon.css';
 
 const appStateJsonPath = path.join(remote.app.getPath('userData'), 'appState.json');
 const webviewId = 'kancolle';
