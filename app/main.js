@@ -49,6 +49,9 @@ if (!hasPPAPIFlashPath(process.argv)) {
 }
 
 app.commandLine.appendSwitch('proxy-server', `http=localhost:${localProxyPort}`);
+if (isDev) {
+	app.commandLine.appendSwitch('proxy-bypass-list', 'localhost:8080');
+}
 
 async function handleProxyRequest(win, message) {
 	let accept = true;
