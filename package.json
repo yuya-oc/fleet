@@ -25,7 +25,7 @@
   "license": "MIT",
   "dependencies": {
     "dateformat": "^2.0.0",
-    "electron-is-dev": "^0.1.2",
+    "electron-is-dev": "^0.3.0",
     "electron-updater": "^2.8.7",
     "electron-window-state": "^4.0.2",
     "eslint-config-react": "^1.1.7",
@@ -51,9 +51,9 @@
     "babel-preset-power-assert": "^1.0.0",
     "babel-preset-react": "^6.16.0",
     "babel-register": "^6.22.0",
-    "babili-webpack-plugin": "^0.0.11",
+    "babili-webpack-plugin": "^0.1.2",
     "chokidar-cli": "^1.2.0",
-    "cross-env": "^4.0.0",
+    "cross-env": "^5.0.5",
     "css-loader": "^0.28.1",
     "electron": "1.7.5",
     "electron-builder": "^19.18.1",
@@ -68,10 +68,10 @@
     "npm-run-all": "^4.0.2",
     "patch-package": "^3.3.3",
     "power-assert": "^1.4.2",
-    "style-loader": "^0.17.0",
+    "style-loader": "^0.18.2",
     "tree-kill": "^1.1.0",
     "url-loader": "^0.5.7",
-    "webpack": "^2.2.1",
+    "webpack": "^3.5.5",
     "webpack-dev-server": "^2.3.0",
     "webpack-merge": "^4.1.0"
   }
