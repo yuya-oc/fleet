@@ -1,19 +1,16 @@
 import {app, dialog, ipcMain, session, shell} from 'electron';
-import {fork} from 'child_process';
-import path from 'path';
 
 import installExtension, {REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS} from 'electron-devtools-installer';
 import isDev from 'electron-is-dev';
 import {autoUpdater} from 'electron-updater';
 import winston from 'winston';
 
-import {setKcsapiMasterData, setKcsapiUserData, setKcsapiDeckShip, setKcsapiDeck, setKcsapiPresetDeck, setKcsapiPresetSelect, setKcsapiPresetRegister, setLoginRequired, REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
+import {REQUEST_LOGIN, TAKE_SCREENSHOT, SET_WEBVIEW_SCALE} from './actions';
 import createMainWindow from './main-process/createMainWindow';
 import createLoginModal from './main-process/createLoginModal';
-import customDialog from './main-process/customDialog';
+import {createProxyProcess} from './main-process/proxyHandler';
 import getFlashPluginPath, {hasPPAPIFlashPath} from './main-process/getFlashPluginPath';
 import {takeScreenshot, getCurrentDeviceScaleFactor} from './main-process/ipcReduxActions';
-import kcsapi from './lib/kcsapi';
 
 const localProxyPort = 20010;
 
@@ -53,93 +50,6 @@ if (isDev) {
 	app.commandLine.appendSwitch('proxy-bypass-list', 'localhost:8080');
 }
 
-async function handleProxyRequest(win, message) {
-	let accept = true;
-	switch (message.pathname) {
-		case '/kcsapi/api_req_map/start': {
-			if (message.requestData.api_maparea_id === 1 && message.requestData.api_mapinfo_no === 1) {
-				const state = await win.requestState();
-				const numOfShips = state.gameData.user.api_deck_port[message.requestData.api_deck_id - 1].api_ship.filter(s => s !== -1).length;
-				if (numOfShips > 2) {
-					accept = await customDialog.confirmActuallyLaunch(win);
-				}
-			}
-			break;
-		}
-		default:
-			break;
-	}
-	proxyProcess.acceptRequest(accept);
-	return accept;
-}
-
-async function handleProxyMessage(win, message) {
-	if (message.event === 'confirm-accept-request') {
-		const accept = await handleProxyRequest(win, message);
-		if (accept === false) {
-			setTimeout(() => {
-				win.reloadWebview();
-			}, 500);
-		}
-	} else if (message.event === 'kcsapi') {
-		const {pathname, requestData, responseData} = message;
-		if (kcsapi.isSucceeded(responseData)) {
-			switch (pathname) {
-				case '/kcsapi/api_start2': // ログイン直後、GAME START押下前
-					win.dispatch(setKcsapiMasterData(responseData.api_data));
-					break;
-				case '/kcsapi/api_port/port': // 母港帰投時
-					win.dispatch(setKcsapiUserData(responseData.api_data));
-					break;
-				case '/kcsapi/api_get_member/deck':
-					win.dispatch(setKcsapiDeck(responseData.api_data));
-					break;
-				case '/kcsapi/api_get_member/preset_deck':
-					win.dispatch(setKcsapiPresetDeck(responseData.api_data));
-					break;
-				case '/kcsapi/api_req_hensei/change':
-					win.dispatch(setKcsapiDeckShip(requestData));
-					break;
-				case '/kcsapi/api_req_hensei/preset_register':
-					win.dispatch(setKcsapiPresetRegister(requestData));
-					break;
-				case '/kcsapi/api_req_hensei/preset_select':
-					win.dispatch(setKcsapiPresetSelect(requestData));
-					break;
-				default:
-					winston.debug('Unhandled API:', message.method, pathname);
-					break;
-			}
-		} else {
-			winston.info('API response failed: Need to login');
-			win.dispatch(setLoginRequired(true));
-		}
-		if (isDev || process.argv.includes('--save-kcsapi')) {
-			kcsapi.saveToDirectory(app.getPath('userData'), pathname, requestData, responseData, err => {
-				if (err) {
-					winston.warn(err);
-				}
-			});
-		}
-	}
-}
-
-function createProxyProcess(proxyModule) {
-	return new Promise((resolve, reject) => {
-		const proxy = fork(proxyModule, [localProxyPort]);
-		proxy.once('message', message => {
-			if (message.event === 'listening') {
-				resolve(proxy);
-			} else {
-				reject(new Error(`Unexpected message: ${message}`));
-			}
-		});
-		proxy.acceptRequest = accept => {
-			proxy.send({event: 'ack-accept-request', accept});
-		};
-	});
-}
-
 function setNotification(browserWindow, hasNotification) {
 	switch (process.platform) {
 		case 'win32':
@@ -161,11 +71,12 @@ function setNotification(browserWindow, hasNotification) {
 }
 
 app.on('quit', () => {
-	proxyProcess.kill();
+	if (proxyProcess) {
+		proxyProcess.kill();
+	}
 });
 
 app.on('ready', async () => {
-	proxyProcess = await createProxyProcess(path.join(app.getAppPath(), 'proxy-process/index_bundle.js'));
 	const userAgent = session.defaultSession.getUserAgent()
 					.replace(new RegExp(`${app.getName()}\\/[^\\s]+\\s*`), '')
 					.replace(/Electron\/[^\s]+\s*/, '');
@@ -176,9 +87,8 @@ app.on('ready', async () => {
 		mainWindow = null;
 	});
 
-	proxyProcess.on('message', message => {
-		handleProxyMessage(mainWindow, message);
-	});
+	proxyProcess = await createProxyProcess(localProxyPort);
+	proxyProcess.registerMainWindow(mainWindow);
 
 	ipcMain.on('SHOW_LOGIN_WINDOW', (e, show) => {
 		if (show) {
