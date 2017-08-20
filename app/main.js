@@ -149,7 +149,7 @@ app.on('ready', async () => {
 			}
 		});
 	}).on('error', err => {
-		console.err(err);
+		winston.error(err);
 	});
 	autoUpdater.autoDownload = false;
 	if (!isDev) {
