@@ -39,7 +39,7 @@ const MissionList = props => (
 			);
 		}) : null}
 	</ul>
-	);
+);
 
 MissionList.propTypes = {
 	currentDateValue: PropTypes.number.isRequired,

@@ -18,13 +18,13 @@ function setWebViewScale(webview, scale) {
 class KanColle extends React.Component {
 	componentDidMount() {
 		this.webview.addEventListener('dom-ready', () => {
-//			This.webview.openDevTools();
+			// This.webview.openDevTools();
 			this.webview.setVisualZoomLevelLimits(1, 1);
 		});
 		this.webview.addEventListener('did-finish-load', () => {
-//			If (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
+			// If (url.parse(this.webview.getURL()).pathname.endsWith('.swf')) {
 			setWebViewScale(this.webview, this.props.scale);
-//			}
+			// }
 		});
 		this.webview.setAttribute('plugins', true);
 	}
@@ -33,6 +33,9 @@ class KanColle extends React.Component {
 		const deviceScaleFactor = getCurrentDeviceScaleFactor();
 		return (
 			<webview
+				ref={webview => { // eslint-disable-line react/jsx-no-bind
+					this.webview = webview;
+				}}
 				id={this.props.id}
 				style={Object.assign({}, {
 					display: 'inline-flex',
@@ -40,11 +43,8 @@ class KanColle extends React.Component {
 					width: `${800 * this.props.scale / deviceScaleFactor}px`,
 					height: `${480 * this.props.scale / deviceScaleFactor}px`
 				}, this.props.appendStyle)}
-				ref={webview => { // eslint-disable-line react/jsx-no-bind
-					this.webview = webview;
-				}}
 				src={this.props.src}
-				/>);
+			/>);
 	}
 }
 

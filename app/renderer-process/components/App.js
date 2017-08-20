@@ -79,17 +79,17 @@ class App extends React.Component {
 	render() {
 		return (
 			<div
-				style={parentStyle}
 				ref={div => {
 					this.appDiv = div;
 				}}
-				>
+				style={parentStyle}
+			>
 				<div
-					style={Object.assign({}, mainStyle, {left: this.state.mainDivLeft})}
 					ref={div => {
 						this.mainDiv = div;
 					}}
-					>
+					style={Object.assign({}, mainStyle, {left: this.state.mainDivLeft})}
+				>
 					<KanColle muted appendStyle={{marginBottom: '8px'}} id={this.props.route.webviewId}/>
 					<ToolButtons screenshotTargetId={this.props.route.webviewId} initialScale={1.0} possibleScales={possibleScales}/>
 				</div>

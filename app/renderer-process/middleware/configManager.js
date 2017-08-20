@@ -9,13 +9,13 @@ const configManager = userDataPath => {
 		switch (action.type) {
 			case SAVE_CONFIG:
 				fs.writeFile(
-				configFile,
-				JSON.stringify(store.getState()[action.key], null, '  '),
-				err => {
-					if (err) {
-						winston.error(err);
-					}
-				});
+					configFile,
+					JSON.stringify(store.getState()[action.key], null, '  '),
+					err => {
+						if (err) {
+							winston.error(err);
+						}
+					});
 				break;
 			case LOAD_CONFIG:
 				fs.readFile(configFile, 'utf-8', (err, data) => {

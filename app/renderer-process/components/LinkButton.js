@@ -12,7 +12,7 @@ const activeStyle = {
 };
 
 const LinkButton = props => (
-	<Link style={linkButtonStyle} className="btn btn-default" to={props.to} activeClassName="active" activeStyle={activeStyle}>{props.children}</Link>  // eslint-disable-line react/forbid-component-props
+	<Link style={linkButtonStyle} className="btn btn-default" to={props.to} activeClassName="active" activeStyle={activeStyle}>{props.children}</Link> // eslint-disable-line react/forbid-component-props
 );
 
 LinkButton.propTypes = {

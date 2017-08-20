@@ -23,7 +23,7 @@ const FleetList = props => (
 	<ul className="list-group">
 		{props.ships ? props.ships.map(ship => (
 			<FleetListItem key={`ship-${ship.id}`} ship={ship}/>
-			)) : null}
+		)) : null}
 	</ul>
 );
 

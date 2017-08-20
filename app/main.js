@@ -78,8 +78,8 @@ app.on('quit', () => {
 
 app.on('ready', async () => {
 	const userAgent = session.defaultSession.getUserAgent()
-					.replace(new RegExp(`${app.getName()}\\/[^\\s]+\\s*`), '')
-					.replace(/Electron\/[^\s]+\s*/, '');
+		.replace(new RegExp(`${app.getName()}\\/[^\\s]+\\s*`), '')
+		.replace(/Electron\/[^\s]+\s*/, '');
 	session.defaultSession.setUserAgent(userAgent);
 
 	mainWindow = createMainWindow();

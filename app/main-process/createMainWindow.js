@@ -43,9 +43,9 @@ function createMainWindow() {
 	mainWindow.once('ready-to-show', () => {
 		mainWindow.show();
 		mainWindow.dispatch(requestLogin());
-//		If (isDev) {
-//			mainWindow.openDevTools();
-//		}
+		// If (isDev) {
+		//	mainWindow.openDevTools();
+		// }
 	});
 
 	mainWindow.webContents.on('did-fail-load', () => {

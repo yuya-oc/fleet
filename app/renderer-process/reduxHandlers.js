@@ -18,13 +18,13 @@ export function appStateReplacer(key, value) {
 export function appStateHandler(appStateJsonPath) {
 	return appState => {
 		fs.writeFile(
-		appStateJsonPath,
-		JSON.stringify(appState, appStateReplacer, '  '),
-		err => {
-			if (err) {
-				winston.info(err);
-			}
-		});
+			appStateJsonPath,
+			JSON.stringify(appState, appStateReplacer, '  '),
+			err => {
+				if (err) {
+					winston.info(err);
+				}
+			});
 	};
 }
 
