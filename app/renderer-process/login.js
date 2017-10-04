@@ -9,6 +9,7 @@ function loadFrameURL() {
 	if (embed) {
 		ipcRenderer.send('SET_SWF_URL', embed.src);
 		remote.getCurrentWindow().close();
+		return;
 	}
 	setTimeout(loadFrameURL, 100);
 }
