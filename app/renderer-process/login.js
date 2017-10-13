@@ -9,6 +9,7 @@ function loadFrameURL() {
 	if (gameFrame) {
 		log('debug', `#game_frame has been found. Move to ${gameFrame.src}`);
 		window.location.href = gameFrame.src;
+		return;
 	}
 	let embed = document.getElementById('externalswf');
 	if (embed) {
