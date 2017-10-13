@@ -1,5 +1,15 @@
 import {app, BrowserWindow, ipcMain} from 'electron';
+import isDev from 'electron-is-dev';
+import winston from 'winston';
 import {SET_SWF_URL, setSwfURL} from '../actions';
+
+if (isDev || process.argv.includes('--log-level=debug')) {
+	winston.level = 'debug';
+}
+
+ipcMain.on('LOGIN-MESSAGE', (event, level, message) => {
+	winston.log(level, message);
+});
 
 function createLoginModal(mainWindow) {
 	let icon = `${app.getAppPath()}/assets/icon`;
