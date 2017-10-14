@@ -32,7 +32,7 @@ if (pageURL.includes('login')) {
 	log('debug', 'URL doesn\'t include \'login\'. Hide the modal.');
 	ipcRenderer.send('SHOW_LOGIN_WINDOW', false);
 }
-if (pageURL === 'http://www.dmm.com/') {
+if (pageURL === 'http://www.dmm.com/' || pageURL === 'https://www.dmm.com/') {
 	log('info', 'Login succeeded. Move to KanColle URL.');
 	window.location.href = 'http://www.dmm.com/netgame/social/-/gadgets/=/app_id=854854/';
 }
