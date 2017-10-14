@@ -4,6 +4,8 @@ function log(level, message) {
 	ipcRenderer.send('LOGIN-MESSAGE', level, message);
 }
 
+log('debug', `URL: ${window.location.href}`);
+
 function loadFrameURL() {
 	let gameFrame = document.getElementById('game_frame');
 	if (gameFrame) {
